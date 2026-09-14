@@ -216,6 +216,115 @@ store: {
   `datecolumn`→date, `checkcolumn`/`booleancolumn`→boolean).
 - CSS hooks: `.x-grid-filterbar`, `.x-grid-filterbar-filtered-column`.
 
+### Trees — `treelist` vs `treepanel` (verified against local source)
+
+Two **different** components. Pick by whether you need columns.
+
+| | `Ext.list.Tree` | `Ext.tree.Panel` |
+|---|---|---|
+| xtype | `treelist` | `treepanel` |
+| item xtype | `treelistitem` (`Ext.list.TreeItem`) | — |
+| columns | no | yes, first one is `treecolumn` (`Ext.tree.Column`) |
+| engine | lightweight DOM, lives in **ext-core** | full grid (`Ext.tree.View`) |
+| use for | nav rails, simple hierarchies | "TreeGrid" — hierarchy + data columns |
+
+`MenuView` (the left nav) is a `treelist` with `ui: 'nav'`. **`ui: 'nav'` is the sidebar
+styling — do not use it for a general-purpose tree.**
+
+```js
+requires: [
+    'Ext.list.Tree', 'Ext.list.TreeItem',   // treelist
+    'Ext.tree.Panel', 'Ext.tree.Column',    // treepanel + treecolumn
+    'Ext.data.TreeStore'
+]
+```
+
+`Ext.tree.View` comes in via `Ext.tree.Panel` — do not list it.
+
+#### TreeStore
+
+Inline data hangs off `root.children`. `leaf: true` = terminal, `expanded: true` = open on load.
+`text` is the default `displayField`; extra columns need `fields` on the store.
+
+```js
+store: {
+    type: 'tree',
+    fields: ['text', 'status', { name: 'seats', type: 'int' }],
+    root: {
+        expanded: true,
+        children: [
+            { text: 'Asia', iconCls: 'x-fa fa-earth-asia', expanded: true, children: [
+                { text: 'Silk Road', status: 'open', seats: 4, leaf: true }
+            ] },
+            { text: 'Europe', leaf: true }
+        ]
+    }
+}
+```
+
+Other configs: `folderSort`, `defaultRootProperty` (default `'children'`), `clearOnLoad`.
+Node fields recognised by the views: `text`, `iconCls`, `leaf`, `expanded`, `checked`.
+
+#### `treelist`
+
+```js
+{
+    xtype: 'treelist',
+    store: { type: 'tree', root: { ... } },
+    indent: 16,           // px per depth level; defaults to iconSize if omitted
+    expanderFirst: true,  // chevron before the icon
+    expanderOnly: false,  // false = clicking anywhere in the row toggles
+    singleExpand: true,
+    selection: someNode   // a node record, not an id
+}
+```
+
+- Indent is applied in **JS, not CSS**: `TreeItem#syncIndent` writes
+  `marginLeft = depth * indent` onto `.x-treelist-item-wrap`, which sits *inside*
+  `.x-treelist-row` — so the row background always spans the full width.
+- CSS hooks: `.x-treelist`, `.x-treelist-item`, `.x-treelist-row`, `.x-treelist-item-wrap`,
+  `.x-treelist-item-{text,icon,expander}`, `-item-{selected,over,leaf,expanded,collapsed}`,
+  `.x-treelist-nav`, `.x-treelist-micro`.
+- Events: `selectionchange`, `itemclick`, `itemexpand`, `itemcollapse`.
+
+#### `treepanel` (TreeGrid)
+
+```js
+{
+    xtype: 'treepanel',
+    rootVisible: false,
+    useArrows: true,      // chevron expander
+    lines: false,         // no elbow connector lines
+    singleExpand: false,
+    store: { type: 'tree', root: { ... } },
+    columns: [
+        { xtype: 'treecolumn', text: 'Name', dataIndex: 'text', flex: 1 },
+        { text: 'Status', dataIndex: 'status', width: 120 },
+        { text: 'Seats', dataIndex: 'seats', width: 80, align: 'right' }
+    ]
+}
+```
+
+- `useArrows: true` + `lines: false` emits `.x-tree-arrows` + `.x-tree-no-lines`. The defaults
+  render Material's elbow / plus-minus sprites instead.
+- Everything grid applies: `features`, `plugins`, `tbar`, `viewConfig.getRowClass`, renderers.
+- Checkbox trees: `checkable` / `enableTri` / `checkPropagation` on `Ext.tree.Panel`, plus
+  `checked: true|false` on nodes. Verify against
+  `node_modules/@sencha/ext-classic/src/tree/Panel.js` before relying on it.
+- CSS hooks: `.x-tree-panel`, `.x-tree-{arrows,lines,no-lines}`, `.x-tree-expander`,
+  `.x-tree-{icon,folder-icon,leaf-icon}`, `.x-tree-elbow*`, `.x-tree-checkbox`,
+  `.x-tree-node-text`, `.x-grid-cell-treecolumn`, `.x-grid-tree-node-expanded`.
+
+#### Theming traps (see `docs/EXTJS_THEME_PARITY_SPEC.md` §12)
+
+- `treelist` variables are `$treelist-*` (`sass/var/list/TreeItem.scss`); `treepanel`
+  variables are `$tree-*` (`sass/var/tree/View.scss`).
+- ext-core's `sass/src/list/TreeItem.scss` emits the default-ui treelist CSS **unscoped**, then
+  the `ui: 'nav'` variant. So any `$treelist-*` override also lands on the nav rail.
+- Tree glyphs: `$font-icon-font-family` resolves to **Material Icons** here, so a FontAwesome
+  codepoint must carry an explicit family —
+  `$fa-var-chevron-right 14px $fontawesome-font-family`.
+
 ## 8. Forms — label beside field (this app's house style)
 
 ```js

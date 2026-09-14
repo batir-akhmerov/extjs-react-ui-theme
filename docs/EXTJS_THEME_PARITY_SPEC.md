@@ -106,6 +106,8 @@ with a runtime-switchable light/dark mode.
   `sass/src/button/Button.scss`. Verified in both light and dark mode.
 
 ### Still to do
+- **Parity pass 11 — trees (`Ext.list.Tree` + `Ext.tree.Panel`). See §12.** Depends on the
+  gallery addendum in `docs/EXTJS_GALLERY_SPEC.md` §11 landing first.
 - Known cosmetic gap: the ExtJS tab bar is full-bleed where shadcn's `TabsList` is `w-fit`
   (ExtJS sizes the docked bar from the layout, so CSS alone cannot shrink it).
 
@@ -238,7 +240,8 @@ Build the real `.dark-mode` layer in `packages/local/theme-react-shadcn/sass/src
 Work **component by component**, in this order (highest visual impact first):
 
 1. buttons · 2. fields (incl. focus ring) · 3. panels/cards · 4. grid · 5. tabs ·
-6. menus/overlays · 7. windows · 8. toasts · 9. tiles/status accents · 10. misc
+6. menus/overlays · 7. windows · 8. toasts · 9. tiles/status accents · 10. misc ·
+11. trees (§12)
 
 For each:
 
@@ -333,6 +336,30 @@ Plain tabs must read as **smaller and visually subordinate** to default tabs.
     `[ERR] [echo] App watch is already running for this build profile.` Kill the orphaned
     `java -jar ...sencha.jar app watch` pid and restart. Confirm a rebuild by the mtime of
     `build/development/ClassicApp/desktop/resources/ClassicApp-all_1.css`, not by the page.
+19. **The default-ui TreeList CSS also applies to the nav rail.** `ext-core`'s
+    `sass/src/list/TreeItem.scss` ends with a **bare, unscoped** `treelist-ui-body(...)` call
+    driven by the `$treelist-*` variables, and *then* `@include treelist-ui((ui: nav) …)`.
+    So every `$treelist-*` override lands on `.x-treelist` — including `MenuView` — and only
+    survives there where the `ui: 'nav'` invocation passed `null` for that parameter.
+    Changing the treelist var layer **can silently regress the sidebar**. Re-verify the nav
+    rail in light *and* dark after any tree work.
+20. **`$font-icon-font-family` resolves to Material Icons in this build.** Neutral declares the
+    tree glyphs as FontAwesome codepoints (`$fa-var-caret-right` etc.) but material replaces
+    them with Material ligatures (`'chevron_right'`, `'expand_more'`) *without* a family arg.
+    A FontAwesome codepoint written without an explicit family renders as a wrong glyph.
+    Always pass the family: `$fa-var-chevron-right 14px $fontawesome-font-family`. Same trap
+    already documented in `sass/var/grid/feature/Grouping.scss`.
+21. **Three treelist transition variables are missing their `treelist-` prefix** in
+    `@sencha/ext-core/sass/var/list/TreeItem.scss`: `$item-icon-over-transition`,
+    `$item-text-over-transition`, `$item-expander-over-transition` — all `color 0.5s`, and all
+    declared **without `dynamic()`**. They are read only by the treelist mixins, but the names
+    are generic enough to be worth avoiding; kill the 500ms fade in the `sass/src` layer
+    instead of reassigning them.
+22. **Material re-points the tree glyph colours at `$accent-color`** in
+    `sass/var/tree/View.scss` (`$tree-arrow-glyph-color`, `$tree-folder-glyph-color`,
+    `$tree-folder-open-glyph-color`, `$tree-leaf-glyph-color`, `$tree-expand-glyph-color`,
+    `$tree-collapse-glyph-color`). Same class of problem as trap 12 — each must be pinned
+    explicitly; setting `$tree-glyph-color` alone does nothing.
 
 ---
 
@@ -356,6 +383,10 @@ Plain tabs must read as **smaller and visually subordinate** to default tabs.
 2. `c:\work\extjs\classic-app\.github\skills\extjs8-classic\SKILL.md`
 3. `c:\work\extjs\classic-app\app\desktop\src\view\gallery\GalleryView.js`
 4. `c:\work\manuka-ai-agent\frontend\src\app\globals.css`
+
+*For the trees work (§12) also attach*
+`c:\work\extjs\classic-app\docs\EXTJS_GALLERY_SPEC.md` — §11 there is the component-placement
+half of the same task.
 
 **Confirm running first** (the agent cannot start these reliably):
 - ExtJS dev server → `cd c:\work\extjs\classic-app; npm run dev` → port 1962
@@ -398,4 +429,218 @@ via a `<body>` class, the same mechanism `.dark-mode` already uses for light/dar
   no live collision to guard against yet. Add the `.ppaAppReactShadcn`-style wrapper only when a
   second runtime-switchable theme is actually introduced; doing it preemptively here would just
   be dead selector weight.
+
+---
+
+# 12. Parity pass 11 — trees (NEW WORK)
+
+> Added 2026-09-14. **Prerequisite:** `docs/EXTJS_GALLERY_SPEC.md` §11 (the `trees` gallery
+> section in both galleries). Do that first; this pass is styling only.
+>
+> Read traps **19–22** in §8 before touching anything. Trap 19 in particular — the nav rail
+> shares this CSS.
+
+Two surfaces, two different theming mechanisms:
+
+| surface | ExtJS class | how it is themed |
+|---|---|---|
+| TreeList | `Ext.list.Tree` | the `treelist-ui-body` / `treelist-ui` mixin pair in `@sencha/ext-core/sass/src/list/TreeItem.scss`, driven by `$treelist-*` vars |
+| TreeGrid | `Ext.tree.Panel` | `$tree-*` vars in `sass/var/tree/View.scss`, **on top of** the grid pass already done in Task C.4 |
+
+## 12.1 Files to create
+
+Four new files in `packages/local/theme-react-shadcn`. None of these paths exist yet.
+
+```
+sass/var/list/TreeItem.scss     TreeList variables (default ui)
+sass/src/list/TreeItem.scss     TreeList CSS-only bits + .dark-mode block
+sass/var/tree/View.scss         TreePanel / TreeGrid variables
+sass/src/tree/View.scss         TreePanel CSS-only bits + .dark-mode block
+```
+
+Both `Ext.list.TreeItem` and `Ext.tree.View` are real classes present in this build
+(`MenuView` pulls in the former; the gallery treegrid pulls in the latter), so both `sass/src`
+filenames map correctly and will emit. Trap 1 does **not** bite here — but confirm emission by
+grepping the compiled CSS, not by eye.
+
+## 12.2 Target metrics
+
+From the React `TreeView` contract (`EXTJS_GALLERY_SPEC.md` §11.1):
+
+| | |
+|---|---|
+| row height | 32px |
+| row radius | 6px (`$shadcn-radius-sm`) |
+| row padding | 8 left / 8 right |
+| chevron | 16px, `--muted-foreground`, rotates 90° when expanded |
+| icon | 16px, `--muted-foreground` |
+| gap chevron→icon→text | 8px |
+| text | 14 / 400; selected 14 / 500 |
+| indent | 16px per level |
+| hover | bg `--accent` `#f5f5f5`, fg `--accent-foreground` |
+| selected | bg `--accent`, weight 500, **no left indicator bar** |
+| container | radius 14, `ring-1 foreground/10`, padding 4 |
+
+## 12.3 `sass/var/list/TreeItem.scss`
+
+Full variable list is in `@sencha/ext-core/sass/var/list/TreeItem.scss` (45 vars) plus
+`@sencha/ext-classic-theme-neutral/sass/var/list/TreeItem.scss` (24, all `dynamic()`).
+Override at minimum:
+
+```scss
+$treelist-background-color: dynamic(transparent);
+$treelist-color:            dynamic($shadcn-foreground);
+$treelist-padding:          dynamic(0 4px 0 4px);   // 4-value: the mixin calls left()/right()
+
+$treelist-item-line-height:    dynamic(32px);
+$treelist-item-text-color:     dynamic($shadcn-foreground);
+$treelist-item-text-over-color: dynamic($shadcn-accent-foreground);
+$treelist-item-text-font-size: dynamic($font-size);      // 14px
+$treelist-item-text-icon-gap:  dynamic(8px);
+
+$treelist-item-icon-color:      dynamic($shadcn-muted-foreground);
+$treelist-item-icon-over-color: dynamic($shadcn-accent-foreground);
+$treelist-item-icon-width:      dynamic(24px);           // 16px glyph + 8px gap
+$treelist-item-icon-font-size:  dynamic(16px);
+
+// Explicit family — see trap 20.
+$treelist-item-expander-glyph:
+    dynamic($fa-var-chevron-right 14px $fontawesome-font-family);
+$treelist-item-expander-expanded-glyph:
+    dynamic($fa-var-chevron-down 14px $fontawesome-font-family);
+$treelist-item-expander-color:      dynamic($shadcn-muted-foreground);
+$treelist-item-expander-over-color: dynamic($shadcn-accent-foreground);
+$treelist-item-expander-width:      dynamic(20px);
+$treelist-item-expander-font-size:  dynamic(14px);
+
+$treelist-row-over-background-color:           dynamic($shadcn-accent);
+$treelist-row-selected-background-color:       dynamic($shadcn-accent);
+$treelist-row-selected-over-background-color:  dynamic($shadcn-accent);
+
+// shadcn's tree has no left rail indicator — that belongs to the sidebar only.
+$treelist-row-indicator-width:                dynamic(0);
+$treelist-row-indicator-over-color:           dynamic(transparent);
+$treelist-row-indicator-selected-color:       dynamic(transparent);
+$treelist-row-indicator-selected-over-color:  dynamic(transparent);
+```
+
+**After writing this file, re-check the nav rail (trap 19).** `MenuView`'s `ui: 'nav'`
+invocation in `sass/src/Component.scss` passes most of these explicitly, so it *should* be
+immune — but it passes `null` for `$item-expander-glyph`, `$item-text-color` and the
+`*-selected-*` colours, and those will now change. Fix by adding the missing arguments to the
+existing `treelist-ui($ui: 'nav', …)` call rather than by weakening the default-ui values.
+
+## 12.4 `sass/src/list/TreeItem.scss`
+
+Things with no variable:
+
+```scss
+// Row is the hover/selected surface; the indent lives on .x-treelist-item-wrap inside it,
+// so the background already spans the full width — only the radius is missing.
+.#{$prefix}treelist-row {
+    border-radius: $shadcn-radius-sm;   // 6px
+}
+
+// shadcn bolds the selected label; ExtJS has no variable for it.
+.#{$prefix}treelist-item-selected > .#{$prefix}treelist-row
+    .#{$prefix}treelist-item-text {
+    font-weight: 500;
+}
+
+// ext-core fades icon/text/expander colour over 500ms. shadcn is instant-ish (trap 21).
+.#{$prefix}treelist-item-text,
+.#{$prefix}treelist-item-icon,
+.#{$prefix}treelist-item-expander {
+    transition: color 150ms;
+}
+
+// Expander rotation: the collapsed and expanded glyphs are separate characters, so no
+// transform is needed — but confirm the expanded glyph actually swaps. If it does not,
+// keep one glyph and rotate .x-treelist-item-expanded > * > * > .x-treelist-item-expander
+// by 90deg instead.
+```
+
+`indent` is a **component config**, not a variable — `Ext.list.TreeItem#syncIndent` writes
+`marginLeft = depth * indent` onto `.x-treelist-item-wrap` and `Ext.list.Tree#indent` defaults
+to the icon size. Set `indent: 16` in `GalleryView.js`; do not try to do it in CSS.
+
+Then a `.dark-mode { }` block at the bottom of the same file, mirroring the structure of the
+existing nav block in `sass/src/Component.scss` (lines ~771–822):
+
+- Restate every colour the light `treelist-ui-body` call baked in: item text, icon, expander,
+  row hover bg + its `> * > *` colour trio, selected row bg.
+- Use `$shadcn-dark-foreground` / `$shadcn-dark-muted-foreground` / `$shadcn-dark-accent` /
+  `$shadcn-dark-accent-foreground`.
+- **Keep these at 2 class selectors** (`.dark-mode .x-treelist-item-text`). The nav's dark
+  block is 3 classes (`.dark-mode .x-treelist-nav .x-treelist-item-text`) and must keep
+  winning. Do not write the new rules at 3+ or you will break the sidebar in dark mode.
+
+## 12.5 `sass/var/tree/View.scss` + `sass/src/tree/View.scss`
+
+The treegrid inherits row height, hover, selection, header and hairlines from Task C.4, so this
+is mostly glyph work. Neutral declares 33 `$tree-*` vars; material re-points six glyph colours
+at `$accent-color` (trap 22) and swaps six glyphs to Material ligatures.
+
+```scss
+$tree-elbow-width:      dynamic(20px);
+$tree-icon-width:       dynamic(16px);
+$tree-icon-spacing:     dynamic(8px);
+$tree-elbow-spacing:    dynamic(0);
+$tree-glyph-font-size:  dynamic(16px);
+$tree-expander-cursor:  dynamic(pointer);
+
+$tree-glyph-color:                   dynamic($shadcn-muted-foreground);
+$tree-arrow-glyph-color:             dynamic($shadcn-muted-foreground);
+$tree-arrow-expanded-glyph-color:    dynamic($shadcn-muted-foreground);
+$tree-folder-glyph-color:            dynamic($shadcn-muted-foreground);
+$tree-folder-open-glyph-color:       dynamic($shadcn-muted-foreground);
+$tree-leaf-glyph-color:              dynamic($shadcn-muted-foreground);
+$tree-expand-glyph-color:            dynamic($shadcn-muted-foreground);
+$tree-collapse-glyph-color:          dynamic($shadcn-muted-foreground);
+
+// All four need the explicit family (trap 20).
+$tree-arrow-glyph:          dynamic($fa-var-chevron-right 14px $fontawesome-font-family);
+$tree-arrow-glyph-rtl:      dynamic($fa-var-chevron-left  14px $fontawesome-font-family);
+$tree-arrow-expanded-glyph: dynamic($fa-var-chevron-down  14px $fontawesome-font-family);
+$tree-folder-glyph:         dynamic($fa-var-folder      16px $fontawesome-font-family);
+$tree-folder-open-glyph:    dynamic($fa-var-folder-open 16px $fontawesome-font-family);
+$tree-leaf-glyph:           dynamic($fa-var-file        16px $fontawesome-font-family);
+```
+
+> `$tree-cell-inner-padding` is shared: neutral derives `$treelist-left-padding` /
+> `$treelist-right-padding` from it. §12.3 sets `$treelist-padding` outright, so changing
+> `$tree-cell-inner-padding` here is safe — but it also feeds the treecolumn cell, so keep it
+> at the grid's `0 8px` unless a screenshot says otherwise.
+
+In `sass/src/tree/View.scss`, only what has no variable:
+
+- `.x-tree-checkbox` — material draws it as a Material Icons glyph. Reuse the CSS-drawn 16px
+  box already built in `sass/src/form/field/Checkbox.scss`; do not invent a second one. Skip
+  entirely if the optional checkbox row was dropped.
+- `.dark-mode` block for the glyph colours (`$shadcn-dark-muted-foreground`) — the grid rows,
+  hover and selection already flip via the Task C.4 dark block.
+
+The gallery's treepanel uses `lines: false` + `useArrows: true` (`.x-tree-no-lines` +
+`.x-tree-arrows`), so the elbow/plus-minus sprites never render and need no styling.
+
+## 12.6 Verification
+
+1. `getComputedStyle` on `.x-treelist-row` → `height: 32px`, `border-radius: 6px`.
+2. `getComputedStyle` on `.x-treelist-item-expander` → `color: rgb(115, 115, 115)`,
+   `font-family` contains `FontAwesome`.
+3. Hover a row → `background-color: rgb(245, 245, 245)`; selected row label `font-weight: 500`.
+4. Chevron glyph is a **chevron**, not a box/tofu/wrong ligature — verify by screenshot, since
+   a wrong codepoint still computes a valid `font-family`.
+5. Side-by-side screenshot `#gallery-trees` vs `[data-gallery="trees"]` at 14px.
+6. `Ext.getBody().toggleCls('dark-mode')` → tree flips, **and the nav rail still looks right**.
+7. Nav rail regression check in both modes: selection indicator bar still 3px primary, hover
+   still sidebar-accent, expander glyph unchanged.
+8. Zero console errors, no new Fashion warnings.
+
+## 12.7 Out of scope for this pass
+
+- Drag-and-drop (`Ext.tree.ViewDropZone`) styling.
+- `micro` / collapsed-rail treelist mode — that is the sidebar's concern, already done.
+- Indent guide lines / elbow connectors. The React reference deliberately has none.
+
 

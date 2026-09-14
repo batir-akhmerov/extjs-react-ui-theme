@@ -1,0 +1,34 @@
+// ============================================================================
+// TreeGrid (Ext.tree.Panel / Ext.tree.View) glyphs. Row height, hover,
+// selection and header already come from the Task C.4 grid pass — this is
+// only the elbow/folder/leaf glyph layer, which theme-material repoints at
+// $accent-color and swaps to Material ligatures (see spec §12 trap 22).
+//
+// The gallery's treegrid uses `lines: false` + `useArrows: true`
+// (.x-tree-no-lines .x-tree-arrows), so the elbow/plus-minus glyphs below
+// never render — only the arrow/folder/leaf ones matter in practice.
+// ============================================================================
+
+$tree-elbow-width: dynamic(20px);
+$tree-icon-width: dynamic(16px);
+$tree-icon-spacing: dynamic(8px);
+$tree-elbow-spacing: dynamic(0);
+$tree-glyph-font-size: dynamic(16px);
+$tree-expander-cursor: dynamic(pointer);
+
+$tree-glyph-color: dynamic($shadcn-muted-foreground);
+$tree-arrow-glyph-color: dynamic($shadcn-muted-foreground);
+$tree-arrow-expanded-glyph-color: dynamic($shadcn-muted-foreground);
+$tree-folder-glyph-color: dynamic($shadcn-muted-foreground);
+$tree-folder-open-glyph-color: dynamic($shadcn-muted-foreground);
+$tree-leaf-glyph-color: dynamic($shadcn-muted-foreground);
+$tree-expand-glyph-color: dynamic($shadcn-muted-foreground);
+$tree-collapse-glyph-color: dynamic($shadcn-muted-foreground);
+
+// Explicit family on all four — same trap as the treelist expander.
+$tree-arrow-glyph: dynamic($fa-var-chevron-right 14px $fontawesome-font-family);
+$tree-arrow-glyph-rtl: dynamic($fa-var-chevron-left 14px $fontawesome-font-family);
+$tree-arrow-expanded-glyph: dynamic($fa-var-chevron-down 14px $fontawesome-font-family);
+$tree-folder-glyph: dynamic($fa-var-folder 16px $fontawesome-font-family);
+$tree-folder-open-glyph: dynamic($fa-var-folder-open 16px $fontawesome-font-family);
+$tree-leaf-glyph: dynamic($fa-var-file 16px $fontawesome-font-family);

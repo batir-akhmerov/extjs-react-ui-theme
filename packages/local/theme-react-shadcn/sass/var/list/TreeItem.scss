@@ -1,0 +1,50 @@
+// ============================================================================
+// TreeList (Ext.list.Tree / Ext.list.TreeItem) = shadcn hand-rolled <TreeView>.
+//
+// This is the DEFAULT ui only (used by the gallery). MenuView's `ui: 'nav'`
+// call in sass/src/Component.scss is untouched by these vars EXCEPT where it
+// doesn't pass its own value (expander glyph, selected-row colours) — those
+// args were added there alongside this file. See docs/EXTJS_THEME_PARITY_SPEC.md
+// §12 trap 19 before changing anything here.
+//
+// Reference (measured on the React gallery, [data-slot="tree-item"]):
+//   row height 32 · radius 6 · padding 8/8 · indent 16 · chevron/icon 16px
+//   gap 8 · text 14/400, selected 14/500 · hover+selected bg = --accent
+// ============================================================================
+
+$treelist-background-color: dynamic(transparent);
+$treelist-color: dynamic($shadcn-foreground);
+
+$treelist-left-padding: dynamic(4px);
+$treelist-right-padding: dynamic(4px);
+$treelist-padding: dynamic(0 $treelist-right-padding 0 $treelist-left-padding);
+
+$treelist-item-line-height: dynamic(32px);
+
+$treelist-item-text-color: dynamic($shadcn-foreground);
+$treelist-item-text-over-color: dynamic($shadcn-accent-foreground);
+$treelist-item-text-font-size: dynamic($font-size);
+$treelist-item-text-icon-gap: dynamic(8px);
+
+$treelist-item-icon-color: dynamic($shadcn-muted-foreground);
+$treelist-item-icon-over-color: dynamic($shadcn-accent-foreground);
+$treelist-item-icon-width: dynamic(24px); // 16px glyph + 8px gap to the text
+$treelist-item-icon-font-size: dynamic(16px);
+
+// Explicit family — $font-icon-font-family resolves to Material Icons here.
+$treelist-item-expander-glyph: dynamic($fa-var-chevron-right 14px $fontawesome-font-family);
+$treelist-item-expander-expanded-glyph: dynamic($fa-var-chevron-down 14px $fontawesome-font-family);
+$treelist-item-expander-color: dynamic($shadcn-muted-foreground);
+$treelist-item-expander-over-color: dynamic($shadcn-accent-foreground);
+$treelist-item-expander-width: dynamic(20px);
+$treelist-item-expander-font-size: dynamic(14px);
+
+$treelist-row-over-background-color: dynamic($shadcn-accent);
+$treelist-row-selected-background-color: dynamic($shadcn-accent);
+$treelist-row-selected-over-background-color: dynamic($shadcn-accent);
+
+// shadcn's tree has no left rail indicator bar — that belongs to the sidebar only.
+$treelist-row-indicator-width: dynamic(0);
+$treelist-row-indicator-over-color: dynamic(transparent);
+$treelist-row-indicator-selected-color: dynamic(transparent);
+$treelist-row-indicator-selected-over-color: dynamic(transparent);

@@ -1,0 +1,12 @@
+// ============================================================================
+// TreeGrid — dark-mode glyph colours. Row/hover/selection surfaces already
+// flip via the Task C.4 grid dark block; only the arrow/folder/leaf glyphs
+// (baked from $tree-*-glyph-color at build time) need restating here.
+// ============================================================================
+
+.dark-mode {
+    .#{$prefix}tree-icon,
+    .#{$prefix}tree-elbow {
+        color: $shadcn-dark-muted-foreground;
+    }
+}

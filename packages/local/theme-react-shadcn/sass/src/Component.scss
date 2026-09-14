@@ -262,6 +262,12 @@
     $item-text-font-size: $font-size,
     $item-expander-font-size: $font-size,
 
+    // Explicit family: the gallery treelist var file now overrides the
+    // shared, unscoped $treelist-item-expander-glyph default, so this ui
+    // must restate its own glyph or it inherits that new value.
+    $item-expander-glyph: $fa-var-chevron-right 14px $fontawesome-font-family,
+    $item-expander-expanded-glyph: $fa-var-chevron-down 14px $fontawesome-font-family,
+
     $item-line-height : 35px,
     $item-text-overflow: initial,
 
@@ -280,6 +286,7 @@
     $row-over-background-color: $shadcn-sidebar-accent,
 
     $row-selected-background-color: $shadcn-sidebar-accent,
+    $row-selected-over-background-color: $shadcn-sidebar-accent,
     $toolstrip-background-color:  $shadcn-sidebar,
     $tool-selected-color: $shadcn-sidebar-accent-foreground,
     $tool-selected-background-color: $shadcn-sidebar-accent,

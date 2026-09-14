@@ -1,0 +1,46 @@
+// ============================================================================
+// TreeList — CSS-only bits with no theme variable (default ui, the gallery's
+// treelist rows). Keep dark overrides at 2 classes so they never outrank
+// MenuView's nav dark block (3 classes) in sass/src/Component.scss.
+// ============================================================================
+
+.#{$prefix}treelist-row {
+    border-radius: $shadcn-radius-sm;
+}
+
+.#{$prefix}treelist-item-selected > .#{$prefix}treelist-row
+    .#{$prefix}treelist-item-text {
+    font-weight: 500;
+}
+
+// ext-core fades icon/text/expander colour over 500ms; shadcn is near-instant.
+.#{$prefix}treelist-item-text,
+.#{$prefix}treelist-item-icon,
+.#{$prefix}treelist-item-expander {
+    transition: color 150ms;
+}
+
+.dark-mode {
+    .#{$prefix}treelist-item-text {
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}treelist-item-icon,
+    .#{$prefix}treelist-item-expander {
+        color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}treelist-row-over {
+        background-color: $shadcn-dark-accent;
+
+        > * > .#{$prefix}treelist-item-icon,
+        > * > .#{$prefix}treelist-item-text,
+        > * > .#{$prefix}treelist-item-expander {
+            color: $shadcn-dark-accent-foreground;
+        }
+    }
+
+    .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row {
+        background-color: $shadcn-dark-accent;
+    }
+}

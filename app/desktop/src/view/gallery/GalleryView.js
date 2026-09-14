@@ -44,7 +44,12 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
         'Ext.window.Window',
         'Ext.window.Toast',
         'Ext.ProgressBar',
-        'Ext.toolbar.Separator'
+        'Ext.toolbar.Separator',
+        'Ext.list.Tree',
+        'Ext.list.TreeItem',
+        'Ext.data.TreeStore',
+        'Ext.tree.Panel',
+        'Ext.tree.Column'
     ],
 
     items: (function () {
@@ -572,6 +577,128 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                     ],
 
                     bbar: { xtype: 'pagingtoolbar', displayInfo: true }
+                }
+            ]
+        },
+        {
+            xtype: 'panel',
+            itemId: 'gallery-trees',
+            cls: 'gallery-section',
+            title: 'Trees',
+            bodyPadding: 16,
+            items: [
+                {
+                    xtype: 'container', itemId: 'row-treelist', cls: 'gallery-row', layout: 'hbox',
+                    items: [
+                        {
+                            xtype: 'treelist',
+                            width: 288,
+                            indent: 16,
+                            expanderFirst: true,
+                            expanderOnly: false,
+                            ui: null,
+                            store: {
+                                type: 'tree',
+                                root: {
+                                    expanded: true,
+                                    children: [
+                                        { text: 'Asia', iconCls: 'x-fa fa-earth-asia', expanded: true, children: [
+                                            { text: 'Silk Road 19d', iconCls: 'x-fa fa-route', expanded: true, children: [
+                                                { text: 'Mar 2027 departure', iconCls: 'x-fa fa-calendar', leaf: true }
+                                            ] },
+                                            { text: 'Mekong Delta', iconCls: 'x-fa fa-route', leaf: true }
+                                        ] },
+                                        { text: 'Europe', iconCls: 'x-fa fa-earth-europe', children: [
+                                            { text: 'Fjord Explorer', iconCls: 'x-fa fa-route', leaf: true },
+                                            { text: 'Lofoten Circuit', iconCls: 'x-fa fa-route', leaf: true }
+                                        ] },
+                                        { text: 'Americas', iconCls: 'x-fa fa-earth-americas', children: [
+                                            { text: 'Andes Traverse', iconCls: 'x-fa fa-route', leaf: true },
+                                            { text: 'Patagonia Wild', iconCls: 'x-fa fa-route', leaf: true }
+                                        ] }
+                                    ]
+                                }
+                            },
+                            listeners: {
+                                afterrender: function (list) {
+                                    var node = list.getStore().findNode('text', 'Mar 2027 departure');
+                                    if (node) {
+                                        list.setSelection(node);
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'container', itemId: 'row-treelist-states', cls: 'gallery-row', layout: 'hbox',
+                    items: [
+                        {
+                            xtype: 'treelist',
+                            width: 288,
+                            indent: 16,
+                            singleExpand: true,
+                            store: {
+                                type: 'tree',
+                                root: {
+                                    expanded: false,
+                                    children: [
+                                        { text: 'Asia', children: [
+                                            { text: 'Silk Road 19d', children: [
+                                                { text: 'Mar 2027 departure', leaf: true }
+                                            ] },
+                                            { text: 'Mekong Delta', leaf: true }
+                                        ] },
+                                        { text: 'Europe', children: [
+                                            { text: 'Fjord Explorer', leaf: true },
+                                            { text: 'Lofoten Circuit', leaf: true }
+                                        ] },
+                                        { text: 'Americas', children: [
+                                            { text: 'Andes Traverse', leaf: true },
+                                            { text: 'Patagonia Wild', leaf: true }
+                                        ] }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'treepanel',
+                    itemId: 'row-treegrid',
+                    cls: 'gallery-row',
+                    height: 260,
+                    rootVisible: false,
+                    useArrows: true,
+                    lines: false,
+                    store: {
+                        type: 'tree',
+                        fields: ['text', 'status', { name: 'seats', type: 'int' }],
+                        root: {
+                            expanded: true,
+                            children: [
+                                { text: 'Asia', expanded: true, children: [
+                                    { text: 'Silk Road 19d', status: 'Open', seats: 4, expanded: true, children: [
+                                        { text: 'Mar 2027 departure', status: 'Open', seats: 4, leaf: true }
+                                    ] },
+                                    { text: 'Mekong Delta', status: 'Replied', seats: 11, leaf: true }
+                                ] },
+                                { text: 'Europe', children: [
+                                    { text: 'Fjord Explorer', status: 'Closed', seats: 0, leaf: true },
+                                    { text: 'Lofoten Circuit', status: 'Open', seats: 6, leaf: true }
+                                ] },
+                                { text: 'Americas', children: [
+                                    { text: 'Andes Traverse', status: 'Open', seats: 7, leaf: true },
+                                    { text: 'Patagonia Wild', status: 'Closed', seats: 0, leaf: true }
+                                ] }
+                            ]
+                        }
+                    },
+                    columns: [
+                        { xtype: 'treecolumn', text: 'Name', dataIndex: 'text', flex: 1 },
+                        { text: 'Status', dataIndex: 'status', width: 120 },
+                        { text: 'Seats', dataIndex: 'seats', width: 80, align: 'right' }
+                    ]
                 }
             ]
         },

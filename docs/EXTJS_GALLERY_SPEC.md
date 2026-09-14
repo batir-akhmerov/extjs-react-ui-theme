@@ -184,6 +184,7 @@ downstream workflow breaks.
 | `gallery-card` | `card` |
 | `gallery-table` | `table` |
 | `gallery-datagrid` | `datagrid` |
+| `gallery-trees` | `trees` | *(addendum — §11)* |
 | `gallery-tiles` | `tiles` |
 | `gallery-tabs` | `tabs` |
 | `gallery-overlays` | `overlays` |
@@ -313,6 +314,9 @@ Buttons firing `Ext.toast({ html, title, align })`:
 `Ext.ProgressBar`, `Ext.LoadMask` on a panel, a separator (`Ext.toolbar.Separator`),
 and an avatar substitute (`Ext.Component` with `cls: 'gallery-avatar'` + initials).
 
+### 7.15 `gallery-trees` — ADDENDUM, not part of the original 15
+See **§11**. Inserted directly after `gallery-datagrid` in both galleries.
+
 ## 8. Definition of done
 
 1. `http://localhost:1962/#galleryview` loads with **zero console errors**.
@@ -350,6 +354,231 @@ Should list all 15 `gallery-*` ids in order.
 
 - Any colour / font / spacing work to match React. That is the next phase.
 - Editing `packages/local/theme-react-shadcn/**`.
-- Editing the React gallery.
+- Editing the React gallery. *(Exception: §11 explicitly adds a React tree component.)*
 - Re-tokenising the 14 existing view SCSS files under `app/desktop/src/view/**`.
 - Deleting or modifying `HomeView` / `PersonnelView`.
+
+---
+
+# 11. ADDENDUM — `trees` section (NEW WORK)
+
+> Added 2026-09-14. Everything above §11 is **already built and verified**. This addendum is
+> the only outstanding gallery work. The matching theming pass is
+> `docs/EXTJS_THEME_PARITY_SPEC.md` §12 — **read that before styling anything**; this section
+> is component-placement only.
+
+ExtJS has two distinct tree surfaces and both need a gallery entry:
+
+| ExtJS | what it is | React reference |
+|---|---|---|
+| `Ext.list.Tree` (`xtype: 'treelist'`) | lightweight, no columns, no grid engine. Same class the left nav rail already uses. | `<TreeView>` (new component, §11.1) |
+| `Ext.tree.Panel` (`xtype: 'treepanel'`) | a grid whose first column is an `Ext.tree.Column`. "TreeGrid". | `<TreeTable>` (new component, §11.1) |
+
+Section placement: immediately **after** `datagrid` in both galleries.
+`data-gallery="trees"` / `itemId: 'gallery-trees'`.
+
+---
+
+## 11.1 React side — `frontend/src/components/ui/tree-view.tsx`
+
+**Repo:** `c:\work\manuka-ai-agent`. shadcn/ui ships **no** tree primitive and this project has
+**no** `@radix-ui/react-collapsible` / `react-accordion` installed.
+
+> **Do not `npm install` anything.** Hand-roll the component with React state + `lucide-react`
+> (already a dependency at `^0.577.0`). Adding a radix package is not worth the churn for a
+> gallery reference, and the ExtJS side has to be hand-matched either way.
+
+Follow the existing house conventions in `src/components/ui/`: `"use client"`, `cn()` from
+`@/lib/utils`, `data-slot` attributes, Tailwind classes only (no inline colour).
+
+### Public API
+
+```tsx
+export type TreeNode = {
+  id: string;
+  label: string;
+  icon?: React.ElementType;   // lucide component; defaults to Folder/FolderOpen/File
+  children?: TreeNode[];
+};
+
+export function TreeView(props: {
+  data: TreeNode[];
+  defaultExpandedIds?: string[];
+  selectedId?: string;
+  onSelect?: (id: string) => void;
+  showIcons?: boolean;        // default true
+  indent?: number;            // px per depth level, default 16
+  className?: string;
+}): JSX.Element;
+
+export function TreeTable(props: {
+  data: TreeNode[];           // extra columns read off a `meta` record on each node
+  defaultExpandedIds?: string[];
+  columns: { key: string; header: string; align?: "left" | "right" }[];
+  indent?: number;            // default 16
+}): JSX.Element;
+```
+
+`TreeTable` composes the **existing** `@/components/ui/table` primitives (`Table`,
+`TableHeader`, `TableHead`, `TableBody`, `TableRow`, `TableCell`) and puts the
+chevron + icon + label inside the first `TableCell`, indented with
+`style={{ paddingLeft: 8 + depth * indent }}`. Rows are flattened depth-first and
+collapsed subtrees are simply not rendered.
+
+### Row markup (this is the thing ExtJS must match — keep it exact)
+
+```tsx
+<div
+  data-slot="tree-item"
+  data-selected={selected || undefined}
+  role="treeitem"
+  style={{ paddingLeft: 8 + depth * indent }}
+  className={cn(
+    "flex h-8 cursor-pointer select-none items-center gap-2 rounded-md pr-2 text-sm",
+    "hover:bg-accent hover:text-accent-foreground",
+    "data-[selected=true]:bg-accent data-[selected=true]:font-medium",
+  )}
+>
+  <ChevronRight
+    className={cn(
+      "size-4 shrink-0 text-muted-foreground transition-transform duration-150",
+      expanded && "rotate-90",
+      !hasChildren && "invisible",
+    )}
+  />
+  {showIcons && <Icon className="size-4 shrink-0 text-muted-foreground" />}
+  <span className="truncate">{node.label}</span>
+</div>
+```
+
+Container:
+
+```tsx
+<div data-slot="tree" role="tree" className="w-72 rounded-xl p-1 ring-1 ring-foreground/10">
+```
+
+### Deliberate simplifications — DO NOT "improve" these
+
+These exist purely to keep the ExtJS side reachable. Changing them makes §12 much harder.
+
+- **No indent guide lines.** No `border-l` on nested levels.
+- **No elbow / connector lines** in `TreeTable`.
+- **No checkbox tree** on the React side (the ExtJS checkbox row in §11.2 is optional and has
+  no React counterpart — note it in the gallery row label as `ExtJS only`).
+- Indent is applied as **padding inside the row**, so the hover/selected background spans the
+  full row width. ExtJS does the same (it sets `margin-left` on `.x-treelist-item-wrap`,
+  which lives *inside* `.x-treelist-row`) — that is why this choice matters.
+
+### Measured target metrics (the contract §12 has to hit)
+
+| surface | value |
+|---|---|
+| row height | 32px |
+| row radius | 6px (`rounded-md`) |
+| row padding | 8px left (at depth 0) / 8px right |
+| gap chevron→icon→text | 8px |
+| font | 14px / weight 400; selected weight 500 |
+| chevron | 16px, `--muted-foreground` `#737373`, `rotate-90` when expanded |
+| node icon | 16px, `--muted-foreground` |
+| indent per level | 16px |
+| hover | bg `--accent` `#f5f5f5`, text `--accent-foreground` |
+| selected | bg `--accent` `#f5f5f5`, weight 500 |
+| container | width 288px, radius 14px, `ring-1 foreground/10`, padding 4px |
+
+### Gallery section
+
+Add to `frontend/src/app/theme-gallery/page.tsx`, using the file's existing `Section` / `Row`
+helpers, placed **after** the `datagrid` section:
+
+```tsx
+<Section id="trees" title="Trees">
+  <Row label="treelist">        {/* TreeView, icons on, one node selected, 3 levels deep */}
+  <Row label="treelist states"> {/* second TreeView: showIcons={false}, all collapsed */}
+  <Row label="treegrid">        {/* TreeTable, 3 columns: Name / Status / Seats */}
+</Section>
+```
+
+Dataset: reuse the gallery's tour vocabulary (regions → tours → departures) so the two
+galleries read identically. ~3 roots, 2–3 children each, one grandchild level.
+
+---
+
+## 11.2 ExtJS side — `gallery-trees`
+
+Add one new section object to the `items` array in
+`app/desktop/src/view/gallery/GalleryView.js`, **between** `gallery-datagrid` and
+`gallery-tiles`. Do not touch any existing section.
+
+### `requires` — add these five
+
+Nothing here resolves from an xtype string alone (trap §4.4):
+
+```js
+'Ext.list.Tree',
+'Ext.list.TreeItem',
+'Ext.data.TreeStore',
+'Ext.tree.Panel',
+'Ext.tree.Column'
+```
+
+`Ext.tree.View` comes in via `Ext.tree.Panel`; do not list it.
+
+### Store shape (verified against `@sencha/ext-core/src/data/TreeStore.js`)
+
+Inline tree data hangs off `root.children`; `leaf: true` marks a terminal node:
+
+```js
+{
+    xtype: 'treelist',
+    itemId: 'row-treelist',
+    cls: 'gallery-row',
+    width: 288,
+    indent: 16,           // px per depth; defaults to iconSize, so set it explicitly
+    expanderFirst: true,  // chevron before the icon, like lucide/shadcn
+    expanderOnly: false,  // clicking the row toggles, matching the React component
+    ui: null,             // IMPORTANT: default ui. `ui: 'nav'` is the sidebar, not this.
+    store: {
+        type: 'tree',
+        root: {
+            expanded: true,
+            children: [
+                { text: 'Asia', iconCls: 'x-fa fa-earth-asia', expanded: true, children: [
+                    { text: 'Silk Road', iconCls: 'x-fa fa-route', leaf: true },
+                    { text: 'Mekong Delta', iconCls: 'x-fa fa-route', children: [
+                        { text: 'Mar 2027 departure', iconCls: 'x-fa fa-calendar', leaf: true }
+                    ] }
+                ] },
+                { text: 'Europe', iconCls: 'x-fa fa-earth-europe', children: [ /* … */ ] }
+            ]
+        }
+    }
+}
+```
+
+### Rows to build
+
+| itemId | component | notes |
+|---|---|---|
+| `row-treelist` | `treelist` | icons on, 3 levels, one node selected via `selection` |
+| `row-treelist-states` | `treelist` | `singleExpand: true`, all collapsed, no `iconCls` on nodes |
+| `row-treegrid` | `treepanel` | `rootVisible: false`, `useArrows: true`, `lines: false`, `height: 260`, columns `[{ xtype: 'treecolumn', text: 'Name', dataIndex: 'text', flex: 1 }, { text: 'Status', dataIndex: 'status', width: 120 }, { text: 'Seats', dataIndex: 'seats', width: 80, align: 'right' }]` |
+| `row-treegrid-checkbox` | `treepanel` | **optional, ExtJS only.** `Ext.tree.Panel` in 8.0 exposes `checkable` / `enableTri` / `checkPropagation`. Verify the exact config against `node_modules/@sencha/ext-classic/src/tree/Panel.js` before using it; if it does not behave, drop this row rather than fighting it. |
+
+`lines: false` + `useArrows: true` is required: it emits `.x-tree-no-lines` + `.x-tree-arrows`,
+which is the only ExtJS mode that resembles the React tree. With the defaults you get
+Material's elbow/plus-minus rendering and no amount of §12 CSS will rescue it cheaply.
+
+Extra `requires` for the tree grid's non-`text` fields: declare them on the store
+(`fields: ['text', 'status', { name: 'seats', type: 'int' }]`).
+
+### Definition of done for the addendum
+
+1. `#galleryview` still loads with **zero console errors**.
+2. `Ext.ComponentQuery.query('galleryview')[0].items.items.map(c => c.itemId)` lists
+   16 ids with `gallery-trees` between `gallery-datagrid` and `gallery-tiles`.
+3. Both treelists expand/collapse; the treegrid expands/collapses and shows all three columns.
+4. **The left nav rail is unchanged** — see the §12 warning about the shared default-ui CSS.
+5. `git status` in `classic-app` shows only `app/desktop/src/view/gallery/*` and
+   (for §12) `packages/local/theme-react-shadcn/**`.
+6. `git status` in `manuka-ai-agent` shows only
+   `frontend/src/components/ui/tree-view.tsx` and `frontend/src/app/theme-gallery/page.tsx`.
