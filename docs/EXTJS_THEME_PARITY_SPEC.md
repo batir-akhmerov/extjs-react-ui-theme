@@ -17,14 +17,14 @@ with a runtime-switchable light/dark mode.
 |---|---|
 | ExtJS gallery | `http://localhost:1962/#galleryview` |
 | React reference | `http://localhost:3000/theme-gallery` |
-| Theme package | `packages/local/theme-shadcn` (extends `theme-material`) |
+| Theme package | `packages/local/theme-react-shadcn` (extends `theme-material`) |
 
 ---
 
 ## 2. Current state
 
 ### Done
-- `packages/local/theme-shadcn` created, `app.json` `builds.desktop.theme` points at it.
+- `packages/local/theme-react-shadcn` created, `app.json` `builds.desktop.theme` points at it.
 - ExtJS gallery: 15 sections, all `gallery-*` itemIds, 0 console errors.
 - React gallery: matching sections with `data-gallery` / `data-gallery-row` hooks.
 - Phase 0 spikes all passed (see §4).
@@ -173,7 +173,7 @@ compiled CSS · `.dark-mode` class repaints instantly (`.x-panel-body` → `rgb(
 
 ## 5. Task A — token layer
 
-Replace `packages/local/theme-shadcn/sass/var/Component.scss` with the full mapping.
+Replace `packages/local/theme-react-shadcn/sass/var/Component.scss` with the full mapping.
 
 - Use `dynamic()` for every variable so it stays overridable:
   `$base-color: dynamic(#171717);`
@@ -224,7 +224,7 @@ Implementation:
 
 ## 6. Task B — dark layer
 
-Build the real `.dark-mode` layer in `packages/local/theme-shadcn/sass/src/Component.scss`.
+Build the real `.dark-mode` layer in `packages/local/theme-react-shadcn/sass/src/Component.scss`.
 
 - Source dark values from the `.dark` block in manuka's `globals.css`.
 - Prefer re-invoking ExtJS `*-ui` mixins with dark parameters inside `.dark-mode { }` over
@@ -390,12 +390,12 @@ via a `<body>` class, the same mechanism `.dark-mode` already uses for light/dar
   `.footerview`, `.topview`, `.navview`, `.centerview`, `.detailview`, `.homeview`, `.imgAll`) —
   uses a generic name that a second theme package could plausibly reuse for its own purposes.
   If two such themes are ever compiled into the same bundle, these need to be scoped under a
-  wrapper class on `<body>` (e.g. `.ppaAppReact`, mirrored on `.dark-mode`) so only the active
-  theme's custom rules apply — the same pattern `.dark-mode` already establishes for
+  wrapper class on `<body>` (e.g. `.ppaAppReactShadcn`, mirrored on `.dark-mode`) so only the
+  active theme's custom rules apply — the same pattern `.dark-mode` already establishes for
   light/dark, just one level higher (theme-vs-theme instead of light-vs-dark).
 - **Today, this doesn't apply.** Theme selection is still build-time (`app.json`
   `builds.desktop.theme`) — only one theme's CSS is ever compiled into the bundle, so there is
-  no live collision to guard against yet. Add the `.ppaAppReact`-style wrapper only when a
+  no live collision to guard against yet. Add the `.ppaAppReactShadcn`-style wrapper only when a
   second runtime-switchable theme is actually introduced; doing it preemptively here would just
   be dead selector weight.
 

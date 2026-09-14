@@ -277,7 +277,7 @@ Ext.toast({
 The theme's `$font-icon-font-family` currently points at Material Icons in stock Material —
 this app uses FA. Available: solid (`fa-`), regular (outline), brands.
 
-## 11. Theme SCSS (`packages/local/theme-shadcn`)
+## 11. Theme SCSS (`packages/local/theme-react-shadcn`)
 
 - `sass/var/*.scss` — variable overrides. Use `dynamic()`: `$base-color: dynamic(#171717);`
 - `sass/src/*.scss` — emitted CSS rules.

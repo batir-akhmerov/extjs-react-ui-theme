@@ -1,2 +1,2 @@
-Ext.namespace('Ext.theme.is')['theme-shadcn'] = true;
-Ext.theme.name = 'theme-shadcn';
+Ext.namespace('Ext.theme.is')['theme-react-shadcn'] = true;
+Ext.theme.name = 'theme-react-shadcn';

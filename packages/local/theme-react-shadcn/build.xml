@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="theme-shadcn" default=".help">
+<project name="theme-react-shadcn" default=".help">
 
     <script language="javascript">
         <![CDATA[

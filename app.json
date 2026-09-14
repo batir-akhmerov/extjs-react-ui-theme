@@ -14,7 +14,7 @@
   "builds": {
     "desktop": {
       "toolkit": "classic",
-      "theme": "theme-shadcn",
+      "theme": "theme-react-shadcn",
       "sass": {
         "generated": {
           "var": "${build.id}/sass/save.scss",

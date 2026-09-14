@@ -105,7 +105,7 @@ Ext.define('ClassicApp.view.main.MainViewController', {
   },
 
   // Dark mode is a single stylesheet with a `.dark-mode` body-class layer;
-  // see packages/local/theme-shadcn/sass/src/Component.scss.
+  // see packages/local/theme-react-shadcn/sass/src/Component.scss.
   onHeaderViewDarkModeToggle: function (button) {
     Ext.getBody().toggleCls('dark-mode', button.pressed);
     button.setIconCls(button.pressed ? 'x-fa fa-sun' : 'x-fa fa-moon');

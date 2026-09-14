@@ -74,7 +74,7 @@ Additionally `.x-btn-button:after` (the separator) was repainted per state in th
 own background colour and was 60px tall inside a 32px button, so it rendered as a hard black
 edge-to-edge bar.
 
-**Fix** — `packages/local/theme-shadcn/sass/src/button/Button.scss`:
+**Fix** — `packages/local/theme-react-shadcn/sass/src/button/Button.scss`:
 
 1. Force both masks to `background-color: transparent !important`. `!important` is required:
    theme-material re-emits these once per state \u00d7 ui at four classes of specificity.

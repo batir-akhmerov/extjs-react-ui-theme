@@ -45,7 +45,7 @@ renders, so the two can be screenshot side-by-side during theme development.
 **This task is "get the components on screen". It is NOT a styling task.**
 
 - Do **not** write any SCSS colour/spacing/font rules to make ExtJS look like React.
-- Do **not** edit `packages/local/theme-shadcn/**`.
+- Do **not** edit `packages/local/theme-react-shadcn/**`.
 - Do **not** edit `app/desktop/sass/var.scss` or `app/shared/sass/var.scss`.
 - The gallery will look like stock Material. **That is the correct outcome.**
 
@@ -59,7 +59,7 @@ row wrapping) and the status-accent classes named in §7.10.
 | Ext JS | 8.0.0.43, Classic toolkit |
 | Dev server | `npm run dev` → `http://localhost:1962` (already running) |
 | Rebuild | webpack-dev-server hot-rebuilds on `.js`/`.scss` save, ~10s. **No restart needed.** |
-| Active theme | `theme-shadcn` (`packages/local/theme-shadcn`) — leave it alone |
+| Active theme | `theme-react-shadcn` (`packages/local/theme-react-shadcn`) — leave it alone |
 | Icons | FontAwesome 7 Free, via `iconCls: 'x-fa fa-<name>'` |
 | App namespace | `ClassicApp` |
 
@@ -349,7 +349,7 @@ Should list all 15 `gallery-*` ids in order.
 ## 10. Out of scope — do not do these
 
 - Any colour / font / spacing work to match React. That is the next phase.
-- Editing `packages/local/theme-shadcn/**`.
+- Editing `packages/local/theme-react-shadcn/**`.
 - Editing the React gallery.
 - Re-tokenising the 14 existing view SCSS files under `app/desktop/src/view/**`.
 - Deleting or modifying `HomeView` / `PersonnelView`.

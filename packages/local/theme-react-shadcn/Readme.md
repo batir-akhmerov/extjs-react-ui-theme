@@ -1,2 +1,2 @@
-# theme-shadcn - Read Me
+# theme-react-shadcn - Read Me
 
