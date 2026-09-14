@@ -47,15 +47,18 @@
 }
 
 // ---------------------------------------------------------------------------
-// Focus ring clipping.
+// Focus / invalid ring clipping.
 //
-// shadcn draws focus as a 3px ring OUTSIDE the field box. `.x-box-layout-ct`
-// and `.x-box-inner` clip at exactly the child's edge, so a field flush with
-// its row loses whichever side of the ring is against it. Un-clip, but only
-// while a field inside is actually focused, so box scrollers keep working.
+// shadcn draws focus and invalid as a 3px ring OUTSIDE the field box.
+// `.x-box-layout-ct` and `.x-box-inner` clip at exactly the child's edge, so a
+// field flush with its row loses whichever side of the ring is against it.
+// Un-clip, but only while a field inside is actually focused or invalid, so box
+// scrollers keep working everywhere else.
 // ---------------------------------------------------------------------------
 .#{$prefix}box-layout-ct:has(.#{$prefix}form-trigger-wrap-focus),
 .#{$prefix}box-inner:has(.#{$prefix}form-trigger-wrap-focus),
+.#{$prefix}box-layout-ct:has(.#{$prefix}form-trigger-wrap-invalid),
+.#{$prefix}box-inner:has(.#{$prefix}form-trigger-wrap-invalid),
 .#{$prefix}box-layout-ct:has(.#{$prefix}form-cb-focus),
 .#{$prefix}box-inner:has(.#{$prefix}form-cb-focus),
 .#{$prefix}box-layout-ct:has(.#{$prefix}form-checkbox-focus),
@@ -81,6 +84,71 @@
 .#{$prefix}mask-msg-inner {
     border-radius: $shadcn-radius-lg;
     background-color: transparent;
+}
+
+// ---------------------------------------------------------------------------
+// Fieldset = a bordered card with a legend.
+//
+// theme-triton emits `border-top: 1px solid #cacaca !important` and both triton
+// and material repaint the surface, so the border has to be restated the same
+// way. The legend's colour/weight come from the vars in sass/var/Component.scss.
+// ---------------------------------------------------------------------------
+.#{$prefix}fieldset,
+.#{$prefix}fieldset-default {
+    border: $fieldset-border-width $fieldset-border-style $fieldset-border-color !important;
+    border-radius: $fieldset-border-radius;
+    background: $fieldset-background-color;
+}
+
+// ---------------------------------------------------------------------------
+// CheckboxGroup / RadioGroup.
+//
+// Both lay their options out in a plain table with no column gap, so adjacent
+// options run together, and the box label wraps rather than widening its cell.
+// ---------------------------------------------------------------------------
+.#{$prefix}form-check-group,
+.#{$prefix}form-radio-group {
+    padding-right: 16px;
+}
+
+.#{$prefix}checkboxgroup-form-item .#{$prefix}form-cb-label {
+    white-space: nowrap;
+}
+
+// ---------------------------------------------------------------------------
+// ext-calendar's month grid is a bare table with mid-grey rules and square
+// corners. Give it the card ring so it reads as one rounded surface.
+//
+// The ring goes on the panel root, not on `.x-calendar-weeks`: the weekday
+// header is a sibling table docked above the body, so ringing the weeks div
+// alone would draw a rule between the two. The panel carries no calendar
+// class of its own, hence the :has() on the header table.
+// ---------------------------------------------------------------------------
+.#{$prefix}panel-default:has(> .#{$prefix}panel-bodyWrap > .#{$prefix}calendar-header-table) {
+    border-radius: $shadcn-radius-lg;
+    // The day cells are opaque and square; without this they paint over the
+    // rounded corners.
+    overflow: hidden;
+    isolation: isolate;
+
+    // Overlay pseudo-element, for the reason given in sass/src/panel/Panel.scss.
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+        border: 1px solid $shadcn-card-ring;
+        border-radius: inherit;
+        pointer-events: none;
+    }
+}
+
+.#{$prefix}calendar-weeks td,
+.#{$prefix}calendar-header td {
+    border-color: $shadcn-border;
 }
 
 // ============================================================================
@@ -247,7 +315,7 @@
     padding: 2px 8px;
     border: 1px solid transparent;
     border-radius: 26px;
-    font-size: 12px;
+    font-size: var(--form-font-size, var(--ui-font-size, 14px));
     font-weight: 500;
     white-space: nowrap;
 }
@@ -308,18 +376,17 @@ $gallery-status-fills: (
     }
 
     // Tile edge accents (spec §7.10). Drawn as inset shadows rather than
-    // borders so they neither consume layout nor replace the card ring on the
-    // other edges.
+    // borders so they neither consume layout nor fight the card outline.
     .gallery-tile-accent-left.gallery-status-#{$name} {
-        box-shadow: inset 3px 0 0 0 $color, inset 0 0 0 1px $shadcn-card-ring;
+        box-shadow: inset 3px 0 0 0 $color;
     }
 
     .gallery-tile-accent-top.gallery-status-#{$name} {
-        box-shadow: inset 0 3px 0 0 $color, inset 0 0 0 1px $shadcn-card-ring;
+        box-shadow: inset 0 3px 0 0 $color;
     }
 
     .gallery-tile-accent-right.gallery-status-#{$name} {
-        box-shadow: inset -3px 0 0 0 $color, inset 0 0 0 1px $shadcn-card-ring;
+        box-shadow: inset -3px 0 0 0 $color;
     }
 
     .gallery-status-chip-#{$name} {
@@ -344,12 +411,23 @@ $gallery-status-fills: (
 // with a 36px rounded-lg icon chip.
 .gallery-tile {
     border-radius: $shadcn-radius-xl;
-    // Inset, so a flush box-layout container cannot clip the outline away.
-    box-shadow: inset 0 0 0 1px $shadcn-card-ring;
+
+    // Overlay pseudo-element, for the reason given in sass/src/panel/Panel.scss.
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px solid $shadcn-card-ring;
+        border-radius: inherit;
+        pointer-events: none;
+    }
 }
 
 // The panel body fills the panel edge to edge and paints its own opaque
-// surface, which covers the ring above on every side but the clipped corners.
+// surface, which would otherwise hide the accent borders below.
 .gallery-tile .#{$prefix}panel-body {
     background-color: transparent;
 }
@@ -527,7 +605,7 @@ $gallery-toast-colors: (
     .#{$prefix}fieldset,
     .#{$prefix}fieldset-default {
         background-color: $shadcn-dark-card;
-        border-color: $shadcn-dark-border-solid;
+        border-color: $shadcn-dark-border-solid !important;
         color: $shadcn-dark-foreground;
     }
 
@@ -566,6 +644,15 @@ $gallery-toast-colors: (
     .#{$prefix}calendar-header-cell,
     .#{$prefix}calendar-day-number {
         color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}panel-default:has(> .#{$prefix}panel-bodyWrap > .#{$prefix}calendar-header-table):after {
+        border-color: $shadcn-dark-card-ring;
+    }
+
+    .#{$prefix}calendar-weeks td,
+    .#{$prefix}calendar-header td {
+        border-color: $shadcn-dark-border-solid;
     }
 
     // -----------------------------------------------------------------------
@@ -761,8 +848,8 @@ $gallery-toast-colors: (
         color: $shadcn-dark-foreground;
     }
 
-    .gallery-tile {
-        box-shadow: inset 0 0 0 1px $shadcn-dark-card-ring;
+    .gallery-tile:after {
+        border-color: $shadcn-dark-card-ring;
     }
 
     .gallery-tile-icon {
@@ -796,15 +883,15 @@ $gallery-toast-colors: (
         }
 
         .gallery-tile-accent-left.gallery-status-#{$name} {
-            box-shadow: inset 3px 0 0 0 $color, inset 0 0 0 1px $shadcn-dark-card-ring;
+            box-shadow: inset 3px 0 0 0 $color;
         }
 
         .gallery-tile-accent-top.gallery-status-#{$name} {
-            box-shadow: inset 0 3px 0 0 $color, inset 0 0 0 1px $shadcn-dark-card-ring;
+            box-shadow: inset 0 3px 0 0 $color;
         }
 
         .gallery-tile-accent-right.gallery-status-#{$name} {
-            box-shadow: inset -3px 0 0 0 $color, inset 0 0 0 1px $shadcn-dark-card-ring;
+            box-shadow: inset -3px 0 0 0 $color;
         }
 
         .gallery-status-chip-#{$name} {

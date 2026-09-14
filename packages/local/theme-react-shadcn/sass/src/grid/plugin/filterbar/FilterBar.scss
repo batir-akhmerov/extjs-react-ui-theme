@@ -7,6 +7,24 @@
     box-shadow: inset 0 (-$grid-header-border-width) 0 $grid-header-border-color;
 }
 
+// The filter fields are box items sized to the exact column width with no
+// margin, so each one's rounded left edge butts straight against the previous
+// one's right edge and the two read as a single broken box. The vertical inset
+// matters just as much: the fields are content-sized and fill the bar edge to
+// edge, so their top and bottom borders land on the bar's own boundaries and
+// merge with the header divider. The fields are border-box, so this insets
+// them horizontally and grows the bar vertically.
+.#{$prefix}grid-filterbar .#{$prefix}grid-filter-base {
+    padding: 3px 4px;
+}
+
+// The operator icon (~, =, etc.) is the wrap's first table-cell and is painted
+// with an opaque background by the neutral theme, same problem as the number
+// spinner below: it squares off the wrap's rounded left corners.
+.#{$prefix}operator-button {
+    background-color: transparent;
+}
+
 // Dark mode. See the note at the top of sass/src/Component.scss.
 .dark-mode {
     .#{$prefix}grid-filterbar {
@@ -19,8 +37,7 @@
     }
 
     .#{$prefix}grid-filter-base,
-    .#{$prefix}grid-filter-none,
-    .#{$prefix}operator-button {
+    .#{$prefix}grid-filter-none {
         background-color: transparent;
         color: $shadcn-dark-muted-foreground;
     }

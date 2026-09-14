@@ -14,7 +14,13 @@
     padding: 0;
 
     .#{$prefix}tab {
-        margin-right: 4px;
+        margin-right: 6px;
+    }
+
+    &.#{$prefix}docked-left .#{$prefix}tab,
+    &.#{$prefix}docked-right .#{$prefix}tab {
+        margin-right: 0;
+        margin-bottom: 6px;
     }
 }
 

@@ -11,6 +11,9 @@
 .#{$prefix}datepicker {
     border-width: 0;
     border-radius: $shadcn-radius-lg;
+    // The header, footer and month grid are opaque and square, so without this
+    // they paint straight over the rounded corners.
+    overflow: hidden;
     box-shadow:
         0 0 0 1px $shadcn-card-ring,
         0 4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -29,6 +32,20 @@
         border-radius: 50%;
         line-height: 32px;
         text-align: center;
+    }
+}
+
+// The month/year header is a real Ext.button, so it inherits the filled primary
+// UI's near-white label — invisible on the picker's white surface. Four classes
+// to beat `.x-btn.x-btn-default-small .x-btn-inner`.
+.#{$prefix}datepicker .#{$prefix}datepicker-month .#{$prefix}btn {
+    background-color: transparent;
+
+    .#{$prefix}btn-inner,
+    .#{$prefix}btn-icon-el,
+    .#{$prefix}btn-arrow:after,
+    .#{$prefix}btn-split:after {
+        color: $shadcn-foreground;
     }
 }
 
@@ -95,5 +112,14 @@
     .#{$prefix}monthpicker-selected a {
         background-color: $shadcn-dark-primary;
         color: $shadcn-dark-primary-foreground;
+    }
+
+    .#{$prefix}datepicker .#{$prefix}datepicker-month .#{$prefix}btn {
+        .#{$prefix}btn-inner,
+        .#{$prefix}btn-icon-el,
+        .#{$prefix}btn-arrow:after,
+        .#{$prefix}btn-split:after {
+            color: $shadcn-dark-foreground;
+        }
     }
 }

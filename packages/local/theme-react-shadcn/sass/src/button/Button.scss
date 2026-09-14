@@ -145,6 +145,129 @@
 @include shadcn-button-ui('decline', $shadcn-destructive-foreground);
 
 // ---------------------------------------------------------------------------
+// Toggle buttons -> shadcn <Toggle> / <ToggleGroupItem>.
+//
+// `x-btn-pressed` alone is no good as the "on" hook: ExtJS also adds it for the
+// mousedown flash of an ordinary button. ExtJS writes aria-pressed only on
+// toggle-enabled buttons, which makes it the exact hook for both states.
+//
+// off -> ghost (transparent, foreground text, muted on hover)
+// on  -> the muted surface
+//
+// Without the off half, an unpressed toggle keeps the filled primary fill and
+// the two states are indistinguishable. Scoped to the `default` UI so the app
+// shell's `toolbutton` toggles are left alone.
+// ---------------------------------------------------------------------------
+@mixin shadcn-button-toggle-off($fg, $bg-over, $scope: '') {
+    @each $scale in ('small', 'medium', 'large') {
+        $sel: '#{$scope}.#{$prefix}btn.#{$prefix}btn-default-#{$scale}[aria-pressed="false"]';
+
+        #{$sel},
+        #{$sel}.#{$prefix}btn-focus {
+            background-color: transparent;
+            border-color: transparent;
+        }
+
+        #{$sel}.#{$prefix}btn-over,
+        #{$sel}.#{$prefix}btn-focus-over,
+        #{$sel}.#{$prefix}btn-menu-active {
+            background-color: $bg-over;
+            border-color: transparent;
+        }
+
+        #{$sel} {
+            .#{$prefix}btn-inner,
+            .#{$prefix}btn-icon-el,
+            .#{$prefix}btn-arrow:after,
+            .#{$prefix}btn-split:after {
+                color: $fg;
+            }
+        }
+    }
+}
+
+@mixin shadcn-button-toggled($bg, $fg, $border, $scope: '') {
+    $sel: '#{$scope}.#{$prefix}btn.#{$prefix}btn-pressed[aria-pressed="true"]';
+
+    #{$sel},
+    #{$sel}.#{$prefix}btn-over,
+    #{$sel}.#{$prefix}btn-focus,
+    #{$sel}.#{$prefix}btn-focus-pressed,
+    #{$sel}.#{$prefix}btn-menu-active {
+        background-color: $bg;
+        border-color: $border;
+
+        .#{$prefix}btn-inner,
+        .#{$prefix}btn-icon-el,
+        .#{$prefix}btn-arrow:after,
+        .#{$prefix}btn-split:after {
+            color: $fg;
+        }
+    }
+}
+
+@include shadcn-button-toggle-off($shadcn-foreground, $shadcn-accent);
+@include shadcn-button-toggled($shadcn-accent, $shadcn-accent-foreground, $shadcn-border);
+
+// ---------------------------------------------------------------------------
+// Ext.button.Segmented -> shadcn <ToggleGroup variant="outline">.
+//
+// The container draws no border of its own and the toggle rules above clear
+// each item's, so the group read as a row of loose, unrelated buttons. Ring the
+// container (overlay pseudo-element, for the reason given in
+// sass/src/panel/Panel.scss) and separate the items with hairlines.
+// ---------------------------------------------------------------------------
+.#{$prefix}segmented-button-default {
+    position: relative;
+    border-radius: $shadcn-radius-lg;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px solid $shadcn-border;
+        border-radius: inherit;
+        pointer-events: none;
+    }
+}
+
+// The items keep their own 1px border for sizing, but only ExtJS' pressed state
+// ever colours it, which put a stray double rule beside the active item. The
+// dividers are drawn as overlay pseudo-elements instead: they cost no layout
+// width, and unlike an inset shadow they survive the neutral theme's
+// `.x-btn.x-btn-pressed.x-btn-default-small { box-shadow: none }`.
+.#{$prefix}btn.#{$prefix}segmented-button-item,
+.#{$prefix}btn.#{$prefix}segmented-button-item.#{$prefix}btn-over,
+.#{$prefix}btn.#{$prefix}segmented-button-item.#{$prefix}btn-pressed[aria-pressed="true"] {
+    border-color: transparent;
+}
+
+.#{$prefix}segmented-button-item:not(.#{$prefix}segmented-button-first):before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    background-color: $shadcn-border;
+    pointer-events: none;
+}
+
+.#{$prefix}segmented-button-item-horizontal:not(.#{$prefix}segmented-button-first):before {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+}
+
+.#{$prefix}segmented-button-item-vertical:not(.#{$prefix}segmented-button-first):before {
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+}
+
+// ---------------------------------------------------------------------------
 // Split / menu buttons.
 //
 // ExtJS masks everything except the arrow segment with an opaque, square-
@@ -346,6 +469,13 @@ $shadcn-itemselector-glyphs: (
 @include shadcn-split-tint('default-toolbar', $shadcn-dark-accent, '.dark-mode ');
 @include shadcn-split-tint('plain-toolbar', $shadcn-dark-accent, '.dark-mode ');
 
+// Must follow shadcn-button-ui-dark: the two sets of selectors tie on
+// specificity, so source order decides.
+@include shadcn-button-toggle-off($shadcn-dark-foreground, $shadcn-dark-accent, '.dark-mode ');
+@include shadcn-button-toggled(
+    $shadcn-dark-accent, $shadcn-dark-accent-foreground, $shadcn-dark-border-solid, '.dark-mode '
+);
+
 .dark-mode {
     #{$shadcn-itemselector-btn}.#{$prefix}btn-over,
     #{$shadcn-itemselector-btn}.#{$prefix}btn-focus,
@@ -380,5 +510,13 @@ $shadcn-itemselector-glyphs: (
     .#{$prefix}btn-group-header-text-default-framed,
     .#{$prefix}btn-group-header-text {
         color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}segmented-button-default:after {
+        border-color: $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}segmented-button-item:not(.#{$prefix}segmented-button-first):before {
+        background-color: $shadcn-dark-border-solid;
     }
 }

@@ -131,6 +131,44 @@ cannot be shrunk from CSS without breaking the dock.
 3. ✅ No new Fashion build warnings; zero console errors on a clean load.
 4. ✅ `docs/EXTJS_THEME_PARITY_SPEC.md` §2 "Still to do" updated.
 
+## 5a. Round 2 — 13 further defects from a second manual pass (all VERIFIED)
+
+| # | Issue | Fix location | Measured result |
+|---|---|---|---|
+| 1 | Panel body content not aligned with the panel title | `app/desktop/src/view/gallery/GalleryView.js` | `bodyPadding: 16` matches the header's `16px 16px 8px`; title x = body text x = 363 |
+| 2 | Pressed and unpressed buttons look identical; "Options" shows two arrows | `sass/src/button/Button.scss`, `GalleryView.js` | off = transparent/`#0a0a0a` text, on = `#f5f5f5`/`#171717`; the redundant `iconCls` is gone, one arrow element |
+| 3 | Number field's right corners broken by the spinner | `sass/src/form/field/Text.scss` | `.x-form-spinner*` transparent; wrap radius 10px intact |
+| 4 | Month/Year barely visible in the datepicker header | `sass/src/picker/Date.scss` | header button label `rgb(10,10,10)` on a transparent fill |
+| 5 | Pressed toggle indistinguishable | same as 2 | segmented items follow the same on/off pair (= shadcn `ToggleGroup`) |
+| 6 | Horizontal checkbox/radio options run together; labels wrap | `sass/src/Component.scss` | `.x-form-check-group` (the layout's column `<td>`) `padding-right: 16px`; box labels `nowrap`, single 20px line |
+| 7 | Inline datepicker and calendar corners broken | `sass/src/picker/Date.scss`, `sass/src/Component.scss` | datepicker r10 + `overflow: hidden`; the calendar **panel** (not `.x-calendar-weeks`) carries the r10 ring + clip |
+| 8 | Fieldset corners square, legend grey | `sass/var/Component.scss`, `sass/src/Component.scss` | r10, border `#e5e5e5`, legend `#0a0a0a` / 600 |
+| 9 | Card has no rounded outline; stat label overlaps the number | `sass/src/panel/Panel.scss`, `GalleryView.js` | ring r14 continuous; value 24/32, label 16 line-height |
+| 10 | Select-all leaves every checkbox off; filter-bar fields lose their left edge | `sass/src/form/field/Checkbox.scss`, `sass/src/grid/plugin/filterbar/FilterBar.scss` | header + row boxes fill `#171717` with the tick; `.x-grid-filter-base` `padding: 0 4px` gives each field its own rounded box |
+| 11/12 | First letter of tab content clipped; tab titles too close | `sass/src/panel/Panel.scss`, `sass/src/tab/{Tab,Bar}.scss`, `sass/var/tab/Tab.scss` | body `line-height: 20px` (text top now 1px inside the body); tab padding `2px 10px`, 6px gap horizontally and vertically, close button `right: 6px` |
+| 13 | Submenu arrow not vertically centred | `sass/src/menu/Menu.scss` | arrow centre offset 0 in a 28px item |
+
+### The one finding worth carrying forward
+
+The "broken panel borders" in 6/7/8/9 were all the same bug. ExtJS positions `.x-panel-body`
+absolutely, and a positioned descendant paints **above** its parent's `outline` just as it does
+over an inset `box-shadow` — so only the rounded corners ever showed. The ring has to be an
+overlay pseudo-element:
+
+```scss
+&:after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    border: 1px solid $shadcn-card-ring;
+    border-radius: inherit;
+    pointer-events: none;
+}
+```
+
+A real `border` on the panel root also renders (ExtJS is `border-box`, so the outer size is
+unchanged) but it shifts the body ExtJS has already measured by 1px.
+
 ## 6. Still open (not part of the 16)
 
 - ExtJS tab bar is full-bleed; shadcn's `TabsList` is `w-fit`.

@@ -135,6 +135,28 @@ $window-header-color: dynamic($shadcn-card-foreground);
 $focus-font-color: dynamic($shadcn-primary-foreground);
 
 // ---------------------------------------------------------------------------
+// Fieldset.
+//
+// shadcn has no fieldset primitive, so treat it as a bordered card with a
+// foreground-coloured legend. theme-neutral derives the legend from
+// $fieldset-header-color, which resolves to a mid grey that reads as disabled.
+//
+// Declared here rather than in sass/var/form/FieldSet.scss because the dev
+// server only compiles the sass files that existed when it started; var files
+// are all evaluated before any src file emits, so the position does not matter.
+// ---------------------------------------------------------------------------
+$fieldset-border-color: dynamic($shadcn-border);
+$fieldset-border-radius: dynamic($shadcn-radius-lg);
+$fieldset-background-color: dynamic($shadcn-card);
+$fieldset-padding: dynamic(12px 12px 4px);
+$fieldset-header-padding: dynamic(0 6px);
+$fieldset-header-color: dynamic($shadcn-foreground);
+$fieldset-header-font-size: dynamic(14px);
+$fieldset-header-font-weight: dynamic(600);
+$fieldset-header-line-height: dynamic(20px);
+$fieldset-tool-glyph-color: dynamic($shadcn-muted-foreground);
+
+// ---------------------------------------------------------------------------
 // Spacing
 // ---------------------------------------------------------------------------
 $content-padding: dynamic(16px);

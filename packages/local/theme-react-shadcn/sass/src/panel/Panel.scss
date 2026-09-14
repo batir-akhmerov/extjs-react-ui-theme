@@ -7,16 +7,48 @@
 // and there is no box-shadow hook on the default UI at all.
 // ============================================================================
 
-// shadcn's Card maps to a *titled* ExtJS panel. Header-less panels are almost
-// always layout scaffolding here (form containers, the app shell, docked
-// wrappers) and must stay flat, so the ring is gated on the header's presence.
+// The base theme's frame mixin rounds every default-UI panel and ExtJS clips
+// the panel root, so a tab panel and its children shave the top-left of the
+// first glyph off an unpadded tab body. Neither draws a ring, so neither needs
+// the radius.
+.#{$prefix}panel-default:has(> .#{$prefix}panel-bodyWrap > .#{$prefix}tab-bar),
+.#{$prefix}panel-default.#{$prefix}tabpanel-child {
+    border-radius: 0;
+}
+
+// shadcn's Card maps to a *titled* ExtJS panel, plus the grid, which shadcn
+// draws as a bordered card of its own. Header-less panels are almost always
+// layout scaffolding here (form containers, the app shell, docked wrappers,
+// tab-panel children) and must stay flat.
 //
-// The ring is INSET: `.x-box-inner` / `.x-box-layout-ct` clip at exactly the
-// child's edge, so an outward 1px ring loses whichever side is flush with its
-// container — which is every side a card is stretched against.
-.#{$prefix}panel-default:has(> .#{$prefix}panel-header) {
+// The ring is drawn on an OVERLAY PSEUDO-ELEMENT, not as a border, an outline
+// or a box-shadow: a border shifts the layout box ExtJS has already measured,
+// an outward box-shadow is clipped by `.x-box-inner` / `.x-box-layout-ct`, an
+// inset one paints before the children, and even an outline loses to the
+// panel's body — ExtJS positions it absolutely, and positioned descendants
+// paint above the parent's outline. Only the corners survived.
+.#{$prefix}panel-default:has(> .#{$prefix}panel-header),
+.#{$prefix}panel-default.#{$prefix}grid {
     border-radius: $panel-border-radius;
-    box-shadow: inset 0 0 0 1px $shadcn-card-ring;
+
+    // Docked headers, toolbars, tab bars and filter bars are absolutely
+    // positioned at z-index 4 and would paint over the ring's edges — the top
+    // one in particular, which is why titled panels looked open at the top.
+    // `isolation` keeps the ring's layer from escaping the panel.
+    isolation: isolate;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+        border: 1px solid $shadcn-card-ring;
+        border-radius: inherit;
+        pointer-events: none;
+    }
 
     > .#{$prefix}panel-header-default-docked-top {
         border-top-left-radius: $panel-border-radius;
@@ -31,12 +63,20 @@
     }
 }
 
+// The global $line-height is 17px, which is below Inter's 14px ascender box, so
+// the top of the first text row is shaved off wherever the body has no padding
+// — most visibly in tab content.
+.#{$prefix}panel-body-default {
+    line-height: 20px;
+}
+
 // ---------------------------------------------------------------------------
 // Dark mode. See the note at the top of sass/src/Component.scss.
 // ---------------------------------------------------------------------------
 .dark-mode {
-    .#{$prefix}panel-default:has(> .#{$prefix}panel-header) {
-        box-shadow: inset 0 0 0 1px $shadcn-dark-card-ring;
+    .#{$prefix}panel-default:has(> .#{$prefix}panel-header):after,
+    .#{$prefix}panel-default.#{$prefix}grid:after {
+        border-color: $shadcn-dark-card-ring;
     }
 
     // Material paints the panel ROOT as well as the body, and it shows through

@@ -119,8 +119,10 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                     layout: 'hbox',
                     defaults: { margin: '0 12 0 0' },
                     items: [
-                        { xtype: 'panel', title: 'Panel', width: 150, height: 80, bodyPadding: 8, html: 'panel body' },
-                        { xtype: 'panel', title: 'Framed', frame: true, width: 150, height: 80, bodyPadding: 8, html: 'frame body' },
+                        // bodyPadding matches the header's 16px inset so body
+                        // content starts on the same x as the title.
+                        { xtype: 'panel', title: 'Panel', width: 150, height: 90, bodyPadding: 16, html: 'panel body' },
+                        { xtype: 'panel', title: 'Framed', frame: true, width: 150, height: 90, bodyPadding: 16, html: 'frame body' },
                         { xtype: 'toolbar', width: 150, items: [{ text: 'Toolbar' }] }
                     ]
                 },
@@ -204,7 +206,8 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                     defaults: { margin: '0 8 0 0' },
                     items: [
                         { xtype: 'splitbutton', text: 'Save', menu: [{ text: 'Save as…' }, { text: 'Save a copy' }] },
-                        { xtype: 'button', text: 'Options', iconCls: 'x-fa fa-chevron-down', iconAlign: 'right',
+                        // No iconCls: a button with a menu already renders its own arrow.
+                        { xtype: 'button', text: 'Options',
                           menu: [{ text: 'Item one' }, { text: 'Item two' }] }
                     ]
                 },
@@ -409,7 +412,7 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
             items: [
                 {
                     xtype: 'panel', itemId: 'row-agent-settings', cls: 'gallery-row', width: 320,
-                    title: 'Agent settings', bodyPadding: 12,
+                    title: 'Agent settings', bodyPadding: 16,
                     items: [{
                         xtype: 'form', border: false,
                         defaults: { labelAlign: 'left', labelWidth: 100, anchor: '100%', margin: '0 0 8 0' },
@@ -422,8 +425,9 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                 },
                 {
                     xtype: 'panel', itemId: 'row-statistics', cls: 'gallery-row', width: 220,
-                    title: 'Statistics', bodyPadding: 12,
-                    html: '<div style="font-size:28px;font-weight:600;">1,284</div><div>emails processed</div>'
+                    title: 'Statistics', bodyPadding: 16,
+                    html: '<div class="gallery-tile-value">1,284</div>' +
+                          '<div class="gallery-tile-label">emails processed</div>'
                 }
             ]
         },

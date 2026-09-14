@@ -66,6 +66,14 @@
     color: $shadcn-muted-foreground;
 }
 
+// The number field's two spinner halves are painted opaque white and run to the
+// trigger's full width, so they cover the wrap's rounded right-hand corners.
+.#{$prefix}form-spinner,
+.#{$prefix}form-spinner-up,
+.#{$prefix}form-spinner-down {
+    background-color: transparent;
+}
+
 // ---------------------------------------------------------------------------
 // States.
 //

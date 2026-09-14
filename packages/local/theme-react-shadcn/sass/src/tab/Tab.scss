@@ -19,17 +19,35 @@
 // so the 8px radius silently turns $tab-padding into 8px 8px 6px. Restate it —
 // 2 + 19 + 2 + 2px border = the 25px shadcn trigger.
 .#{$prefix}tab.#{$prefix}tab-default {
-    padding: 2px 6px;
+    padding: 2px 10px;
 
     .#{$prefix}tab-inner {
         line-height: 19px;
     }
 }
 
+// $tab-border-width is shared with the line variant, which needs it for the
+// underline. On the filled variant the border is transparent but still takes
+// space, and ExtJS moves it to whichever edge faces the body — so a
+// bottom-docked bar pushed every label 2px below the centre of its pill.
+.#{$prefix}tab-bar:not(.#{$prefix}tab-bar-plain) .#{$prefix}tab.#{$prefix}tab-default {
+    border-width: 0;
+    padding: 3px 10px;
+}
+
 // shadcn's TabsList spaces its triggers; $tab-margin is shared with the line
-// variant, which sets its own gap below.
+// variant, which sets its own gap below. The box layout writes `margin: 0`
+// inline after measuring, so these values only ever reach the layout pass —
+// which is what actually produces the gap.
 .#{$prefix}tab-bar:not(.#{$prefix}tab-bar-plain) .#{$prefix}tab {
-    margin-right: 2px;
+    margin-right: 6px;
+}
+
+// Stacked tabs need the gap on the other axis.
+.#{$prefix}tab-bar.#{$prefix}docked-left .#{$prefix}tab,
+.#{$prefix}tab-bar.#{$prefix}docked-right .#{$prefix}tab {
+    margin-right: 0;
+    margin-bottom: 6px;
 }
 
 // The line variant's active marker is the underline, so the trigger must be a
@@ -42,11 +60,11 @@
 
 // ExtJS pins the close button to the tab's top-right corner; centre it instead.
 .#{$prefix}tab.#{$prefix}tab-closable {
-    padding-right: 22px;
+    padding-right: 26px;
 
     .#{$prefix}tab-close-btn {
         top: 50%;
-        right: 4px;
+        right: 6px;
         margin-top: -8px;
     }
 }

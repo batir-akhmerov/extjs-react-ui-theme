@@ -11,7 +11,9 @@ $shadcn-check-tick: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3
 
 .#{$prefix}form-checkbox,
 .#{$prefix}grid-checkcolumn,
-.#{$prefix}column-header-checkbox,
+// CheckboxModel puts x-column-header-checkbox on the column header as well as
+// on the box inside it; only the inner one is the checkbox.
+.#{$prefix}column-header-checkbox:not(.#{$prefix}column-header),
 .#{$prefix}tree-checkbox {
     box-sizing: border-box;
     // checkcolumn/tree render a bare <span>; without this the 16px box is
@@ -64,6 +66,17 @@ $shadcn-check-tick: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3
     @include shadcn-focus-ring();
 }
 
+// Ext.selection.CheckboxModel never puts a checked class on the cell's span or
+// the header's box — it keys the tick off the row's selected class and the
+// header's checker class, both of which the theme paints as a :after ligature
+// that is suppressed above.
+.#{$prefix}grid-item-selected .#{$prefix}selmodel-column .#{$prefix}grid-checkcolumn,
+.#{$prefix}grid-hd-checker-on .#{$prefix}column-header-checkbox {
+    border-color: $shadcn-primary;
+    background-color: $shadcn-primary;
+    background-image: url($shadcn-check-tick);
+}
+
 .#{$prefix}form-cb-label {
     color: $shadcn-foreground;
     font-size: var(--form-font-size, var(--ui-font-size, #{$font-size}));
@@ -103,6 +116,13 @@ $shadcn-check-tick-dark: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://w
     .#{$prefix}form-cb-focus .#{$prefix}form-checkbox {
         border-color: $shadcn-dark-ring;
         @include shadcn-focus-ring($shadcn-dark-ring-shadow);
+    }
+
+    .#{$prefix}grid-item-selected .#{$prefix}selmodel-column .#{$prefix}grid-checkcolumn,
+    .#{$prefix}grid-hd-checker-on .#{$prefix}column-header-checkbox {
+        border-color: $shadcn-dark-primary;
+        background-color: $shadcn-dark-primary;
+        background-image: url($shadcn-check-tick-dark);
     }
 
     .#{$prefix}form-cb-label {

@@ -13,6 +13,17 @@
     background-color: $menu-background-color;
 }
 
+// theme-material pins the submenu arrow to a fixed `top: 8px`, which sits 2px
+// below centre in a 28px item. Centre it instead; the focus/active selectors
+// have to be restated because material repeats the offset for them.
+.#{$prefix}menu-item-arrow,
+.#{$prefix}menu-item-focus .#{$prefix}menu-item-arrow-default,
+.#{$prefix}menu-item-active .#{$prefix}menu-item-arrow-default {
+    top: 50%;
+    right: 6px;
+    margin-top: -8px;
+}
+
 // ---------------------------------------------------------------------------
 // Dark mode. See the note at the top of sass/src/Component.scss.
 // ---------------------------------------------------------------------------
