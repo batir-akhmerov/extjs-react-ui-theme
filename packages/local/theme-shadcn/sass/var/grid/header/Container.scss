@@ -1,0 +1,26 @@
+// ============================================================================
+// Column header container = shadcn <TableHeader>.
+//
+// Reference (measured on the React gallery, [data-gallery="table"]):
+//   thead tr  h40 · bg transparent · border-bottom 1px #e5e5e5
+//   th        pad 0 8 · fs14/20 · fw500 · colour #0a0a0a · no vertical rule
+// ============================================================================
+
+$grid-header-background-color: dynamic($shadcn-background);
+$grid-header-background-gradient: dynamic('none');
+$grid-header-border-color: dynamic($shadcn-border);
+$grid-header-border-width: dynamic(1px);
+$grid-header-border-style: dynamic(solid);
+
+// 20px line-height + 2 x 10px = the 40px shadcn header row.
+$grid-header-padding: dynamic(10px 8px);
+
+$grid-header-over-background-color: dynamic($shadcn-muted);
+$grid-header-over-background-gradient: dynamic('none');
+$grid-header-sorted-background-color: dynamic($shadcn-muted);
+$grid-header-sorted-background-gradient: dynamic('none');
+$grid-header-open-background-color: dynamic($shadcn-muted);
+
+$grid-header-sort-glyph-color: dynamic($shadcn-muted-foreground);
+$grid-header-trigger-glyph-color: dynamic($shadcn-muted-foreground);
+$grid-header-menu-glyph-color: dynamic($shadcn-muted-foreground);

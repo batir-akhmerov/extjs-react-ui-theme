@@ -1,0 +1,50 @@
+// ============================================================================
+// The line under the column headers.
+//
+// ExtJS puts `x-noborder-trl` on the header container and zeroes its borders
+// with !important, so the divider is drawn as an inset shadow instead of a
+// border — the same trick used for docked toolbars.
+// ============================================================================
+
+// The filter bar also carries x-grid-header-ct; it draws its own divider in
+// sass/src/grid/plugin/filterbar/FilterBar.scss.
+.#{$prefix}grid-header-ct:not(.#{$prefix}grid-filterbar) {
+    box-shadow: inset 0 (-$grid-header-border-width) 0 $grid-header-border-color;
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}grid-header-ct:not(.#{$prefix}grid-filterbar) {
+        box-shadow: inset 0 (-$grid-header-border-width) 0 $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}grid-header-ct {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}column-header {
+        background-color: $shadcn-dark-card;
+        border-right-color: $shadcn-dark-border-solid;
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}column-header-over,
+    .#{$prefix}column-header-open,
+    .#{$prefix}column-header-sort-ASC,
+    .#{$prefix}column-header-sort-DESC {
+        background-color: $shadcn-dark-muted;
+    }
+
+    .#{$prefix}column-header-text,
+    .#{$prefix}column-header-text-inner {
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}column-header-trigger:before,
+    .#{$prefix}column-header-text-inner:after {
+        color: $shadcn-dark-muted-foreground;
+    }
+}

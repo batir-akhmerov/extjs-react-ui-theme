@@ -1,0 +1,49 @@
+// ============================================================================
+// Panel = shadcn Card.
+//
+// theme-material paints the header with $base-color (near-black) and the body
+// with $reverse-color (#fafafa). shadcn cards are white all the way through
+// with a dark title, so every one of those has to be pinned here — material's
+// var/panel/Panel.scss loads before this file and would otherwise win.
+//
+// Reference (measured on the React gallery, [data-slot="card"]):
+//   card    bg #fff · radius 14 · ring 1px foreground/10 · pt 16 · gap 16
+//   header  pad 0 16 · title 16/500 · description 14 muted
+//   content pad 0 16
+//   footer  pad 16 · border-top 1px · bg muted/50
+// ============================================================================
+
+$panel-base-color: dynamic($shadcn-border);
+$panel-border-color: dynamic($shadcn-card-ring);
+$panel-border-radius: dynamic($shadcn-radius-xl);
+
+// The card outline is the ring drawn in sass/src/panel/Panel.scss. Zeroing the
+// panel/header/body borders keeps it from doubling up — and stops layout-only
+// panels (`border: false`) from picking up an outline they never asked for.
+$panel-border-width: dynamic(0);
+$panel-header-border-width: dynamic(0);
+$panel-body-border-width: dynamic(0);
+$panel-body-border-color: dynamic($shadcn-border);
+
+$panel-header-background-color: dynamic($shadcn-card);
+$panel-header-color: dynamic($shadcn-card-foreground);
+$panel-header-glyph-color: dynamic($shadcn-muted-foreground);
+$panel-header-glyph-opacity: dynamic(1);
+$panel-header-font-size: dynamic(16px);
+$panel-header-font-weight: dynamic(500);
+$panel-header-line-height: dynamic(24px);
+$panel-header-padding: dynamic(16px 16px 8px);
+$panel-header-inner-border-width: dynamic(0);
+
+$panel-body-background-color: dynamic($shadcn-card);
+$panel-body-color: dynamic($shadcn-card-foreground);
+$panel-body-font-size: dynamic($font-size);
+
+$panel-frame-base-color: dynamic($shadcn-border);
+$panel-frame-background-color: dynamic($shadcn-card);
+$panel-frame-border-color: dynamic($shadcn-card-ring);
+$panel-frame-border-width: dynamic(1px);
+$panel-frame-border-radius: dynamic($shadcn-radius-xl);
+$panel-frame-header-border-width: dynamic(0);
+$panel-frame-body-border-width: dynamic(0);
+$panel-frame-padding: dynamic(0);

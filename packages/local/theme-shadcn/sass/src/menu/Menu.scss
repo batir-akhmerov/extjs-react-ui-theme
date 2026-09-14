@@ -1,0 +1,60 @@
+// Menus have no radius or shadow variable; shadcn popovers are rounded-lg with
+// shadow-md.
+
+.#{$prefix}menu {
+    border-radius: $shadcn-radius-lg;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.#{$prefix}menu-body {
+    border-radius: $shadcn-radius-lg;
+    background-color: $menu-background-color;
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}menu {
+        border-color: $shadcn-dark-card-ring;
+        box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.6),
+            0 2px 4px -2px rgba(0, 0, 0, 0.6);
+    }
+
+    .#{$prefix}menu-body,
+    .#{$prefix}menu-body-default {
+        background-color: $shadcn-dark-popover;
+    }
+
+    .#{$prefix}menu-item-text,
+    .#{$prefix}menu-item-text-default {
+        color: $shadcn-dark-popover-foreground;
+    }
+
+    .#{$prefix}menu-item-active .#{$prefix}menu-item-link {
+        background-color: $shadcn-dark-accent;
+    }
+
+    .#{$prefix}menu-item-active .#{$prefix}menu-item-text {
+        color: $shadcn-dark-accent-foreground;
+    }
+
+    .#{$prefix}menu-item-icon,
+    .#{$prefix}menu-item-icon-default,
+    .#{$prefix}menu-item-arrow,
+    .#{$prefix}menu-item-arrow-default {
+        color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}menu-item-checked .#{$prefix}menu-item-icon {
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}menu-item-separator {
+        background-color: $shadcn-dark-border-solid;
+        border-color: $shadcn-dark-border-solid;
+    }
+}

@@ -1,0 +1,26 @@
+// ============================================================================
+// Grouping feature header row.
+//
+// Reference (React gallery, [data-gallery="datagrid"]):
+//   h36 · bg muted/60 · border-bottom 1px #e5e5e5 · pad 6 8 · 14/500 · chevron
+//
+// Neutral's expand/collapse glyphs are FontAwesome codepoints, but
+// $font-icon-font-family resolves to Material Icons here, so they render as a
+// filled square. Material Icons is ligature-based — pass the ligature name.
+// ============================================================================
+
+$grid-grouped-header-background-color: dynamic(mix($shadcn-muted, $shadcn-background, 60%));
+$grid-grouped-header-border-width: dynamic(0 0 1px 0);
+$grid-grouped-header-border-style: dynamic(solid);
+$grid-grouped-header-border-color: dynamic($shadcn-border);
+$grid-grouped-header-padding: dynamic(8px);
+
+$grid-grouped-title-color: dynamic($shadcn-foreground);
+$grid-grouped-title-font-size: dynamic($font-size);
+$grid-grouped-title-font-weight: dynamic(500);
+$grid-grouped-title-line-height: dynamic(20px);
+
+$grid-grouped-title-glyph-color: dynamic($shadcn-muted-foreground);
+$grid-grouped-title-glyph-font-size: dynamic(16px);
+$grid-grouped-title-expand-glyph: dynamic('chevron_right');
+$grid-grouped-title-collapse-glyph: dynamic('expand_more');

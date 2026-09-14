@@ -1,0 +1,121 @@
+// ============================================================================
+// Summary rows. Neither Ext.grid.feature.Summary nor GroupingSummary ships a
+// var file worth overriding, so these are plain CSS.
+//
+// Reference (React gallery, [data-gallery="datagrid"]):
+//   subtotal  h32 · bg muted/30 · hairline above and below · muted-foreground
+//   total     same box, foreground, fw600 — it reads as a table footer
+// ============================================================================
+
+.#{$prefix}grid-row-summary {
+    border-top: 1px solid $shadcn-border;
+
+    // The second selector outranks .x-grid-cell-special, which would otherwise
+    // repaint the checkbox gutter cell white. !important is needed because
+    // neutral's Summary feature declares the white fill that way.
+    .#{$prefix}grid-cell,
+    .#{$prefix}grid-cell.#{$prefix}grid-cell-special {
+        background-color: mix($shadcn-muted, $shadcn-background, 30%) !important;
+        color: $shadcn-muted-foreground;
+    }
+
+    .#{$prefix}grid-cell-inner {
+        padding: 6px 8px;
+    }
+}
+
+.#{$prefix}docked-summary {
+    background-color: $shadcn-background !important;
+
+    .#{$prefix}grid-row-total .#{$prefix}grid-cell {
+        background-color: $shadcn-muted-half !important;
+        color: $shadcn-foreground;
+        font-weight: 600;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}grid-body,
+    .#{$prefix}grid-empty {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}grid-empty {
+        color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}grid-item,
+    .#{$prefix}grid-item-alt {
+        background-color: $shadcn-dark-card;
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}grid-item-over {
+        background-color: $shadcn-dark-muted-half;
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}grid-item-selected {
+        background-color: $shadcn-dark-muted;
+        color: $shadcn-dark-foreground;
+    }
+
+    // shadcn <td> is transparent and the row carries the colour, which also
+    // lets the hover/selected row rules show through.
+    .#{$prefix}grid-cell,
+    .#{$prefix}grid-td,
+    .#{$prefix}grid-cell-special,
+    .#{$prefix}grid-item-selected .#{$prefix}grid-cell-special {
+        background-color: transparent;
+    }
+
+    .#{$prefix}grid-cell-special,
+    .#{$prefix}grid-item-selected .#{$prefix}grid-cell-special {
+        border-right-color: $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}docked-summary {
+        background-color: $shadcn-dark-card !important;
+    }
+
+    .#{$prefix}grid-with-row-lines .#{$prefix}grid-item {
+        border-color: $shadcn-dark-border-solid;
+
+        &:first-child {
+            border-top-color: transparent;
+        }
+    }
+
+    // Grouping feature (no var file reaches the compiled colours in dark).
+    .#{$prefix}grid-group-hd {
+        background: $shadcn-dark-muted-half;
+        border-color: $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}grid-group-title {
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}grid-group-hd-collapsible .#{$prefix}grid-group-title:before {
+        color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}grid-row-summary {
+        border-top-color: $shadcn-dark-border-solid;
+
+        .#{$prefix}grid-cell,
+        .#{$prefix}grid-cell.#{$prefix}grid-cell-special {
+            background-color: $shadcn-dark-muted-half !important;
+            color: $shadcn-dark-muted-foreground;
+        }
+    }
+
+    .#{$prefix}docked-summary .#{$prefix}grid-row-total .#{$prefix}grid-cell {
+        background-color: $shadcn-dark-muted !important;
+        color: $shadcn-dark-foreground;
+    }
+}

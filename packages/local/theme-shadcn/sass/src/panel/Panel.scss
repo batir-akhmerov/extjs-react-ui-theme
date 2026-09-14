@@ -1,0 +1,85 @@
+// ============================================================================
+// Panel = shadcn Card — rules with no matching theme variable.
+//
+// shadcn draws the card outline as `ring-1 ring-foreground/10`, i.e. a 1px
+// box-shadow rather than a border, and rounds the corners at 14px. ExtJS has
+// no variable for either: $panel-border-radius only reaches the *framed* UI,
+// and there is no box-shadow hook on the default UI at all.
+// ============================================================================
+
+// shadcn's Card maps to a *titled* ExtJS panel. Header-less panels are almost
+// always layout scaffolding here (form containers, the app shell, docked
+// wrappers) and must stay flat, so the ring is gated on the header's presence.
+//
+// The ring is INSET: `.x-box-inner` / `.x-box-layout-ct` clip at exactly the
+// child's edge, so an outward 1px ring loses whichever side is flush with its
+// container — which is every side a card is stretched against.
+.#{$prefix}panel-default:has(> .#{$prefix}panel-header) {
+    border-radius: $panel-border-radius;
+    box-shadow: inset 0 0 0 1px $shadcn-card-ring;
+
+    > .#{$prefix}panel-header-default-docked-top {
+        border-top-left-radius: $panel-border-radius;
+        border-top-right-radius: $panel-border-radius;
+    }
+
+    // Whatever ends up last in the body wrap (body, or a docked bottom
+    // toolbar / paging bar) carries the bottom corners.
+    > .#{$prefix}panel-bodyWrap > :last-child {
+        border-bottom-left-radius: $panel-border-radius;
+        border-bottom-right-radius: $panel-border-radius;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}panel-default:has(> .#{$prefix}panel-header) {
+        box-shadow: inset 0 0 0 1px $shadcn-dark-card-ring;
+    }
+
+    // Material paints the panel ROOT as well as the body, and it shows through
+    // wherever the body does not cover it (rounded corners, docked gaps).
+    .#{$prefix}panel-default {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}panel-header-default,
+    .#{$prefix}panel-header-default-docked-top,
+    .#{$prefix}panel-header-default-docked-bottom {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}panel-header-default .#{$prefix}panel-header-title-default,
+    .#{$prefix}panel-header-default .#{$prefix}title-text,
+    .#{$prefix}panel-header-title-default-framed,
+    .#{$prefix}panel-header-title-default-framed > .#{$prefix}title-text-default-framed {
+        color: $shadcn-dark-card-foreground;
+    }
+
+    .#{$prefix}panel-body-default {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-border-solid;
+        color: $shadcn-dark-card-foreground;
+    }
+
+    .#{$prefix}panel-default-framed,
+    .#{$prefix}panel-body-default-framed,
+    .#{$prefix}panel-header-default-framed {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-card-ring;
+        color: $shadcn-dark-card-foreground;
+    }
+
+    // Header tools (collapse/close/minimise) are glyph-coloured, not images.
+    .#{$prefix}tool-tool-el {
+        color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}tool-over .#{$prefix}tool-tool-el {
+        color: $shadcn-dark-foreground;
+    }
+}

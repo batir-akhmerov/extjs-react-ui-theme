@@ -1,0 +1,43 @@
+// ============================================================================
+// Tag field chips = shadcn <Badge variant="secondary"> inside a normal 32px
+// input box that grows a row at a time, as the React multi-select does.
+//
+// theme-material ships 24px chips with an 8px margin and a close icon pinned to
+// top: 0, which stacks two rows deep on a single line of tags and leaves the
+// remove control hanging above the label.
+//
+// Row height = item 20 + item margin 2/2 = 24; + $tag-field-padding 3/3 = 30;
+// + the trigger wrap's 1px border top and bottom = 32, matching $form-field-height.
+// ============================================================================
+
+$tag-field-padding: dynamic(3px 6px);
+
+$tag-field-item-height: dynamic(20px);
+$tag-field-item-border-radius: dynamic($shadcn-radius-sm);
+$tag-field-item-margin: dynamic(2px 4px 2px 0);
+$tag-field-item-padding: dynamic(0 6px);
+
+$tag-field-item-color: dynamic($shadcn-secondary-foreground);
+$tag-field-item-background-color: dynamic($shadcn-secondary);
+$tag-field-item-border-width: dynamic(1px);
+$tag-field-item-border-color: dynamic($shadcn-border);
+
+$tag-field-item-over-color: dynamic($shadcn-secondary-foreground);
+$tag-field-item-over-background-color: dynamic($shadcn-secondary-hover);
+$tag-field-item-over-border-color: dynamic($shadcn-border);
+
+$tag-field-item-selected-color: dynamic($shadcn-primary-foreground);
+$tag-field-item-selected-background-color: dynamic($shadcn-primary);
+$tag-field-item-selected-border-color: dynamic($shadcn-primary);
+
+// The close icon is absolutely positioned against the item's padding box
+// (20 - 2px border = 18 tall), so (18 - 12) / 2 = 3 centres it on the label.
+$tag-field-item-close-icon-size: dynamic(12px);
+$tag-field-item-close-icon-top: dynamic(3px);
+$tag-field-item-close-icon-right: dynamic(4px);
+$tag-field-item-close-icon-spacing: dynamic(2px);
+$tag-field-item-close-icon-glyph: dynamic($fa-var-xmark 11px $fontawesome-font-family);
+$tag-field-item-close-icon-glyph-color: dynamic($shadcn-muted-foreground);
+$tag-field-item-over-close-icon-glyph-color: dynamic($shadcn-foreground);
+$tag-field-item-selected-close-icon-glyph-color: dynamic($shadcn-primary-foreground);
+$tag-field-item-selected-over-close-icon-glyph-color: dynamic($shadcn-primary-foreground);

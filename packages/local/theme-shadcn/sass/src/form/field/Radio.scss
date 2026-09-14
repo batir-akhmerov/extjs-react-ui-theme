@@ -1,0 +1,61 @@
+// ============================================================================
+// shadcn radio — 16x16 circle, filled dot when selected.
+// Same approach as Checkbox.scss: collapse the Material glyph, draw with CSS.
+//
+// The dot is an 8x8 SVG sized and origin-anchored to the border box, so it
+// lands dead centre whatever the border width is. Fashion silently drops
+// `radial-gradient()` declarations, so that route is not available.
+// ============================================================================
+
+$shadcn-radio-dot: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Ccircle cx='4' cy='4' r='4' fill='%23fafafa'/%3E%3C/svg%3E";
+
+.#{$prefix}form-radio {
+    box-sizing: border-box;
+    width: 16px;
+    height: 16px;
+    font-size: 0;
+    line-height: 0;
+    border: 1px solid $shadcn-input;
+    border-radius: 50%;
+    background-color: transparent;
+    background-image: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-origin: border-box;
+    background-size: 8px 8px;
+
+    // Material draws the control as a "radio_button_checked" ligature in
+    // ::before and sets its font-size there, so collapsing the parent's
+    // font-size never reaches it and the glyph shows through the CSS circle.
+    // Its checked rule is `.x-form-cb-checked .x-form-radio-default::before`,
+    // so the UI class has to be named here to match that specificity.
+    &:before,
+    &:after,
+    &.#{$prefix}form-radio-default:before,
+    &.#{$prefix}form-radio-default:after {
+        content: none;
+        display: none;
+    }
+}
+
+.#{$prefix}form-cb-checked .#{$prefix}form-radio {
+    border-color: $shadcn-primary;
+    background-color: $shadcn-primary;
+    background-image: url($shadcn-radio-dot);
+}
+
+// Dark mode. See the note at the top of sass/src/Component.scss. The dot
+// colour is baked into the data URI, so it is re-inlined.
+$shadcn-radio-dot-dark: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Ccircle cx='4' cy='4' r='4' fill='%23171717'/%3E%3C/svg%3E";
+
+.dark-mode {
+    .#{$prefix}form-radio {
+        border-color: $shadcn-dark-input;
+    }
+
+    .#{$prefix}form-cb-checked .#{$prefix}form-radio {
+        border-color: $shadcn-dark-primary;
+        background-color: $shadcn-dark-primary;
+        background-image: url($shadcn-radio-dot-dark);
+    }
+}

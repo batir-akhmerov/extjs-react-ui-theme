@@ -1,0 +1,92 @@
+// ============================================================================
+// The active tab in the filled variant is a white pill with shadcn's shadow-sm.
+// The plain variant gets no lift — its underline is the only active cue.
+// ============================================================================
+
+.#{$prefix}tab-bar:not(.#{$prefix}tab-bar-plain) {
+    .#{$prefix}tab-active {
+        box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.1),
+            0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.#{$prefix}tab-disabled {
+    opacity: 0.5;
+}
+
+// The base theme's frame mixin floors padding at (border-radius - border-width),
+// so the 8px radius silently turns $tab-padding into 8px 8px 6px. Restate it —
+// 2 + 19 + 2 + 2px border = the 25px shadcn trigger.
+.#{$prefix}tab.#{$prefix}tab-default {
+    padding: 2px 6px;
+
+    .#{$prefix}tab-inner {
+        line-height: 19px;
+    }
+}
+
+// shadcn's TabsList spaces its triggers; $tab-margin is shared with the line
+// variant, which sets its own gap below.
+.#{$prefix}tab-bar:not(.#{$prefix}tab-bar-plain) .#{$prefix}tab {
+    margin-right: 2px;
+}
+
+// The line variant's active marker is the underline, so the trigger must be a
+// plain rectangle — $tab-border-radius is shared between both variants and
+// otherwise rounds the underline's ends (and its left edge when the bar is
+// docked left/right).
+.#{$prefix}tab-bar-plain .#{$prefix}tab.#{$prefix}tab-default {
+    border-radius: 0;
+}
+
+// ExtJS pins the close button to the tab's top-right corner; centre it instead.
+.#{$prefix}tab.#{$prefix}tab-closable {
+    padding-right: 22px;
+
+    .#{$prefix}tab-close-btn {
+        top: 50%;
+        right: 4px;
+        margin-top: -8px;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    // Inactive triggers are transparent; the bar behind them is the pill.
+    .#{$prefix}tab.#{$prefix}tab-default {
+        background-color: transparent;
+    }
+
+    .#{$prefix}tab.#{$prefix}tab-default .#{$prefix}tab-inner-default {
+        color: rgba(250, 250, 250, 0.6);
+    }
+
+    .#{$prefix}tab-over.#{$prefix}tab-default .#{$prefix}tab-inner-default,
+    .#{$prefix}tab.#{$prefix}tab-active.#{$prefix}tab-default .#{$prefix}tab-inner-default {
+        color: $shadcn-dark-foreground;
+    }
+
+    // Filled variant: the active trigger is a lifted surface, not white.
+    .#{$prefix}tab.#{$prefix}tab-active.#{$prefix}tab-default {
+        background-color: $shadcn-dark-secondary-hover;
+    }
+
+    .#{$prefix}tab-bar:not(.#{$prefix}tab-bar-plain) .#{$prefix}tab-active {
+        box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.6),
+            0 1px 2px -1px rgba(0, 0, 0, 0.6);
+    }
+
+    // Line variant: no fill, the underline carries the active state.
+    .#{$prefix}tab-bar-plain .#{$prefix}tab.#{$prefix}tab-active.#{$prefix}tab-default {
+        background-color: transparent;
+        border-color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}tab-close-btn {
+        color: $shadcn-dark-muted-foreground;
+    }
+}

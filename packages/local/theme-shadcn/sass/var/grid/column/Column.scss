@@ -1,0 +1,13 @@
+// ============================================================================
+// Column header cell. shadcn <TableHead> has no vertical rule between columns,
+// so the separator border is zeroed and the header row's own bottom border
+// (see var/grid/header/Container.scss) carries the whole line.
+// ============================================================================
+
+$grid-column-header-font-size: dynamic($font-size);
+$grid-column-header-font-weight: dynamic(500);
+$grid-column-header-line-height: dynamic(20px);
+$grid-column-header-color: dynamic($shadcn-foreground);
+
+$grid-column-header-border-width: dynamic(0px);
+$grid-column-header-focus-border-width: dynamic(0px);

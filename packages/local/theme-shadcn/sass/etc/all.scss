@@ -1,0 +1,8 @@
+// Helpers shared by the shadcn override layer.
+// Loaded before sass/var, so variable references are resolved at call time.
+
+// shadcn renders focus as a 3px alpha ring outside the 1px border. ExtJS only
+// recolours the border, so every focusable surface opts in via this mixin.
+@mixin shadcn-focus-ring($color: $shadcn-ring-shadow) {
+    box-shadow: 0 0 0 3px $color;
+}

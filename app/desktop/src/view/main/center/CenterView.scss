@@ -1,0 +1,10 @@
+// Colours live in packages/local/theme-shadcn (sass/src/Component.scss, '.centerview').
+.centerview {
+	border-left: 0;
+	border-top: 0;
+  padding: 0px;
+  margin: 15px;
+
+	color: $color;
+	font-size: 24px;
+}

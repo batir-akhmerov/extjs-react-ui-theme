@@ -1,0 +1,27 @@
+// The filter bar sits between the column headers and the first row and carries
+// x-grid-header-ct itself, so its own top border would double the header
+// divider. Drop it and draw a single hairline underneath instead.
+
+.#{$prefix}grid-filterbar {
+    border-top-width: 0;
+    box-shadow: inset 0 (-$grid-header-border-width) 0 $grid-header-border-color;
+}
+
+// Dark mode. See the note at the top of sass/src/Component.scss.
+.dark-mode {
+    .#{$prefix}grid-filterbar {
+        background-color: $shadcn-dark-card;
+        box-shadow: inset 0 (-$grid-header-border-width) 0 $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}grid-filterbar .#{$prefix}column-header {
+        background-color: $shadcn-dark-card;
+    }
+
+    .#{$prefix}grid-filter-base,
+    .#{$prefix}grid-filter-none,
+    .#{$prefix}operator-button {
+        background-color: transparent;
+        color: $shadcn-dark-muted-foreground;
+    }
+}

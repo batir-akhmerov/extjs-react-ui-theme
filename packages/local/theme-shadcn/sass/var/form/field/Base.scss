@@ -1,0 +1,10 @@
+// shadcn uses chevrons for pickers, not FontAwesome carets / Material triangles.
+$form-trigger-glyph: dynamic($fa-var-chevron-down 14px $fontawesome-font-family);
+$form-trigger-glyph-color: dynamic($shadcn-muted-foreground);
+$form-date-trigger-glyph: dynamic($fa-var-calendar 14px $fontawesome-font-family);
+$form-date-trigger-glyph-color: dynamic($shadcn-muted-foreground);
+$form-search-trigger-glyph: dynamic($fa-var-magnifying-glass 14px $fontawesome-font-family);
+$form-clear-trigger-glyph: dynamic($fa-var-xmark 14px $fontawesome-font-family);
+
+$form-error-msg-font-size: dynamic(12px);
+$form-error-msg-line-height: dynamic(16px);

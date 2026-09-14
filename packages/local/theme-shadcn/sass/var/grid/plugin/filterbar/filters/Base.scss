@@ -1,0 +1,6 @@
+// Filter bar cells sit in their own row under the column headers. shadcn draws
+// no vertical rule there, so only the field's own border remains.
+
+$grid-filter-background-color: dynamic($shadcn-background);
+$grid-filter-border-width: dynamic(0);
+$grid-filter-border-color: dynamic($shadcn-border);

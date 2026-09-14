@@ -1,0 +1,85 @@
+// ============================================================================
+// Combo / picker dropdown = shadcn <SelectContent>: rounded-lg popover with a
+// 4px gutter, ring-1 foreground/10 and shadow-md. Rows are 8px-radius and
+// highlight with `accent` — theme-material fills them solid with $base-color,
+// which reads as a black bar.
+// ============================================================================
+
+.#{$prefix}boundlist {
+    border-radius: $shadcn-radius-lg;
+    background-color: $shadcn-popover;
+}
+
+.#{$prefix}boundlist-floating {
+    padding: 4px;
+    border-width: 0;
+    box-shadow:
+        0 0 0 1px $shadcn-card-ring,
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+// A docked bound list (multiselect, item selector) is an input surface, not a
+// popover. ExtJS sizes its inner scroller from the component height minus the
+// border alone, so any padding here pushes the last row and the scrollbar past
+// the bottom edge.
+.#{$prefix}boundlist:not(.#{$prefix}boundlist-floating) {
+    padding: 0;
+    border-style: solid;
+    border-color: $shadcn-input;
+    background-color: $shadcn-background;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.#{$prefix}boundlist:not(.#{$prefix}boundlist-floating) .#{$prefix}boundlist-list-ct {
+    padding: 4px;
+}
+
+.#{$prefix}boundlist-item {
+    border: 1px solid transparent;
+    border-radius: $shadcn-radius-md;
+    padding: 0 8px;
+    color: $shadcn-popover-foreground;
+}
+
+.#{$prefix}boundlist .#{$prefix}boundlist-item-over,
+.#{$prefix}boundlist .#{$prefix}boundlist-selected {
+    border-color: transparent;
+    background-color: $shadcn-accent;
+    color: $shadcn-accent-foreground;
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss — these live
+// here rather than in Component.scss because the light rules above are more
+// specific than a `.dark-mode .x-boundlist-*` rule written there.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}boundlist {
+        background-color: $shadcn-dark-popover;
+    }
+
+    .#{$prefix}boundlist-floating {
+        box-shadow:
+            0 0 0 1px $shadcn-dark-card-ring,
+            0 4px 6px -1px rgba(0, 0, 0, 0.6),
+            0 2px 4px -2px rgba(0, 0, 0, 0.6);
+    }
+
+    .#{$prefix}boundlist:not(.#{$prefix}boundlist-floating) {
+        border-color: $shadcn-dark-input;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .#{$prefix}boundlist-item {
+        color: $shadcn-dark-popover-foreground;
+    }
+
+    .#{$prefix}boundlist .#{$prefix}boundlist-item-over,
+    .#{$prefix}boundlist .#{$prefix}boundlist-selected {
+        background-color: $shadcn-dark-accent;
+        color: $shadcn-dark-accent-foreground;
+    }
+}

@@ -1,0 +1,198 @@
+// ============================================================================
+// shadcn/ui token layer — style "base-nova", base colour "neutral".
+//
+// Source of truth: c:\work\manuka-ai-agent\frontend\src\app\globals.css (:root).
+// Every value is dynamic() so downstream var files and the app can still
+// override it.
+//
+// NOTE ON FONT SIZE: ExtJS computes box metrics (field/button heights, padding,
+// line-height) from $font-size at BUILD time. $font-size is therefore pinned to
+// 14px — the stock shadcn size — and runtime resizing is done with the
+// --ui-font-size / --form-font-size CSS variables declared in
+// sass/src/Component.scss. Those change rendered text size only; the compiled
+// box metrics do not move. Safe range is roughly 12-15px; anything outside that
+// needs a rebuild with a different $font-size.
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// Raw design tokens
+// ---------------------------------------------------------------------------
+$shadcn-background: dynamic(#ffffff);
+$shadcn-foreground: dynamic(#0a0a0a);
+$shadcn-card: dynamic(#ffffff);
+$shadcn-card-foreground: dynamic(#0a0a0a);
+$shadcn-popover: dynamic(#ffffff);
+$shadcn-popover-foreground: dynamic(#0a0a0a);
+$shadcn-primary: dynamic(#171717);
+$shadcn-primary-foreground: dynamic(#fafafa);
+$shadcn-primary-hover: dynamic(#2e2e2e); // primary/90 composited on white
+$shadcn-secondary: dynamic(#f5f5f5);
+$shadcn-secondary-foreground: dynamic(#171717);
+$shadcn-secondary-hover: dynamic(#ebebeb);
+$shadcn-muted: dynamic(#f5f5f5);
+$shadcn-muted-foreground: dynamic(#737373);
+$shadcn-accent: dynamic(#f5f5f5);
+$shadcn-accent-foreground: dynamic(#171717);
+$shadcn-destructive: dynamic(#e7000b);
+$shadcn-destructive-foreground: dynamic(#ffffff);
+$shadcn-destructive-hover: dynamic(#cf000a);
+$shadcn-destructive-soft: dynamic(#fee2e2); // destructive/10 on white
+$shadcn-border: dynamic(#e5e5e5);
+$shadcn-input: dynamic(#e5e5e5);
+$shadcn-ring: dynamic(#a1a1a1);
+
+// --radius: 0.625rem
+$shadcn-radius-sm: dynamic(6px);
+$shadcn-radius-md: dynamic(8px);
+$shadcn-radius-lg: dynamic(10px);
+$shadcn-radius-xl: dynamic(14px);
+
+// shadcn renders focus as a 3px alpha ring via box-shadow; ExtJS has no
+// variable for this, so sass/src/Component.scss applies it by hand.
+$shadcn-ring-shadow: dynamic(rgba(161, 161, 161, 0.5));
+$shadcn-ring-shadow-invalid: dynamic(rgba(231, 0, 11, 0.2));
+
+// Card outline: shadcn uses `ring-1 ring-foreground/10`, not a border.
+$shadcn-card-ring: dynamic(rgba(10, 10, 10, 0.1));
+// `bg-muted/50` over white — card footers / docked bottom toolbars.
+$shadcn-muted-half: dynamic(#fafafa);
+
+// App shell — shadcn's `--sidebar-*` family. Drives the nav rail, the app
+// header and the version footer.
+$shadcn-sidebar: dynamic(#fafafa);
+$shadcn-sidebar-foreground: dynamic(#0a0a0a);
+$shadcn-sidebar-accent: dynamic(#f5f5f5);
+$shadcn-sidebar-accent-foreground: dynamic(#171717);
+$shadcn-sidebar-primary: dynamic(#171717);
+$shadcn-sidebar-primary-foreground: dynamic(#fafafa);
+$shadcn-sidebar-border: dynamic(#e5e5e5);
+$shadcn-sidebar-muted-foreground: dynamic(#737373);
+
+// ---------------------------------------------------------------------------
+// Typography
+// ---------------------------------------------------------------------------
+$font-family: dynamic(Inter, 'Inter var', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+$font-size: dynamic(14px);
+$font-size-big: dynamic(14px);
+$font-weight: dynamic(400);
+$font-weight-normal: dynamic(400);
+$font-weight-bold: dynamic(600);
+
+// ---------------------------------------------------------------------------
+// Material "base/accent" ramps.
+//
+// Material derives these from $base-color-name via material-color(), which
+// ignores $base-color. Each one must therefore be pinned explicitly or the
+// stock blue ramp leaks through.
+// ---------------------------------------------------------------------------
+$base-color: dynamic($shadcn-primary);
+$base-highlight-color: dynamic($shadcn-primary);
+$base-light-color: dynamic($shadcn-secondary);
+$base-dark-color: dynamic(#000000);
+$base-pressed-color: dynamic($shadcn-primary-hover);
+$base-focused-color: dynamic($shadcn-primary-hover);
+$base-invisible-color: dynamic(rgba(23, 23, 23, 0));
+$base-foreground-color: dynamic($shadcn-primary-foreground);
+
+$accent-color: dynamic($shadcn-secondary);
+$accent-light-color: dynamic(#fafafa);
+$accent-dark-color: dynamic($shadcn-border);
+$accent-pressed-color: dynamic($shadcn-secondary-hover);
+$accent-invisible-color: dynamic(rgba(245, 245, 245, 0));
+$accent-foreground-color: dynamic($shadcn-secondary-foreground);
+
+$confirm-color: dynamic($shadcn-primary);
+$confirm-pressed-color: dynamic($shadcn-primary-hover);
+$alert-color: dynamic($shadcn-destructive);
+$alert-pressed-color: dynamic($shadcn-destructive-hover);
+$pressed-color: dynamic($shadcn-primary-hover);
+
+// ---------------------------------------------------------------------------
+// Surfaces & text
+// ---------------------------------------------------------------------------
+$color: dynamic($shadcn-foreground);
+$reverse-color: dynamic($shadcn-primary-foreground);
+
+$background-color: dynamic($shadcn-background);
+$alt-background-color: dynamic($shadcn-muted);
+$reverse-background-color: dynamic($shadcn-foreground);
+$reverse-alt-background-color: dynamic($shadcn-primary);
+
+$highlight-color: dynamic($shadcn-muted-foreground);
+$disabled-color: dynamic(rgba(10, 10, 10, 0.5));
+$reverse-disabled-color: dynamic(rgba(250, 250, 250, 0.5));
+$divider-color: dynamic($shadcn-border);
+$faded-color: dynamic($shadcn-border);
+
+$selected-background-color: dynamic($shadcn-accent);
+$hovered-background-color: dynamic($shadcn-accent);
+$header-background-color: dynamic($shadcn-background);
+$overlay-color: dynamic(rgba(0, 0, 0, 0.03));
+
+// Card/window chrome is light in shadcn, so header text is dark, not white.
+$panel-header-color: dynamic($shadcn-card-foreground);
+$window-header-color: dynamic($shadcn-card-foreground);
+$focus-font-color: dynamic($shadcn-primary-foreground);
+
+// ---------------------------------------------------------------------------
+// Spacing
+// ---------------------------------------------------------------------------
+$content-padding: dynamic(16px);
+$basic-padding: dynamic(8px);
+
+// shadcn chrome is flat: hairline borders, no Material elevation gradients.
+$base-gradient: none;
+
+// ---------------------------------------------------------------------------
+// Dark tokens — the `.dark` block of globals.css, oklch converted to hex.
+//
+// These are NOT fed to ExtJS variables (a single build can only carry one set
+// of compiled colours). They are consumed by the `.dark-mode` blocks in
+// sass/src/**, which restate every colour the light build baked in.
+// ---------------------------------------------------------------------------
+$shadcn-dark-background: dynamic(#0a0a0a);
+$shadcn-dark-foreground: dynamic(#fafafa);
+$shadcn-dark-card: dynamic(#171717);
+$shadcn-dark-card-foreground: dynamic(#fafafa);
+$shadcn-dark-popover: dynamic(#171717);
+$shadcn-dark-popover-foreground: dynamic(#fafafa);
+$shadcn-dark-primary: dynamic(#e5e5e5);
+$shadcn-dark-primary-foreground: dynamic(#171717);
+$shadcn-dark-primary-hover: dynamic(#cfcfcf);
+$shadcn-dark-secondary: dynamic(#262626);
+$shadcn-dark-secondary-foreground: dynamic(#fafafa);
+$shadcn-dark-secondary-hover: dynamic(#333333);
+$shadcn-dark-muted: dynamic(#262626);
+$shadcn-dark-muted-foreground: dynamic(#a1a1a1);
+$shadcn-dark-accent: dynamic(#262626);
+$shadcn-dark-accent-foreground: dynamic(#fafafa);
+
+// shadcn dark uses the bright destructive for text/borders but fills buttons
+// with `bg-destructive/60` so white label text stays legible.
+$shadcn-dark-destructive: dynamic(#ff6467);
+$shadcn-dark-destructive-fill: dynamic(#9c4042);
+$shadcn-dark-destructive-fill-hover: dynamic(#b04a4c);
+$shadcn-dark-destructive-foreground: dynamic(#ffffff);
+$shadcn-dark-destructive-soft: dynamic(#2a1214);
+
+// --border is white/10 and --input white/15; borders may stay translucent, but
+// anything that has to be mixed or used as a fill needs the composited value.
+$shadcn-dark-border: dynamic(rgba(255, 255, 255, 0.1));
+$shadcn-dark-border-solid: dynamic(#262626);
+$shadcn-dark-input: dynamic(rgba(255, 255, 255, 0.15));
+$shadcn-dark-ring: dynamic(#737373);
+
+$shadcn-dark-ring-shadow: dynamic(rgba(115, 115, 115, 0.5));
+$shadcn-dark-ring-shadow-invalid: dynamic(rgba(255, 100, 103, 0.25));
+$shadcn-dark-card-ring: dynamic(rgba(255, 255, 255, 0.1));
+// `bg-muted/50` over the dark card surface.
+$shadcn-dark-muted-half: dynamic(#1f1f1f);
+
+$shadcn-dark-sidebar: dynamic(#171717);
+$shadcn-dark-sidebar-foreground: dynamic(#fafafa);
+$shadcn-dark-sidebar-accent: dynamic(#262626);
+$shadcn-dark-sidebar-accent-foreground: dynamic(#fafafa);
+$shadcn-dark-sidebar-primary: dynamic(#e5e5e5);
+$shadcn-dark-sidebar-primary-foreground: dynamic(#171717);
+$shadcn-dark-sidebar-border: dynamic(rgba(255, 255, 255, 0.1));
+$shadcn-dark-sidebar-muted-foreground: dynamic(#a1a1a1);

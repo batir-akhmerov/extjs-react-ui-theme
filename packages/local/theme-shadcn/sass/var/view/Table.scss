@@ -1,0 +1,45 @@
+// ============================================================================
+// Grid rows/cells = shadcn <TableBody>.
+//
+// theme-material paints rows with $reverse-color (#fafafa in our token layer,
+// because shadcn's --primary-foreground is not pure white) and zeroes the row
+// border, so both have to be pinned here.
+//
+// Reference (measured on the React gallery, [data-gallery="table"]):
+//   tr  h38 · bg transparent · border-bottom 1px #e5e5e5 · no striping
+//   td  pad 8 · fs14/20 · colour #0a0a0a
+//   hover bg muted/50
+// ============================================================================
+
+$grid-row-cell-color: dynamic($shadcn-foreground);
+$grid-row-cell-font-size: dynamic($font-size);
+$grid-row-cell-font-weight: dynamic(400);
+$grid-row-cell-line-height: dynamic(20px);
+$grid-cell-inner-padding: dynamic(8px);
+
+$grid-row-cell-background-color: dynamic($shadcn-background);
+// shadcn tables are not striped — the alt row has to match the base row.
+$grid-row-cell-alt-background-color: dynamic($shadcn-background);
+
+$grid-row-cell-border-color: dynamic($shadcn-border);
+$grid-row-cell-border-style: dynamic(solid);
+$grid-row-cell-border-width: dynamic(1px);
+
+// "Special" cells are the checkbox/row-number gutter; ExtJS rules them off from
+// the rest of the row, shadcn does not.
+$grid-cell-special-background-color: dynamic($shadcn-background);
+$grid-cell-special-border-width: dynamic(0);
+
+$grid-row-cell-over-background-color: dynamic($shadcn-muted-half);
+$grid-row-cell-over-color: dynamic($shadcn-foreground);
+$grid-row-cell-selected-background-color: dynamic($shadcn-muted);
+$grid-row-cell-selected-color: dynamic($shadcn-foreground);
+
+// Material's dotted focus rectangle has no shadcn equivalent.
+$grid-row-cell-focus-border-width: dynamic(0px);
+
+$grid-body-background-color: dynamic($shadcn-background);
+$grid-body-border-width: dynamic(0);
+$grid-empty-color: dynamic($shadcn-muted-foreground);
+$grid-empty-padding: dynamic(16px 8px);
+$grid-empty-background-color: dynamic($shadcn-background);

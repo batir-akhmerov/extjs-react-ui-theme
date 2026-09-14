@@ -1,0 +1,63 @@
+// ============================================================================
+// Tabs.
+//
+//   plain: false  ->  shadcn <TabsList variant="default">  (filled pill row)
+//   plain: true   ->  shadcn <TabsList variant="line">     (underline, subordinate)
+//
+// Reference (React gallery, [data-gallery="tabs"]):
+//   trigger  h25 · pad 2/6 · r8 · 14/500 · no uppercase
+//     default active    bg #fff + shadow-sm, colour foreground
+//     default inactive  transparent, colour foreground/60
+//     line    active     transparent + 2px foreground underline
+//
+// The 2px bottom border is kept on BOTH variants and simply left transparent in
+// the default one — `plain` has colour variables but no width variable, so the
+// width has to be shared.
+// ============================================================================
+
+$tab-base-color: dynamic($shadcn-muted);
+$tab-base-color-over: dynamic($shadcn-muted);
+$tab-base-color-active: dynamic($shadcn-background);
+$tab-background-color-active: dynamic($shadcn-background);
+$tab-background-gradient: dynamic('none');
+$tab-background-gradient-over: dynamic('none');
+$tab-background-gradient-active: dynamic('none');
+$tab-background-gradient-focus: dynamic('none');
+$tab-background-gradient-focus-over: dynamic('none');
+$tab-background-gradient-focus-active: dynamic('none');
+$tab-background-gradient-disabled: dynamic('none');
+
+$tab-border-width: dynamic(0 0 2px 0);
+$tab-border-color: dynamic(transparent);
+$tab-border-color-over: dynamic(transparent);
+$tab-border-color-active: dynamic(transparent);
+$tab-border-radius: dynamic($shadcn-radius-md);
+$tab-inner-border-width: dynamic('none');
+
+$tab-color: dynamic(rgba(10, 10, 10, 0.6));
+$tab-color-over: dynamic($shadcn-foreground);
+$tab-color-active: dynamic($shadcn-foreground);
+$tab-color-disabled: dynamic(rgba(10, 10, 10, 0.4));
+
+$tab-font-size: dynamic($font-size);
+$tab-font-weight: dynamic(500);
+$tab-font-weight-active: dynamic(500);
+$tab-text-transform: dynamic(none);
+$tab-line-height: dynamic(19px);
+$tab-padding: dynamic(2px 6px);
+$tab-margin: dynamic(0);
+
+$tab-glyph-opacity: dynamic(1);
+$tab-closable-icon-glyph-color: dynamic($shadcn-muted-foreground);
+$tab-closable-icon-glyph-color-active: dynamic($shadcn-foreground);
+
+// line variant
+$tab-plain-background-color: dynamic(transparent);
+$tab-plain-background-color-over: dynamic(transparent);
+$tab-plain-background-color-active: dynamic(transparent);
+$tab-plain-color: dynamic(rgba(10, 10, 10, 0.6));
+$tab-plain-color-over: dynamic($shadcn-foreground);
+$tab-plain-color-active: dynamic($shadcn-foreground);
+$tab-plain-border-color: dynamic(transparent);
+$tab-plain-border-color-over: dynamic(transparent);
+$tab-plain-border-color-active: dynamic($shadcn-foreground);

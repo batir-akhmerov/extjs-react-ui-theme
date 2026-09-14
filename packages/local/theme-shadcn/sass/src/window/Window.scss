@@ -1,0 +1,84 @@
+// ============================================================================
+// Window = shadcn <DialogContent>: rounded-xl, bg-background, ring-1
+// foreground/10. The panel ring is gated on .x-panel-default, so windows need
+// their own. They also float and drag, unlike a modal dialog, so they carry a
+// shadow-lg to lift them off the page.
+// ============================================================================
+
+.#{$prefix}window-default {
+    box-shadow:
+        0 0 0 1px $shadcn-card-ring,
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+// Hairlines between the dialog's header, body and footer. ExtJS's border
+// management zeroes docked borders with !important, so they are drawn as inset
+// shadows. Toasts are windows too and must stay undivided.
+.#{$prefix}window-default:not(.#{$prefix}toast) {
+    > .#{$prefix}window-header-default-top {
+        box-shadow: inset 0 -1px 0 $shadcn-border;
+    }
+
+    .#{$prefix}toolbar-docked-top {
+        box-shadow: inset 0 -1px 0 $shadcn-border;
+    }
+
+    .#{$prefix}toolbar-docked-bottom {
+        padding: $content-padding;
+        background-color: $shadcn-muted-half;
+        box-shadow: inset 0 1px 0 $shadcn-border;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// Toasts are windows, so they inherit this surface.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}window-default {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-card-ring;
+        box-shadow:
+            0 0 0 1px $shadcn-dark-card-ring,
+            0 10px 15px -3px rgba(0, 0, 0, 0.7),
+            0 4px 6px -4px rgba(0, 0, 0, 0.7);
+    }
+
+    .#{$prefix}window-body-default {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-border-solid;
+        color: $shadcn-dark-card-foreground;
+    }
+
+    .#{$prefix}window-header-default,
+    .#{$prefix}window-header-default-top {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}window-header-default .#{$prefix}title-text,
+    .#{$prefix}window-header-title-default {
+        color: $shadcn-dark-card-foreground;
+    }
+
+    .#{$prefix}window-default:not(.#{$prefix}toast) {
+        > .#{$prefix}window-header-default-top {
+            box-shadow: inset 0 -1px 0 $shadcn-dark-border-solid;
+        }
+
+        .#{$prefix}toolbar-docked-top {
+            box-shadow: inset 0 -1px 0 $shadcn-dark-border-solid;
+        }
+
+        .#{$prefix}toolbar-docked-bottom {
+            background-color: $shadcn-dark-muted-half;
+            box-shadow: inset 0 1px 0 $shadcn-dark-border-solid;
+        }
+    }
+
+    // Ext.Msg renders its icon and prompt text inside the window body.
+    .#{$prefix}message-box .#{$prefix}window-body {
+        color: $shadcn-dark-card-foreground;
+    }
+}

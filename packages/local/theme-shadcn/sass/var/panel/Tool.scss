@@ -1,0 +1,14 @@
+// Panel/window header tools. Neutral's $tool-glyph-color is #fff, which was
+// invisible once the header turned white — only the close tool was picked up by
+// $panel-header-glyph-color.
+
+$tool-glyph-color: dynamic($shadcn-muted-foreground);
+$tool-opacity: dynamic(1);
+$tool-focus-outline-color: dynamic($shadcn-ring);
+
+// theme-material maps minimise/maximise onto the Material "fullscreen_exit" /
+// "fullscreen" pair, which reads as two zoom controls rather than the standard
+// window buttons.
+$tool-minimize-glyph: dynamic('minimize');
+$tool-maximize-glyph: dynamic('crop_square');
+$tool-restore-glyph: dynamic('filter_none');

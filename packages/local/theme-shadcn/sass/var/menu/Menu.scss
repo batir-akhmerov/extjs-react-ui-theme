@@ -1,0 +1,44 @@
+// ============================================================================
+// Menu = shadcn <DropdownMenuContent>.
+//
+// Reference (src/components/ui/dropdown-menu.tsx):
+//   content   rounded-lg (10) · bg-popover · p-1 (4) · shadow-md · ring-1 foreground/10
+//   item      rounded-md (8) · px-1.5 py-1 · text-sm · focus bg-accent
+//   separator 1px bg-border, my-1 -mx-1
+//
+// Material sets $menu-item-active-background-color to $base-highlight-color,
+// which our token layer maps to near-black — hovering a menu item made it
+// black-on-black. It has to be the accent surface instead.
+// ============================================================================
+
+$menu-background-color: dynamic($shadcn-popover);
+$menu-border-color: dynamic($shadcn-card-ring);
+$menu-border-width: dynamic(1px);
+$menu-padding: dynamic(4px);
+$menu-text-color: dynamic($shadcn-popover-foreground);
+
+$menu-item-font-size: dynamic($font-size);
+$menu-item-font-weight: dynamic(400);
+$menu-item-height: dynamic(28px);
+$menu-item-border-width: dynamic(0);
+$menu-item-active-background-color: dynamic($shadcn-accent);
+$menu-item-active-text-color: dynamic($shadcn-accent-foreground);
+$menu-item-active-border-color: dynamic($shadcn-accent);
+$menu-item-active-border-radius: dynamic($shadcn-radius-md);
+$menu-item-disabled-opacity: dynamic(0.5);
+
+$menu-item-icon-horizontal-spacing: dynamic(6px);
+$menu-item-text-horizontal-spacing: dynamic(6px);
+
+$menu-glyph-color: dynamic($shadcn-muted-foreground);
+$menu-glyph-opacity: dynamic(1);
+$menu-item-active-glyph-color: dynamic($shadcn-accent-foreground);
+$menu-item-checkbox-glyph-color: dynamic($shadcn-muted-foreground);
+$menu-item-checkbox-checked-glyph-color: dynamic($shadcn-foreground);
+$menu-item-arrow-glyph-color: dynamic($shadcn-muted-foreground);
+$menu-item-active-arrow-glyph-color: dynamic($shadcn-accent-foreground);
+
+$menu-separator-border-color: dynamic($shadcn-border);
+$menu-separator-background-color: dynamic($shadcn-popover);
+$menu-separator-size: dynamic(1px);
+$menu-item-separator-margin: dynamic(4px 0);

@@ -1,0 +1,11 @@
+// shadcn checkbox: a 16px rounded box, not a Material Icons glyph.
+// The glyph is suppressed in sass/src/form/field/Checkbox.scss.
+$form-checkbox-size: dynamic(16px);
+$form-checkbox-glyph-color: dynamic($shadcn-input);
+$form-checkbox-glyph-checked-color: dynamic($shadcn-primary);
+$form-checkbox-glyph-focus-color: dynamic($shadcn-ring);
+$form-checkbox-label-color: dynamic($shadcn-foreground);
+$form-checkbox-label-font-size: dynamic(14px);
+$form-checkbox-label-font-weight: dynamic(500);
+$form-checkbox-label-line-height: dynamic(20px);
+$form-checkbox-label-spacing: dynamic(8px);

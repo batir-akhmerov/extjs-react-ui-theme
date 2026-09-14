@@ -1,0 +1,111 @@
+// ============================================================================
+// shadcn checkbox — 16x16, 4px radius, 1px border; checked fills with primary
+// and shows a white tick.
+//
+// theme-material draws the box with a Material Icons glyph, so the glyph is
+// collapsed (font-size 0) and the box is drawn with CSS instead. The tick is an
+// inline SVG so nothing extra has to be fetched.
+// ============================================================================
+
+$shadcn-check-tick: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fafafa' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E";
+
+.#{$prefix}form-checkbox,
+.#{$prefix}grid-checkcolumn,
+.#{$prefix}column-header-checkbox,
+.#{$prefix}tree-checkbox {
+    box-sizing: border-box;
+    // checkcolumn/tree render a bare <span>; without this the 16px box is
+    // ignored and the element collapses to a 2px dot.
+    display: inline-block;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    font-size: 0;
+    line-height: 0;
+    border: 1px solid $shadcn-input;
+    border-radius: 4px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 11px 11px;
+
+    // Material draws the box as a "check_box" / "check_box_outline_blank"
+    // ligature in ::before and sets its font-size there, so collapsing the
+    // parent's font-size does not reach it — the glyph shows through as an
+    // artefact inside our CSS-drawn box. Its checked rule is
+    // `.x-form-cb-checked .x-form-checkbox-default::before`, so the UI class
+    // has to be named here to match that specificity.
+    &:before,
+    &:after,
+    &.#{$prefix}form-checkbox-default:before,
+    &.#{$prefix}form-checkbox-default:after {
+        content: none;
+        display: none;
+    }
+}
+
+.#{$prefix}form-cb-checked,
+.#{$prefix}grid-checkcolumn-checked,
+.#{$prefix}column-header-checkbox-checked,
+.#{$prefix}tree-checkbox-checked {
+    .#{$prefix}form-checkbox,
+    &.#{$prefix}grid-checkcolumn,
+    &.#{$prefix}column-header-checkbox,
+    &.#{$prefix}tree-checkbox {
+        border-color: $shadcn-primary;
+        background-color: $shadcn-primary;
+        background-image: url($shadcn-check-tick);
+    }
+}
+
+.#{$prefix}form-checkbox-focus,
+.#{$prefix}form-cb-focus .#{$prefix}form-checkbox {
+    border-color: $shadcn-ring;
+    @include shadcn-focus-ring();
+}
+
+.#{$prefix}form-cb-label {
+    color: $shadcn-foreground;
+    font-size: var(--form-font-size, var(--ui-font-size, #{$font-size}));
+    font-weight: 500;
+    line-height: 20px;
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. The tick has to be re-inlined because its stroke colour is baked
+// into the data URI.
+// ---------------------------------------------------------------------------
+$shadcn-check-tick-dark: "data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23171717' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E";
+
+.dark-mode {
+    .#{$prefix}form-checkbox,
+    .#{$prefix}grid-checkcolumn,
+    .#{$prefix}column-header-checkbox,
+    .#{$prefix}tree-checkbox {
+        border-color: $shadcn-dark-input;
+    }
+
+    .#{$prefix}form-cb-checked,
+    .#{$prefix}grid-checkcolumn-checked,
+    .#{$prefix}column-header-checkbox-checked,
+    .#{$prefix}tree-checkbox-checked {
+        .#{$prefix}form-checkbox,
+        &.#{$prefix}grid-checkcolumn,
+        &.#{$prefix}column-header-checkbox,
+        &.#{$prefix}tree-checkbox {
+            border-color: $shadcn-dark-primary;
+            background-color: $shadcn-dark-primary;
+            background-image: url($shadcn-check-tick-dark);
+        }
+    }
+
+    .#{$prefix}form-checkbox-focus,
+    .#{$prefix}form-cb-focus .#{$prefix}form-checkbox {
+        border-color: $shadcn-dark-ring;
+        @include shadcn-focus-ring($shadcn-dark-ring-shadow);
+    }
+
+    .#{$prefix}form-cb-label {
+        color: $shadcn-dark-foreground;
+    }
+}

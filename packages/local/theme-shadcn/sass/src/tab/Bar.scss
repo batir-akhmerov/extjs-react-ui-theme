@@ -1,0 +1,53 @@
+// ============================================================================
+// Tab bar. The filled variant is a rounded muted pill; the plain variant is a
+// transparent strip whose active tab is marked only by its underline.
+// ============================================================================
+
+.#{$prefix}tab-bar {
+    border-radius: $shadcn-radius-lg;
+}
+
+.#{$prefix}tab-bar-plain {
+    border-radius: 0;
+    background: transparent;
+    background-image: none;
+    padding: 0;
+
+    .#{$prefix}tab {
+        margin-right: 4px;
+    }
+}
+
+// shadcn separates <TabsList> from <TabsContent> with a gap-2; ExtJS docks the
+// bar straight against the body on all four sides.
+.#{$prefix}tab-bar.#{$prefix}docked-top {
+    margin-bottom: 8px;
+}
+
+.#{$prefix}tab-bar.#{$prefix}docked-bottom {
+    margin-top: 8px;
+}
+
+.#{$prefix}tab-bar.#{$prefix}docked-left {
+    margin-right: 8px;
+}
+
+.#{$prefix}tab-bar.#{$prefix}docked-right {
+    margin-left: 8px;
+}
+
+// Dark mode. See the note at the top of sass/src/Component.scss.
+.dark-mode {
+    .#{$prefix}tab-bar-default {
+        background-color: $shadcn-dark-muted;
+    }
+
+    .#{$prefix}tab-bar-default.#{$prefix}tab-bar-plain {
+        background-color: transparent;
+    }
+
+    .#{$prefix}tab-bar-strip-default {
+        background-color: transparent;
+        border-color: transparent;
+    }
+}

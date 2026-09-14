@@ -1,0 +1,57 @@
+// ============================================================================
+// shadcn form field tokens.
+//
+// Target metrics (measured on the React gallery at 14px):
+//   input           h32, padding 4px 10px, radius 10, 1px #e5e5e5, transparent bg
+//   textarea        h64, padding 8px 10px, radius 10
+//   select trigger  h32, padding 8px 8px 8px 10px, radius 10
+//   label           14px / 500 / foreground
+//
+// theme-material renders fields as a Material underline using hardcoded CSS,
+// not variables, so sass/src/form/field/Text.scss rebuilds the box.
+// ============================================================================
+
+$form-field-height: dynamic(32px);
+$form-field-font-size: dynamic(14px);
+$form-field-line-height: dynamic(20px);
+$form-field-border-width: dynamic(1px);
+$form-field-padding: dynamic(4px 10px);
+
+$form-text-field-height: dynamic(32px);
+$form-text-field-padding: dynamic(4px 10px);
+$form-text-field-border-radius: dynamic($shadcn-radius-lg);
+$form-text-field-border-width: 1px;
+$form-text-field-border-color: dynamic($shadcn-input);
+$form-text-field-focus-border-color: dynamic($shadcn-ring);
+$form-text-field-invalid-border-color: dynamic($shadcn-destructive);
+$form-text-field-background-color: dynamic($shadcn-background);
+$form-text-field-color: dynamic($shadcn-foreground);
+$form-text-field-empty-color: dynamic($shadcn-muted-foreground);
+$form-text-field-body-default-min-width: dynamic(0px);
+
+$form-textarea-line-height: dynamic(20px);
+$form-textarea-body-height: dynamic(64px);
+
+$textfield-input-background-color: dynamic(transparent);
+$form-text-default-padding: dynamic(4px 10px);
+$form-text-default-border: dynamic(1px solid $shadcn-ring);
+$form-text-default-border-bottom: dynamic(1px solid $shadcn-input);
+$form-trigger-wrap-invalid-border: dynamic(1px solid $shadcn-destructive);
+$form-trigger-background-color: dynamic(transparent);
+$form-colorpicker-field-padding-left: dynamic(32px);
+
+// Material animates the label from inside the field; shadcn labels are static.
+$form-label-font-color: dynamic($shadcn-foreground);
+$form-label-font-size: dynamic(14px);
+$form-label-font-weight: dynamic(500);
+$form-label-line-height: dynamic(20px);
+$form-item-label-height: dynamic(20px);
+$form-item-label-font-size: dynamic(14px);
+$form-focused-item-label-font-size: dynamic(14px);
+$form-item-label-margin: dynamic(0px);
+$form-item-label-padding: dynamic(0px);
+$form-item-label-inner-padding: dynamic(0 0 6px 0);
+$form-type-text-margin: dynamic(0px);
+
+$form-text-file-height: dynamic(32px);
+$webkit-form-text-height: dynamic(100%);

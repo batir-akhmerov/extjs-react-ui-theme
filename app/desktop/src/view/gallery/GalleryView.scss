@@ -1,0 +1,15 @@
+// Layout scaffolding only. All colours/shapes (badges, tiles, status accents,
+// avatar, toasts) live in packages/local/theme-shadcn — see sass/src/Component.scss.
+
+.galleryview {
+    padding: 16px;
+
+    .gallery-section {
+        margin-bottom: 24px;
+    }
+
+    .gallery-row {
+        margin-bottom: 12px;
+    }
+}
+

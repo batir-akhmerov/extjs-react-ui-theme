@@ -1,0 +1,141 @@
+# ExtJS shadcn Theme — Remediation Spec (Phase 2, follow-up)
+
+Follow-up to `docs/EXTJS_THEME_PARITY_SPEC.md`. Read that spec first — especially
+**§8 Traps** and **§4 Architecture (LOCKED)**. Also read
+`.github/skills/extjs8-classic/SKILL.md`.
+
+This file existed because a manual-testing pass surfaced 16 border/shape/colour defects.
+**All 16 are now fixed and verified** — see §2. What is left is listed in §3.
+
+---
+
+## 1. How this was verified without blowing the image budget
+
+The image budget is ~20 images per request, so almost everything was checked with
+`getComputedStyle` instead of screenshots. Two things make that work:
+
+- **Disable transitions before measuring.** A hidden/background Playwright page throttles
+  style recalc, so any property under a CSS `transition` reads back its *start* value and
+  every state override looks like it failed. Inject
+  `*,*:before,*:after{transition:none !important;animation:none !important;}` first.
+- **Pseudo-elements carry most of the state.** `getComputedStyle(node, '::before')` is the
+  only way to see ExtJS's split-button masks, glyph ligatures and separators.
+
+For the few checks that really need eyes, set `zoom: 5` on the `galleryview` element and
+drive `.galleryview.x-scroller`'s `scrollTop` — element screenshots ignore `zoom`, and
+`scrollIntoView`/`locator.screenshot()` both hang on this page.
+
+---
+
+## 2. Status of the 16 reported issues — all VERIFIED
+
+| # | Issue | Fix location | Measured result |
+|---|---|---|---|
+| 1 | Focused field doesn't show the full grey ring on all sides | `sass/src/form/field/Text.scss` → `.x-form-trigger-wrap-focus` + `shadcn-focus-ring()`; `sass/src/Component.scss` `overflow: visible` | wrap `box-shadow: rgba(161,161,161,.5) 0 0 0 3px`, border `#a1a1a1`, r10, wrap + body `overflow: visible` |
+| 2 | Unchecked checkbox shows an artefact inside the grey square | `sass/src/form/field/Checkbox.scss` | off = transparent bg, `#e5e5e5` border, r4, `background-image: none`, 16×16 |
+| 3 | Radio: no white dot when selected; mess when off | `sass/src/form/field/Radio.scss` | off = transparent + `#e5e5e5` ring; on = `#171717` + centred 8px white dot |
+| 4 | Combo dropdown has no rounded corners | `sass/src/view/BoundList.scss` | list r10 / pad 4 / ring + shadow-md; item r8 / h32 / pad 0 8 |
+| 5 | Split/menu button shows a bad bottom border in the bottom corners | `sass/src/button/Button.scss` (see §3.1) | masks transparent, root tints `#171717 → #2e2e2e` uniformly, separator `rgba(fg,.3)` h20 |
+| 6 | Panels often have missing or broken borders | `sass/src/panel/Panel.scss` | `inset 0 0 0 1px rgba(10,10,10,.1)`, r14, continuous |
+| 7 | Broken borders inside panel | same as 6 | same |
+| 8 | Broken borders in panels/tiles | `app/desktop/src/view/gallery/GalleryView.scss` | `.gallery-tile` r14 + same inset ring |
+| 9 | Missing padding in tab content / tab title overlaps grey bar | `sass/src/tab/Bar.scss` | bar h32 / r10 / `margin-bottom: 8px`; tab h26 inset 3px on all sides; body padding 0 — matches shadcn `Tabs gap-2` + unpadded `TabsContent` |
+| 10 | Plain tabs: active tab has a rounded bottom border | `sass/src/tab/Tab.scss` | plain bar transparent r0; tab r0 with `border-bottom: 2px #0a0a0a` |
+| 11 | Plain vertical (left) tabs: rounded left border on active tab | same rule as 10 | vertical plain bar transparent r0; tab r0 with `border-right: 2px #0a0a0a` |
+| 12 | Toast messages are not coloured | `GalleryViewController.js` + `GalleryView.scss` | success `#008a2e`, error `#e60000`, warning `#dc7609`, info `#0a85d1`, plain `#737373` |
+| 13 | Load mask has no rounded corners | `sass/src/Component.scss` | `.x-mask-msg` r10 + ring + shadow-md |
+| 14 | Datepicker: too wide, no radius, too much padding, day not centred | `sass/src/picker/Date.scss` + `sass/var/picker/Date.scss` | 254px wide, r10, cell 32×32 with `line-height: 32px`, `border-radius: 50%`, `text-align: center` |
+| 15 | Dialog icons are not coloured | `sass/var/window/MessageBox.scss` | info `#0a85d1`, warning `#dc7609`, error `#e7000b`, question `#171717`; question glyph restored to `$fa-var-question-circle` (material had swapped it for the Material `warning` ligature) |
+| 16 | Window: grey corner artefacts, non-standard min/max tools, no header/body/footer separators | `sass/src/window/Window.scss`, `sass/var/panel/Tool.scss` | r14 + ring + shadow-lg, header hairline `inset 0 -1px 0 #e5e5e5`, tools `minimize`/`crop_square` in `#737373` |
+
+Every row above was also measured with `.dark-mode` on (toggled with a real
+`btn.el.dom.click()`), and zero console errors were recorded on a clean load.
+
+---
+
+## 3. What the two open issues actually were
+
+### 3.1 Issue 5 — split/menu button (FIXED)
+
+**Real cause.** ExtJS does not tint a split button as one surface. It paints two
+square-cornered, absolutely-positioned masks inside the button and swaps *their* colours per
+state:
+
+| element | covers | resting | hover / pressed | menu open |
+|---|---|---|---|---|
+| `.x-btn-wrap.x-btn-split:before` | everything left of the arrow | `#171717` | `#2e2e2e` | `#171717` |
+| `.x-btn-split-right + .x-btn-arrow-el:before` | the arrow segment | `#171717` | `#171717` | `#2e2e2e` |
+
+So hovering only half-lit the control, and at a 10px radius the lit half read as a square
+block against the rounded shape — the "bad bottom border in the bottom corners".
+`$button-split-border` was a red herring; it only controls the text/arrow separator.
+
+Additionally `.x-btn-button:after` (the separator) was repainted per state in the button's
+own background colour and was 60px tall inside a 32px button, so it rendered as a hard black
+edge-to-edge bar.
+
+**Fix** — `packages/local/theme-shadcn/sass/src/button/Button.scss`:
+
+1. Force both masks to `background-color: transparent !important`. `!important` is required:
+   theme-material re-emits these once per state \u00d7 ui at four classes of specificity.
+2. `.x-btn.x-split-button { border-radius: 10px; overflow: hidden; }`.
+3. New `shadcn-split-tint($ui, $bg-over, $scope)` mixin puts the hover/pressed/menu-active
+   colour on the button **root**, which is what now shows through \u2014 otherwise the control
+   loses all hover feedback. Invoked for `default`, `confirm`, `decline`,
+   `default-toolbar`, `plain-toolbar`, once for light and once with a `.dark-mode ` scope.
+4. Separator restated inside `shadcn-button-ui` / `shadcn-button-ui-dark` as
+   `top: 0; height: 100%; border-color: rgba($fg, .3)`.
+
+### 3.2 Issue 9 — tab content padding (FIXED / already correct)
+
+Measured on all five gallery tab panels (top, bottom, plain, vertical, vertical-plain):
+
+- bar h32, `border-radius: 10px`, `background #f5f5f5`, `margin` 8px on the body side;
+- active tab h26, r8, `padding: 2px 6px`, inset 3px from every bar edge \u2014 **no overlap**;
+- tab panel body `padding: 0`.
+
+That is exactly shadcn: `Tabs` is `flex flex-col gap-2` (\u2192 the 8px bar margin) and
+`TabsContent` is `flex-1 outline-none` with no padding of its own. Nothing further to add;
+adding body padding would have moved *away* from the reference.
+
+The only remaining tab delta is cosmetic and predates this list: the ExtJS bar is full-bleed
+where shadcn's `TabsList` is `w-fit`. ExtJS sizes the docked bar from the layout, so it
+cannot be shrunk from CSS without breaking the dock.
+
+---
+
+## 4. Reproduction notes (carried over, still true)
+
+- ExtJS dev server: `cd c:\work\extjs\classic-app; npm run dev` → `http://localhost:1962`.
+  Wait for **"Fashion build complete"** *and* **"Waiting for changes..."**.
+- React reference: manuka frontend on `http://localhost:3000/theme-gallery` (no login).
+- After a rebuild, load `http://localhost:1962/?nocache=<timestamp>`, then set
+  `location.hash = '#galleryview'` — the `?nocache=` navigation does not fire the hash route.
+- Before screenshotting sections, assign ids:
+  ```js
+  Ext.ComponentQuery.query('galleryview')[0].items.each(c => { c.el.dom.id = c.itemId; });
+  ```
+- **Never** `waitUntil: 'networkidle'` on `localhost:1962`.
+- `getComputedStyle` is unreliable while the Playwright page is hidden (trap 9) — disable
+  transitions first (see §1), and sanity-check by writing an inline style and reading it back.
+- `locator.screenshot()`, `scrollIntoViewIfNeeded` and `element.scrollIntoView()` all hang or
+  mis-land on this page. Scroll `.galleryview.x-scroller`'s `scrollTop` directly instead.
+
+---
+
+## 5. Definition of done — MET
+
+1. ✅ Issues 5 and 9 fixed and measured.
+2. ✅ All 16 issues confirmed numerically (and, where shape matters, visually) in light mode
+   and dark mode.
+3. ✅ No new Fashion build warnings; zero console errors on a clean load.
+4. ✅ `docs/EXTJS_THEME_PARITY_SPEC.md` §2 "Still to do" updated.
+
+## 6. Still open (not part of the 16)
+
+- ExtJS tab bar is full-bleed; shadcn's `TabsList` is `w-fit`.
+- `textareafield` label centres vertically instead of top-aligning.
+- ~~`HeaderView`, `FooterView`, `TopView`, `BottomView`, `MenuView` SCSS still derives from
+  `$base-color` rather than the token layer.~~ Done — see `EXTJS_THEME_PARITY_SPEC.md` §2
+  "App shell re-tokenised".
+- `ext-ux` SCSS beyond the calendar surfaces is not assessed.

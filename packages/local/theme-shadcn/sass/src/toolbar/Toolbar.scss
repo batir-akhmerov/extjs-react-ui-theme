@@ -1,0 +1,35 @@
+// ============================================================================
+// Toolbar — rules with no matching theme variable.
+//
+// A panel bbar renders with the *default* toolbar UI, not the 'footer' one, so
+// $toolbar-footer-* never reaches it. shadcn's card footer (pad 16, hairline
+// top, bg-muted/50) therefore has to be written out here.
+// ============================================================================
+
+.#{$prefix}panel-default:has(> .#{$prefix}panel-header) > .#{$prefix}panel-bodyWrap > .#{$prefix}toolbar-docked-bottom {
+    padding: $content-padding;
+    background-color: $shadcn-muted-half;
+    // ExtJS's border-management classes zero the toolbar border with
+    // !important, so the divider is drawn as an inset shadow instead.
+    box-shadow: inset 0 1px 0 $shadcn-border;
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}toolbar-default {
+        background-color: $shadcn-dark-card;
+        border-color: $shadcn-dark-border-solid;
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}panel-default:has(> .#{$prefix}panel-header) > .#{$prefix}panel-bodyWrap > .#{$prefix}toolbar-docked-bottom {
+        background-color: $shadcn-dark-muted-half;
+        box-shadow: inset 0 1px 0 $shadcn-dark-border-solid;
+    }
+
+    .#{$prefix}toolbar-text-default {
+        color: $shadcn-dark-foreground;
+    }
+}

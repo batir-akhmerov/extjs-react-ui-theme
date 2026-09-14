@@ -1,0 +1,15 @@
+// Ext.Msg icons. Neutral greys the info/question glyphs and material bumps
+// them to 40px; sonner-style status colours read better against a white card.
+
+$messagebox-icon-size: dynamic(32px);
+$messagebox-glyph-font-size: dynamic(32px);
+$messagebox-icon-spacing: dynamic(12px);
+
+$messagebox-info-glyph-color: dynamic(#0a85d1);
+$messagebox-question-glyph-color: dynamic($shadcn-primary);
+$messagebox-warning-glyph-color: dynamic(#dc7609);
+$messagebox-error-glyph-color: dynamic($shadcn-destructive);
+
+// theme-material swaps the question glyph for the Material "warning" ligature,
+// so Ext.Msg.confirm draws a warning triangle. Put the neutral icon back.
+$messagebox-question-glyph: dynamic($fa-var-question-circle $messagebox-glyph-font-size $font-icon-font-family);

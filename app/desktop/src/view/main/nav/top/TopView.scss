@@ -1,0 +1,23 @@
+// Colours/shape live in packages/local/theme-shadcn (sass/src/Component.scss,
+// '.topview' / '.imgAll').
+.topview {
+  font-size: $font-size;
+}
+
+.imgAll {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 104%;
+  background-position: 50%;
+  border-radius: 50%;
+}
+
+.imgSmall {
+  width: 35px;
+  height: 35px;
+}
+
+.imgBig {
+  width: 100px;
+  height: 100px;
+}

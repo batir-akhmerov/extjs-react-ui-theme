@@ -1,0 +1,38 @@
+// ============================================================================
+// Date picker metrics = shadcn <Calendar>.
+//
+// theme-material sizes cells at 40px (280px of picker for a 7-column grid),
+// right-aligns the day numbers and leaves $datepicker-month-button-color at
+// #fff — which is invisible now that the picker surface is white.
+// ============================================================================
+
+$datepicker-background-color: dynamic($shadcn-popover);
+$datepicker-header-background-color: dynamic($shadcn-popover);
+$datepicker-footer-background-color: dynamic($shadcn-popover);
+$datepicker-min-width: dynamic(252px);
+$datepicker-box-shadow: dynamic(none);
+$datepicker-header-padding: dynamic(8px);
+
+$datepicker-item-width: dynamic(36px);
+$datepicker-item-height: dynamic(36px);
+$datepicker-item-padding: dynamic(0);
+$datepicker-item-text-align: dynamic(center);
+$datepicker-item-color: dynamic($shadcn-foreground);
+$datepicker-item-font-weight: dynamic(400);
+$datepicker-item-border-color: dynamic(transparent);
+$datepicker-item-hover-background-color: dynamic($shadcn-accent);
+$datepicker-item-selected-background-color: dynamic($shadcn-primary);
+$datepicker-item-selected-color: dynamic($shadcn-primary-foreground);
+$datepicker-item-selected-font-weight: dynamic(500);
+$datepicker-item-prev-next-color: dynamic($shadcn-muted-foreground);
+$datepicker-item-disabled-color: dynamic($shadcn-muted-foreground);
+
+$datepicker-column-header-color: dynamic($shadcn-muted-foreground);
+$datepicker-column-header-text-align: dynamic(center);
+$datepicker-column-header-item-padding: dynamic(0);
+$datepicker-column-header-height: dynamic(28px);
+$datepicker-column-header-border-width: dynamic(0);
+
+$datepicker-month-button-color: dynamic($shadcn-foreground);
+$datepicker-month-button-arrow-glyph-color: dynamic($shadcn-muted-foreground);
+$datepicker-arrow-glyph-color: dynamic($shadcn-muted-foreground);

@@ -1,0 +1,37 @@
+// ============================================================================
+// Toolbar — panel tbar/bbar, i.e. shadcn card header actions / card footer.
+//
+// theme-material gives every docked toolbar a Material elevation shadow and
+// derives the separator colour from $base-color (near-black here). Both have
+// to be pinned; shadcn chrome is flat with hairline dividers.
+// ============================================================================
+
+$toolbar-box-shadow: dynamic(none);
+$toolbar-background-color: dynamic($shadcn-card);
+$toolbar-background-gradient: dynamic('none');
+
+$toolbar-border-color: dynamic($shadcn-border);
+$toolbar-border-width: dynamic(1px);
+
+// Card footer: bg-muted/50 + 8px gutter.
+$toolbar-footer-background-color: dynamic($shadcn-muted-half);
+$toolbar-footer-horizontal-spacing: dynamic(8px);
+$toolbar-footer-vertical-spacing: dynamic(8px);
+
+$toolbar-horizontal-spacing: dynamic(8px);
+$toolbar-vertical-spacing: dynamic(8px);
+$toolbar-spacer-width: dynamic(8px);
+
+$toolbar-separator-color: dynamic($shadcn-border);
+$toolbar-separator-highlight-color: dynamic($shadcn-border);
+$toolbar-separator-horizontal-border-width: dynamic(0 0 0 1px);
+$toolbar-separator-vertical-border-width: dynamic(1px 0 0);
+
+$toolbar-text-color: dynamic($shadcn-muted-foreground);
+$toolbar-text-font-size: dynamic($font-size);
+$toolbar-text-font-weight: dynamic(500);
+$toolbar-text-padding: dynamic(0 8px);
+
+$toolbar-tool-glyph-color: dynamic($shadcn-muted-foreground);
+$toolbar-scroller-glyph-color: dynamic($shadcn-muted-foreground);
+$toolbar-menu-overflow-glyph-color: dynamic($shadcn-muted-foreground);

@@ -1,0 +1,274 @@
+// ============================================================================
+// Rebuild the field box.
+//
+// theme-material draws fields as a Material underline with hardcoded CSS
+// (border: none + border-bottom on the input) and animates the label with a
+// translateY float. shadcn wants a static label above a fully bordered,
+// 10px-radius box, so both behaviours are undone here.
+//
+// !important is used only where theme-material's rule has equal or higher
+// specificity and varies per field type; everything else is plain overriding.
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// The border moves back onto the trigger wrap, which encloses input + triggers.
+// ---------------------------------------------------------------------------
+.#{$prefix}form-item .#{$prefix}form-trigger-wrap-default,
+.#{$prefix}form-type-text .#{$prefix}form-trigger-wrap-default,
+.#{$prefix}form-type-password .#{$prefix}form-trigger-wrap-default {
+    box-sizing: border-box;
+    border: 1px solid $shadcn-input;
+    border-radius: $shadcn-radius-lg;
+    background-color: $shadcn-background;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+// ---------------------------------------------------------------------------
+// The input itself carries no chrome, only padding.
+// ---------------------------------------------------------------------------
+.#{$prefix}form-item .#{$prefix}form-text-default,
+.#{$prefix}form-type-text .#{$prefix}form-text-default,
+.#{$prefix}form-type-password .#{$prefix}form-text-default {
+    box-sizing: border-box;
+    height: 100%;
+    border: 0;
+    border-bottom: 0;
+    border-radius: $shadcn-radius-lg;
+    padding: 4px 10px;
+    background-color: transparent;
+    background-image: none;
+    color: $shadcn-foreground;
+    font-size: var(--form-font-size, var(--ui-font-size, #{$font-size}));
+    line-height: 20px;
+}
+
+.#{$prefix}form-item textarea.#{$prefix}form-text-default {
+    padding: 8px 10px;
+}
+
+// Material hides the placeholder until focus; shadcn always shows it.
+.#{$prefix}form-empty-field {
+    &::-webkit-input-placeholder,
+    &::-moz-placeholder,
+    &::-ms-input-placeholder {
+        opacity: 1;
+        color: $shadcn-muted-foreground;
+    }
+}
+
+// Triggers (combo arrow, date icon) sit inside the box, so they lose their own
+// border and the Material underline.
+.#{$prefix}form-item .#{$prefix}form-trigger-default,
+.#{$prefix}form-type-text .#{$prefix}form-trigger-default {
+    border: 0;
+    border-bottom: 0;
+    background-color: transparent;
+    color: $shadcn-muted-foreground;
+}
+
+// ---------------------------------------------------------------------------
+// States.
+//
+// ExtJS 8 marks focus with x-form-trigger-wrap-focus on the wrap itself;
+// x-field-focus is only present when a focusCls is configured.
+// ---------------------------------------------------------------------------
+.#{$prefix}form-trigger-wrap-default.#{$prefix}form-trigger-wrap-focus,
+.#{$prefix}field-focus .#{$prefix}form-trigger-wrap-default {
+    border-color: $shadcn-ring;
+    @include shadcn-focus-ring();
+}
+
+// Material re-adds the Material underline on focus.
+.#{$prefix}form-trigger-wrap-focus,
+.#{$prefix}field-focus {
+    .#{$prefix}form-text-default,
+    .#{$prefix}form-trigger-default {
+        border-bottom: 0;
+    }
+}
+
+.#{$prefix}form-trigger-wrap-invalid,
+.#{$prefix}form-item .#{$prefix}form-trigger-wrap-invalid {
+    border-color: $shadcn-destructive;
+    @include shadcn-focus-ring($shadcn-ring-shadow-invalid);
+
+    .#{$prefix}form-text-default {
+        border-bottom: 0;
+    }
+}
+
+// The neutral theme marks invalid inputs with a red squiggle background image.
+.#{$prefix}form-invalid-field,
+.#{$prefix}form-invalid-field-default {
+    background-image: none;
+    background-color: transparent;
+}
+
+.#{$prefix}form-invalid-under,
+.#{$prefix}form-error-msg {
+    color: $shadcn-destructive;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.#{$prefix}item-disabled {
+    .#{$prefix}form-trigger-wrap-default {
+        background-color: rgba(245, 245, 245, 0.5);
+    }
+
+    &.#{$prefix}form-item,
+    .#{$prefix}form-text-default {
+        opacity: 0.5;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Labels.
+//
+// theme-material floats the label with translateY and shrinks it; shadcn keeps
+// it static above (or beside) the field. The transform rules are spread across
+// several material selectors of equal specificity, hence !important.
+// ---------------------------------------------------------------------------
+.#{$prefix}form-item-label,
+.#{$prefix}form-item-label-default {
+    transform: none !important;
+    -webkit-transform: none !important;
+    transition: none !important;
+    line-height: 20px;
+    font-size: var(--form-font-size, var(--ui-font-size, #{$font-size}));
+    font-weight: 500;
+    color: $shadcn-foreground;
+
+    .#{$prefix}field-focus & {
+        font-size: var(--form-font-size, var(--ui-font-size, #{$font-size}));
+        color: $shadcn-foreground;
+    }
+}
+
+.#{$prefix}form-item-label-inner {
+    line-height: 20px;
+}
+
+.#{$prefix}form-item-label-top > .#{$prefix}form-item-label-inner {
+    padding: 0 0 6px 0;
+}
+
+.#{$prefix}form-item-label-text {
+    line-height: 20px;
+}
+
+// ExtJS lays the side-label cell out as vertical-align: middle, so next to a
+// multi-line textarea the label floats to the middle of the control instead of
+// lining up with its first text row.
+.#{$prefix}form-item:has(> .#{$prefix}form-textarea-body)
+> .#{$prefix}form-item-label:not(.#{$prefix}form-item-label-top) {
+    vertical-align: top;
+    padding-top: 8px + $form-text-field-border-width;
+}
+
+// ---------------------------------------------------------------------------
+// Tag field.
+//
+// The chip list wrapper also carries .x-form-text-default, so the padding and
+// height rules above inflate it into a two-row control. Restate them at three
+// classes so it keeps $tag-field-padding and collapses to one input row.
+// ---------------------------------------------------------------------------
+.#{$prefix}form-item .#{$prefix}form-text-default.#{$prefix}tagfield,
+.#{$prefix}form-type-text .#{$prefix}form-text-default.#{$prefix}tagfield {
+    padding: $tag-field-padding;
+    min-height: $form-text-field-height;
+    border-radius: $shadcn-radius-lg;
+    line-height: $tag-field-item-height;
+}
+
+.#{$prefix}tagfield-item-close {
+    text-align: center;
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// Selectors mirror the light rules above one class deeper, because Fashion
+// emits this file after Component.scss.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}form-item .#{$prefix}form-trigger-wrap-default,
+    .#{$prefix}form-type-text .#{$prefix}form-trigger-wrap-default,
+    .#{$prefix}form-type-password .#{$prefix}form-trigger-wrap-default {
+        border-color: $shadcn-dark-input;
+        background-color: transparent;
+    }
+
+    .#{$prefix}form-item .#{$prefix}form-text-default,
+    .#{$prefix}form-type-text .#{$prefix}form-text-default,
+    .#{$prefix}form-type-password .#{$prefix}form-text-default {
+        color: $shadcn-dark-foreground;
+        background-color: transparent;
+    }
+
+    .#{$prefix}form-empty-field {
+        &::-webkit-input-placeholder,
+        &::-moz-placeholder,
+        &::-ms-input-placeholder {
+            color: $shadcn-dark-muted-foreground;
+        }
+    }
+
+    .#{$prefix}form-item .#{$prefix}form-trigger-default,
+    .#{$prefix}form-type-text .#{$prefix}form-trigger-default {
+        color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}form-trigger-wrap-default.#{$prefix}form-trigger-wrap-focus,
+    .#{$prefix}field-focus .#{$prefix}form-trigger-wrap-default {
+        border-color: $shadcn-dark-ring;
+        @include shadcn-focus-ring($shadcn-dark-ring-shadow);
+    }
+
+    .#{$prefix}form-trigger-wrap-invalid,
+    .#{$prefix}form-item .#{$prefix}form-trigger-wrap-invalid {
+        border-color: $shadcn-dark-destructive;
+        @include shadcn-focus-ring($shadcn-dark-ring-shadow-invalid);
+    }
+
+    .#{$prefix}form-invalid-under,
+    .#{$prefix}form-error-msg {
+        color: $shadcn-dark-destructive;
+    }
+
+    .#{$prefix}item-disabled .#{$prefix}form-trigger-wrap-default {
+        background-color: rgba(255, 255, 255, 0.07);
+    }
+
+    .#{$prefix}form-item .#{$prefix}form-text-default.#{$prefix}tagfield,
+    .#{$prefix}form-type-text .#{$prefix}form-text-default.#{$prefix}tagfield {
+        background-color: transparent;
+    }
+
+    .#{$prefix}form-item-label,
+    .#{$prefix}form-item-label-default {
+        color: $shadcn-dark-foreground;
+
+        .#{$prefix}field-focus & {
+            color: $shadcn-dark-foreground;
+        }
+    }
+
+    // Tag field chips = shadcn secondary badges.
+    .#{$prefix}form-text-default .#{$prefix}tagfield-item {
+        background-color: $shadcn-dark-secondary;
+        border-color: $shadcn-dark-border-solid;
+        color: $shadcn-dark-secondary-foreground;
+    }
+
+    .#{$prefix}form-text-default .#{$prefix}tagfield-item:hover,
+    .#{$prefix}form-text-default .#{$prefix}tagfield-item.#{$prefix}tagfield-item-selected {
+        background-color: $shadcn-dark-primary;
+        border-color: $shadcn-dark-primary;
+        color: $shadcn-dark-primary-foreground;
+    }
+
+    .#{$prefix}tagfield-item-text,
+    .#{$prefix}tagfield-item-close {
+        color: inherit;
+    }
+}

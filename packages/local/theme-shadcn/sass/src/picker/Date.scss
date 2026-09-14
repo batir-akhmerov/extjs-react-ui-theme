@@ -1,0 +1,99 @@
+// ============================================================================
+// Date picker = shadcn <Calendar> popover.
+//
+// theme-material leaves the month button white-on-white, sizes cells at 40px
+// (280px of picker for a 252px grid) and centres the selected day with an
+// asymmetric `padding: 0 15px 0 13px`, which pushes the number off-centre in
+// the circle. All three are corrected here; the metrics themselves are in
+// sass/var/picker/Date.scss.
+// ============================================================================
+
+.#{$prefix}datepicker {
+    border-width: 0;
+    border-radius: $shadcn-radius-lg;
+    box-shadow:
+        0 0 0 1px $shadcn-card-ring,
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
+    // Two classes deep to beat material's `.x-datepicker .x-datepicker-selected
+    // .x-datepicker-date` padding override.
+    .#{$prefix}datepicker-date,
+    .#{$prefix}datepicker-selected .#{$prefix}datepicker-date {
+        display: block;
+        box-sizing: border-box;
+        width: 32px;
+        height: 32px;
+        margin: 2px auto;
+        padding: 0;
+        border-radius: 50%;
+        line-height: 32px;
+        text-align: center;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Dark mode. See the note at the top of sass/src/Component.scss.
+// ---------------------------------------------------------------------------
+.dark-mode {
+    .#{$prefix}datepicker,
+    .#{$prefix}datepicker-inner,
+    .#{$prefix}monthpicker,
+    .#{$prefix}monthpicker-months,
+    .#{$prefix}monthpicker-years {
+        background-color: $shadcn-dark-popover;
+        color: $shadcn-dark-popover-foreground;
+    }
+
+    .#{$prefix}datepicker {
+        box-shadow:
+            0 0 0 1px $shadcn-dark-card-ring,
+            0 4px 6px -1px rgba(0, 0, 0, 0.6),
+            0 2px 4px -2px rgba(0, 0, 0, 0.6);
+    }
+
+    .#{$prefix}datepicker-header,
+    .#{$prefix}datepicker-footer,
+    .#{$prefix}monthpicker-buttons {
+        background-color: $shadcn-dark-popover;
+        color: $shadcn-dark-popover-foreground;
+    }
+
+    .#{$prefix}datepicker-column-header,
+    .#{$prefix}datepicker-column-header-inner {
+        background-color: transparent;
+        color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}datepicker-arrow,
+    .#{$prefix}datepicker-prev,
+    .#{$prefix}datepicker-next {
+        background-color: transparent;
+
+        &:before {
+            color: $shadcn-dark-muted-foreground;
+        }
+    }
+
+    .#{$prefix}datepicker .#{$prefix}datepicker-date {
+        color: $shadcn-dark-foreground;
+    }
+
+    .#{$prefix}datepicker-prevday .#{$prefix}datepicker-date,
+    .#{$prefix}datepicker-nextday .#{$prefix}datepicker-date,
+    .#{$prefix}datepicker-disabled .#{$prefix}datepicker-date {
+        color: $shadcn-dark-muted-foreground;
+    }
+
+    .#{$prefix}datepicker-cell-over .#{$prefix}datepicker-date,
+    .#{$prefix}monthpicker-item-over a {
+        background-color: $shadcn-dark-accent;
+        color: $shadcn-dark-accent-foreground;
+    }
+
+    .#{$prefix}datepicker .#{$prefix}datepicker-selected .#{$prefix}datepicker-date,
+    .#{$prefix}monthpicker-selected a {
+        background-color: $shadcn-dark-primary;
+        color: $shadcn-dark-primary-foreground;
+    }
+}
