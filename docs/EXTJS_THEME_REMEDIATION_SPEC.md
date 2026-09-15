@@ -177,3 +177,23 @@ unchanged) but it shifts the body ExtJS has already measured by 1px.
   `$base-color` rather than the token layer.~~ Done — see `EXTJS_THEME_PARITY_SPEC.md` §2
   "App shell re-tokenised".
 - `ext-ux` SCSS beyond the calendar surfaces is not assessed.
+
+## 7. Round 3 — dark mode pass (6 reported defects)
+
+Reported from screenshots of the gallery in dark mode. Root cause for each was confirmed with
+`getComputedStyle` on the live page (dark mode toggled via the header button) before any fix
+was written, per the method in §1. Status is updated in place as each is closed.
+
+| # | Issue | Root cause (verified) | Fix location | Status |
+|---|---|---|---|---|
+| 1 | Calendar weekday names and day numbers are almost invisible | `.x-calendar-header .x-calendar-header-cell` (`color:#0a0a0a`) and `.x-calendar-weeks .x-calendar-weeks-day-text` (`color:#000`) are baked by `ext-calendar`/`ext-core` at 2-class specificity and compiled **after** our theme package, so our existing `.dark-mode .x-calendar-header-cell` / `.dark-mode .x-calendar-day-number` rules lose the cascade (also: `-day-number` is the wrong class — the real one is `-weeks-day-text`) | `sass/src/Component.scss` | ✅ Fixed — matched selector depth added; measured `color: rgb(152,163,175)` on both the weekday header and day numbers |
+| 2 | Scrollbars render as the bright default OS scrollbar in dark mode | No `::-webkit-scrollbar` / `scrollbar-color` rule exists anywhere in the theme package — verified via a full-package grep | `sass/src/Component.scss` (new global rule) | ✅ Fixed — `scrollbar-width: thin` + muted-tone `scrollbar-color`/`::-webkit-scrollbar-thumb`, light and dark; measured `scrollbar-color: rgb(38,38,38)` on `.dark-mode` |
+| 3 | Column header trigger (dropdown arrow) shows a bright square on hover/open | `.x-column-header-open .x-column-header-trigger { background-color: #fafafa }` is a theme-neutral rule at 2-class specificity; our dark override only recolours the header cell itself, not this descendant, so the light `#fafafa` box wins | `sass/src/grid/header/Container.scss` | ✅ Fixed — trigger box forced transparent in `.dark-mode`; measured `background-color: rgba(0,0,0,0)` on the open trigger |
+| 4 | "Destructive" badge background is barely visible | `$shadcn-dark-destructive-soft: #2a1214` sits too close in luminance to `$shadcn-dark-card: #171717` — confirmed applied (`rgb(42,18,20)`) but not perceptible | `sass/var/Component.scss` | ✅ Fixed — background switched to `rgba($shadcn-dark-destructive, 0.18)`; measured `rgba(255,100,103,0.18)`, dead `$shadcn-dark-destructive-soft` var removed |
+| 5 | Tile status accent (coloured edge bar) invisible in dark mode | `.gallery-tile .x-panel-body { background-color: transparent }` is light-mode-only; `.dark-mode .x-panel-body-default { background-color: $shadcn-dark-card }` in `panel/Panel.scss` compiles later at equal (2-class) specificity and repaints the body opaque, hiding the tile root's inset accent box-shadow underneath. Confirmed via computed style: body `background-color: rgb(23,23,23)` (opaque) despite the box-shadow itself being present and correctly coloured | `sass/src/Component.scss` | ✅ Fixed — added a `.dark-mode .gallery-tile .x-panel-body` override (3-class, wins regardless of file order); measured body `background-color: rgba(0,0,0,0)` and confirmed visually — all 4 tiles now show a full-perimeter coloured ring |
+| 6 | Tab icons invisible in tab titles | `.x-tab-icon-el` has no dark-mode colour rule at all (only `.x-tab-inner-default` text does); the glyph keeps its light-mode baked colour (`#0a0a0a`) against the dark tab bar | `sass/src/tab/Tab.scss` | ✅ Fixed — mirrored the existing text-colour state rules onto `.x-tab-icon-el`; measured `color: rgb(152,163,175)`, matching the title text |
+
+### Reproduction
+
+Same as §4: `npm run dev` → `http://localhost:1962/?nocache=<n>#galleryview`, toggle dark mode
+with `Ext.ComponentQuery.query('headerview')[0].query('button[enableToggle=true]')[0].el.dom.click()`.

@@ -173,21 +173,21 @@ $base-gradient: none;
 // sass/src/**, which restate every colour the light build baked in.
 // ---------------------------------------------------------------------------
 $shadcn-dark-background: dynamic(#0a0a0a);
-$shadcn-dark-foreground: dynamic(#fafafa);
+$shadcn-dark-foreground: dynamic(#98a3af);
 $shadcn-dark-card: dynamic(#171717);
-$shadcn-dark-card-foreground: dynamic(#fafafa);
+$shadcn-dark-card-foreground: dynamic(#98a3af);
 $shadcn-dark-popover: dynamic(#171717);
-$shadcn-dark-popover-foreground: dynamic(#fafafa);
-$shadcn-dark-primary: dynamic(#e5e5e5);
+$shadcn-dark-popover-foreground: dynamic(#98a3af);
+$shadcn-dark-primary: dynamic(#8a8a8a);
 $shadcn-dark-primary-foreground: dynamic(#171717);
 $shadcn-dark-primary-hover: dynamic(#cfcfcf);
 $shadcn-dark-secondary: dynamic(#262626);
-$shadcn-dark-secondary-foreground: dynamic(#fafafa);
+$shadcn-dark-secondary-foreground: dynamic(#98a3af);
 $shadcn-dark-secondary-hover: dynamic(#333333);
 $shadcn-dark-muted: dynamic(#262626);
 $shadcn-dark-muted-foreground: dynamic(#a1a1a1);
 $shadcn-dark-accent: dynamic(#262626);
-$shadcn-dark-accent-foreground: dynamic(#fafafa);
+$shadcn-dark-accent-foreground: dynamic(#98a3af);
 
 // shadcn dark uses the bright destructive for text/borders but fills buttons
 // with `bg-destructive/60` so white label text stays legible.
@@ -195,7 +195,6 @@ $shadcn-dark-destructive: dynamic(#ff6467);
 $shadcn-dark-destructive-fill: dynamic(#9c4042);
 $shadcn-dark-destructive-fill-hover: dynamic(#b04a4c);
 $shadcn-dark-destructive-foreground: dynamic(#ffffff);
-$shadcn-dark-destructive-soft: dynamic(#2a1214);
 
 // --border is white/10 and --input white/15; borders may stay translucent, but
 // anything that has to be mixed or used as a fill needs the composited value.
@@ -211,10 +210,10 @@ $shadcn-dark-card-ring: dynamic(rgba(255, 255, 255, 0.1));
 $shadcn-dark-muted-half: dynamic(#1f1f1f);
 
 $shadcn-dark-sidebar: dynamic(#171717);
-$shadcn-dark-sidebar-foreground: dynamic(#fafafa);
+$shadcn-dark-sidebar-foreground: dynamic(#98a3af);
 $shadcn-dark-sidebar-accent: dynamic(#262626);
-$shadcn-dark-sidebar-accent-foreground: dynamic(#fafafa);
-$shadcn-dark-sidebar-primary: dynamic(#e5e5e5);
+$shadcn-dark-sidebar-accent-foreground: dynamic(#98a3af);
+$shadcn-dark-sidebar-primary: dynamic(#8a8a8a);
 $shadcn-dark-sidebar-primary-foreground: dynamic(#171717);
 $shadcn-dark-sidebar-border: dynamic(rgba(255, 255, 255, 0.1));
 $shadcn-dark-sidebar-muted-foreground: dynamic(#a1a1a1);

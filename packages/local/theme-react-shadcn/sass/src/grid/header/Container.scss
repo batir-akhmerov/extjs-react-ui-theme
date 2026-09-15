@@ -47,4 +47,12 @@
     .#{$prefix}column-header-text-inner:after {
         color: $shadcn-dark-muted-foreground;
     }
+
+    // theme-neutral paints the trigger's own box `#fafafa` on open/hover at
+    // 2-class specificity (`.x-column-header-open .x-column-header-trigger`);
+    // recolouring the header cell itself (above) doesn't reach this
+    // descendant, so it stays bright regardless of mode.
+    .#{$prefix}column-header-open .#{$prefix}column-header-trigger {
+        background-color: transparent;
+    }
 }

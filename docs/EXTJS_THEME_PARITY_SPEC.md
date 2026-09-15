@@ -104,10 +104,16 @@ with a runtime-switchable light/dark mode.
   `sass/src/view/BoundList.scss` (r10, hairline ring, r8/h32 items) and the six
   ItemSelector nav buttons get their FontAwesome glyphs plus the accent hover from
   `sass/src/button/Button.scss`. Verified in both light and dark mode.
+- **Parity pass 11 — trees.** See §12. `sass/var/list/TreeItem.scss` +
+  `sass/src/list/TreeItem.scss` (TreeList: r6 rows, 8px chevron/icon gap, instant
+  150ms colour transition instead of ext-core's 500ms fade, 500-weight selected label)
+  and `sass/var/tree/View.scss` + `sass/src/tree/View.scss` (TreeGrid: muted-foreground
+  arrow/folder/leaf glyphs, explicit FontAwesome family per trap 20) are all populated,
+  light and dark. Verified in the browser: the gallery's `#gallery-trees` treelist rows
+  and treegrid render correctly, and — the point of trap 19 — **the left nav rail is
+  unaffected**, in both light and dark mode.
 
 ### Still to do
-- **Parity pass 11 — trees (`Ext.list.Tree` + `Ext.tree.Panel`). See §12.** Depends on the
-  gallery addendum in `docs/EXTJS_GALLERY_SPEC.md` §11 landing first.
 - Known cosmetic gap: the ExtJS tab bar is full-bleed where shadcn's `TabsList` is `w-fit`
   (ExtJS sizes the docked bar from the layout, so CSS alone cannot shrink it).
 
@@ -432,13 +438,11 @@ via a `<body>` class, the same mechanism `.dark-mode` already uses for light/dar
 
 ---
 
-# 12. Parity pass 11 — trees (NEW WORK)
+# 12. Parity pass 11 — trees (COMPLETE)
 
-> Added 2026-09-14. **Prerequisite:** `docs/EXTJS_GALLERY_SPEC.md` §11 (the `trees` gallery
-> section in both galleries). Do that first; this pass is styling only.
->
-> Read traps **19–22** in §8 before touching anything. Trap 19 in particular — the nav rail
-> shares this CSS.
+> Added 2026-09-14, completed and verified same day. Kept here as the implementation record —
+> read traps **19–22** in §8 before touching anything in this area again. Trap 19 in
+> particular — the nav rail shares this CSS, so any future edit here must re-verify it.
 
 Two surfaces, two different theming mechanisms:
 
