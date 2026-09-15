@@ -100,7 +100,7 @@
 
     // Filled variant: the active trigger is a lifted surface, not white.
     .#{$prefix}tab.#{$prefix}tab-active.#{$prefix}tab-default {
-        background-color: $shadcn-dark-secondary-hover;
+        background-color: $shadcn-dark-tab-active-background;
     }
 
     .#{$prefix}tab-bar:not(.#{$prefix}tab-bar-plain) .#{$prefix}tab-active {

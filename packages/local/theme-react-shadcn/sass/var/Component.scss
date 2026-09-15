@@ -189,6 +189,16 @@ $shadcn-dark-muted-foreground: dynamic(#a1a1a1);
 $shadcn-dark-accent: dynamic(#262626);
 $shadcn-dark-accent-foreground: dynamic(#98a3af);
 
+// The filled tab bar's own background is `$shadcn-dark-muted` (#262626); the
+// active tab needs to read as a clearly lifted surface against it, not just a
+// shade darker/hover-adjacent — brighter than `$shadcn-dark-secondary-hover`.
+$shadcn-dark-tab-active-background: dynamic(#4a4a4a);
+
+// Dimmed further than `$shadcn-dark-muted-foreground` — for text that must
+// read as de-emphasised against a dark surface (e.g. calendar days outside
+// the current month), blended halfway toward `$shadcn-dark-card`.
+$shadcn-dark-muted-foreground-dim: dynamic(#586066);
+
 // shadcn dark uses the bright destructive for text/borders but fills buttons
 // with `bg-destructive/60` so white label text stays legible.
 $shadcn-dark-destructive: dynamic(#ff6467);

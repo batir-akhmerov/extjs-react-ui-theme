@@ -1,0 +1,31 @@
+// ============================================================================
+// ppa.react.ReToast. `.x-toast` itself is styled by the window/panel pass
+// elsewhere in the consuming theme (or theme-material's defaults); this file
+// only adds the parts specific to a typed toast.
+// ============================================================================
+
+.#{$prefix}toast.re-toast .#{$prefix}title-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+// Per-type colours mirror sonner's `richColors` palette. Not part of the
+// shared --re-status-* ramp (that vocabulary is domain status, not toast
+// severity) — literal values, restated per type at matching selector depth
+// so a shorter, generic `.x-title-icon-default` rule can't outrank them.
+$re-toast-colors: (
+    success: #008a2e,
+    error: #e60000,
+    warning: #dc7609,
+    info: #0a85d1
+);
+
+@each $type, $color in $re-toast-colors {
+    .re-toast-#{$type} .#{$prefix}window-header-title-default > .#{$prefix}title-icon-wrap-default > .#{$prefix}title-icon-default {
+        color: $color;
+    }
+}
+
+.re-toast-plain .#{$prefix}window-header-title-default > .#{$prefix}title-icon-wrap-default > .#{$prefix}title-icon-default {
+    color: var(--re-muted-fg, #737373);
+}

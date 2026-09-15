@@ -17,11 +17,10 @@ about the underlying components within it. We could write the rest of the app to
 directly to the tree list, but in a complex app that kind of poor scoping can lead to problems.
 */
 Ext.define("ClassicApp.view.main.nav.NavView", {
-	extend: "Ext.Panel",
+	extend: "ppa.react.ReSidebar",
 	xtype: "navview",
 	controller: "navviewcontroller",
 	viewModel: { type: "navviewmodel"},
-  cls: "navview",
   id: 'navview',
 	layout: "fit",
 

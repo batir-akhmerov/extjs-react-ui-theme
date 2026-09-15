@@ -8,7 +8,8 @@
   "requires": [
     "font-awesome",
     "ux",
-    "calendar"
+    "calendar",
+    "ppa-react-ui"
   ],
 
   "builds": {

@@ -81,11 +81,14 @@ Ext.define('ClassicApp.view.main.MainViewController', {
     vm.set('navCollapsed', !vm.get('navCollapsed'));
     //var topPic = this.lookup('topPic');
     var topPic = Ext.getCmp('topPic');
+    var topAvatar = Ext.getCmp('topAvatar');
     if (vm.get('navCollapsed') == true) {
-      topPic.setData({ src:'resources/desktop/5.jpg', caption:'John Smith', imgStyle: 'imgSmall', height: '100px' });
+      topPic.setData({ caption: 'John Smith' });
+      topAvatar.setSize(35, 35);
     }
     else {
-      topPic.setData({ src:'resources/desktop/5.jpg', caption:'John Smith', imgStyle: 'imgBig', height: '150px' });
+      topPic.setData({ caption: 'Welcome John Smith' });
+      topAvatar.setSize(100, 100);
     }
 
   },

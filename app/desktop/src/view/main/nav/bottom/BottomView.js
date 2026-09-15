@@ -1,9 +1,9 @@
 Ext.define('ClassicApp.view.main.nav.bottom.BottomView', {
-	extend: 'Ext.Toolbar',
+	extend: 'ppa.react.ReSidebarFooter',
+	requires: ['ppa.react.ReIconButton'],
 	xtype: 'bottomview',
-	cls: 'bottomview',
   defaults: {
-    ui:'toolbutton-toolbar', 
+    xtype: 'reiconbutton',
     handler:'onToolButtonClicked'
   },
 	items: [

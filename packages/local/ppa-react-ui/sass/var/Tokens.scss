@@ -1,0 +1,104 @@
+// ============================================================================
+// ppa.react token layer.
+//
+// Every literal default below is copied from the consuming theme package's
+// compiled output, so running this package under that theme is a visual
+// no-op. Nothing here may reference that theme's own SCSS variables — a
+// consumer running under theme-material or any other theme must still get
+// these defaults. A theme may re-assign any $re-* variable in its own
+// sass/var to retokenise the package at build time (see
+// PPA_REACT_UI_PACKAGE_SPEC.md §3).
+// ============================================================================
+
+$re-surface: dynamic(#ffffff);
+$re-surface-dark: dynamic(#171717);
+
+$re-fg: dynamic(#0a0a0a);
+$re-fg-dark: dynamic(#98a3af);
+
+$re-card: dynamic(#ffffff);
+$re-card-fg: dynamic(#0a0a0a);
+$re-card-dark: dynamic(#171717);
+$re-card-fg-dark: dynamic(#98a3af);
+$re-card-ring: dynamic(rgba(10, 10, 10, 0.1));
+$re-card-ring-dark: dynamic(rgba(255, 255, 255, 0.1));
+
+$re-primary: dynamic(#171717);
+$re-primary-fg: dynamic(#fafafa);
+$re-primary-dark: dynamic(#8a8a8a);
+$re-primary-fg-dark: dynamic(#171717);
+
+$re-secondary: dynamic(#f5f5f5);
+$re-secondary-fg: dynamic(#171717);
+$re-secondary-dark: dynamic(#262626);
+$re-secondary-fg-dark: dynamic(#98a3af);
+
+$re-muted: dynamic(#f5f5f5);
+$re-muted-fg: dynamic(#737373);
+$re-muted-dark: dynamic(#262626);
+$re-muted-fg-dark: dynamic(#a1a1a1);
+
+$re-accent: dynamic(#f5f5f5);
+$re-accent-fg: dynamic(#171717);
+$re-accent-dark: dynamic(#262626);
+$re-accent-fg-dark: dynamic(#98a3af);
+
+$re-destructive: dynamic(#e7000b);
+$re-destructive-fg: dynamic(#ffffff);
+$re-destructive-dark: dynamic(#ff6467);
+$re-destructive-fg-dark: dynamic(#ffffff);
+
+$re-border: dynamic(#e5e5e5);
+$re-border-dark: dynamic(#262626);
+
+$re-ring: dynamic(#a1a1a1);
+$re-ring-dark: dynamic(#737373);
+
+$re-radius-sm: dynamic(6px);
+$re-radius-md: dynamic(8px);
+$re-radius-lg: dynamic(10px);
+$re-radius-xl: dynamic(14px);
+
+$re-font-size: dynamic(14px);
+
+// App shell — the `--sidebar-*` token family.
+$re-sidebar: dynamic(#fafafa);
+$re-sidebar-fg: dynamic(#0a0a0a);
+$re-sidebar-dark: dynamic(#171717);
+$re-sidebar-fg-dark: dynamic(#98a3af);
+
+$re-sidebar-accent: dynamic(#f5f5f5);
+$re-sidebar-accent-fg: dynamic(#171717);
+$re-sidebar-accent-dark: dynamic(#262626);
+$re-sidebar-accent-fg-dark: dynamic(#98a3af);
+
+$re-sidebar-primary: dynamic(#171717);
+$re-sidebar-primary-fg: dynamic(#fafafa);
+$re-sidebar-primary-dark: dynamic(#8a8a8a);
+$re-sidebar-primary-fg-dark: dynamic(#171717);
+
+$re-sidebar-border: dynamic(#e5e5e5);
+$re-sidebar-border-dark: dynamic(rgba(255, 255, 255, 0.1));
+
+$re-sidebar-muted-fg: dynamic(#737373);
+$re-sidebar-muted-fg-dark: dynamic(#a1a1a1);
+
+// Status ramp — a default vocabulary, fully replaceable at runtime via
+// ppa.react.ReStatus.setStatuses()/addStatus() plus a matching re-assignment
+// of this map by whoever adds a status. fg/bg are the light values; dark-fg
+// is lifted into the light end of the ramp (dark bg is derived via mix()).
+$re-status-ramp: dynamic((
+    open:        (fg: #1e40af, bg: #dbeafe, dark-fg: #93c5fd),
+    escalated:   (fg: #854d0e, bg: #fef9c3, dark-fg: #fde047),
+    replied:     (fg: #166534, bg: #dcfce7, dark-fg: #86efac),
+    closed:      (fg: #4b5563, bg: #f3f4f6, dark-fg: #d4d4d4),
+    send-failed: (fg: #991b1b, bg: #fee2e2, dark-fg: #fca5a5)
+));
+
+// This app's dark-mode toggle is a body class, not an Ext JS feature. Another
+// consumer repoints this at their own scope selector.
+$re-dark-scope: dynamic('.dark-mode');
+
+// Off by default — this app toggles dark mode explicitly rather than
+// following the OS preference.
+$re-dark-follow-system: dynamic(false);

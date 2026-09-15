@@ -29,7 +29,7 @@
 // paint above the parent's outline. Only the corners survived.
 .#{$prefix}panel-default:has(> .#{$prefix}panel-header),
 .#{$prefix}panel-default.#{$prefix}grid {
-    border-radius: $panel-border-radius;
+    border-radius: $shadcn-radius-xl;
 
     // Docked headers, toolbars, tab bars and filter bars are absolutely
     // positioned at z-index 4 and would paint over the ring's edges — the top
@@ -51,15 +51,15 @@
     }
 
     > .#{$prefix}panel-header-default-docked-top {
-        border-top-left-radius: $panel-border-radius;
-        border-top-right-radius: $panel-border-radius;
+        border-top-left-radius: $shadcn-radius-xl;
+        border-top-right-radius: $shadcn-radius-xl;
     }
 
     // Whatever ends up last in the body wrap (body, or a docked bottom
     // toolbar / paging bar) carries the bottom corners.
     > .#{$prefix}panel-bodyWrap > :last-child {
-        border-bottom-left-radius: $panel-border-radius;
-        border-bottom-right-radius: $panel-border-radius;
+        border-bottom-left-radius: $shadcn-radius-xl;
+        border-bottom-right-radius: $shadcn-radius-xl;
     }
 }
 

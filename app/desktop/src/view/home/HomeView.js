@@ -1,10 +1,9 @@
 Ext.define('ClassicApp.view.home.HomeView',{
 	xtype: 'homeview',
-	cls: 'homeview',
 	controller: {type: 'homeviewcontroller'},
 	viewModel: {type: 'homeviewmodel'},
 	requires: [],
-	extend: 'Ext.Container',
+	extend: 'ppa.react.ReCard',
   scrollable: true,
   html: `Welcome to the Ext JS Classic Desktop Template Application!
 <br><br><br><br> 

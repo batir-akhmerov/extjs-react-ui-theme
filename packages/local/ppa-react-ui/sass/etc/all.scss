@@ -1,0 +1,18 @@
+// Mixins available to every sass/src/*.scss file in this package. Loaded
+// before sass/var and sass/src, per Sencha Cmd package compile order.
+
+// A visible-but-subtle keyboard focus ring, matching the app's design system's
+// focus-visible treatment. Takes a literal SCSS colour (for rgba() colour
+// maths) plus the CSS custom property it should track at runtime.
+@mixin re-focus-ring($ring-literal: #a1a1a1, $ring-var: '--re-ring') {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($ring-literal, 0.5);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(#{$ring-var}, #{$ring-literal}) 50%, transparent);
+}
+
+// Single-line ellipsis truncation for label/value text nodes.
+@mixin re-truncate() {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

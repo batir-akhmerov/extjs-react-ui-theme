@@ -1,0 +1,122 @@
+// ============================================================================
+// ppa.react.Tokens — emits the $re-* SCSS token layer (sass/var/Tokens.scss)
+// as CSS custom properties, so dark mode is one block and a consumer can
+// retint at runtime with no rebuild (PPA_REACT_UI_PACKAGE_SPEC.md §3, option 4).
+//
+// This file only compiles because ppa.react.Tokens (src/ppa/react/Tokens.js)
+// exists — a sass/src file with no matching class in the build compiles to
+// nothing, silently.
+// ============================================================================
+
+:root {
+    --re-surface: #{$re-surface};
+    --re-fg: #{$re-fg};
+
+    --re-card: #{$re-card};
+    --re-card-fg: #{$re-card-fg};
+    --re-card-ring: #{$re-card-ring};
+
+    --re-primary: #{$re-primary};
+    --re-primary-fg: #{$re-primary-fg};
+
+    --re-secondary: #{$re-secondary};
+    --re-secondary-fg: #{$re-secondary-fg};
+
+    --re-muted: #{$re-muted};
+    --re-muted-fg: #{$re-muted-fg};
+
+    --re-accent: #{$re-accent};
+    --re-accent-fg: #{$re-accent-fg};
+
+    --re-destructive: #{$re-destructive};
+    --re-destructive-fg: #{$re-destructive-fg};
+
+    --re-border: #{$re-border};
+    --re-ring: #{$re-ring};
+
+    --re-radius-sm: #{$re-radius-sm};
+    --re-radius-md: #{$re-radius-md};
+    --re-radius-lg: #{$re-radius-lg};
+    --re-radius-xl: #{$re-radius-xl};
+
+    --re-font-size: #{$re-font-size};
+
+    --re-sidebar: #{$re-sidebar};
+    --re-sidebar-fg: #{$re-sidebar-fg};
+    --re-sidebar-accent: #{$re-sidebar-accent};
+    --re-sidebar-accent-fg: #{$re-sidebar-accent-fg};
+    --re-sidebar-primary: #{$re-sidebar-primary};
+    --re-sidebar-primary-fg: #{$re-sidebar-primary-fg};
+    --re-sidebar-border: #{$re-sidebar-border};
+    --re-sidebar-muted-fg: #{$re-sidebar-muted-fg};
+
+    @each $name, $ramp in $re-status-ramp {
+        --re-status-#{$name}-fg: #{map-get($ramp, fg)};
+        --re-status-#{$name}-bg: #{map-get($ramp, bg)};
+    }
+}
+
+#{$re-dark-scope} {
+    --re-surface: #{$re-surface-dark};
+    --re-fg: #{$re-fg-dark};
+
+    --re-card: #{$re-card-dark};
+    --re-card-fg: #{$re-card-fg-dark};
+    --re-card-ring: #{$re-card-ring-dark};
+
+    --re-primary: #{$re-primary-dark};
+    --re-primary-fg: #{$re-primary-fg-dark};
+
+    --re-secondary: #{$re-secondary-dark};
+    --re-secondary-fg: #{$re-secondary-fg-dark};
+
+    --re-muted: #{$re-muted-dark};
+    --re-muted-fg: #{$re-muted-fg-dark};
+
+    --re-accent: #{$re-accent-dark};
+    --re-accent-fg: #{$re-accent-fg-dark};
+
+    --re-destructive: #{$re-destructive-dark};
+    --re-destructive-fg: #{$re-destructive-fg-dark};
+
+    --re-border: #{$re-border-dark};
+    --re-ring: #{$re-ring-dark};
+
+    --re-sidebar: #{$re-sidebar-dark};
+    --re-sidebar-fg: #{$re-sidebar-fg-dark};
+    --re-sidebar-accent: #{$re-sidebar-accent-dark};
+    --re-sidebar-accent-fg: #{$re-sidebar-accent-fg-dark};
+    --re-sidebar-primary: #{$re-sidebar-primary-dark};
+    --re-sidebar-primary-fg: #{$re-sidebar-primary-fg-dark};
+    --re-sidebar-border: #{$re-sidebar-border-dark};
+    --re-sidebar-muted-fg: #{$re-sidebar-muted-fg-dark};
+
+    @each $name, $ramp in $re-status-ramp {
+        --re-status-#{$name}-fg: #{map-get($ramp, dark-fg)};
+        --re-status-#{$name}-bg: #{mix(map-get($ramp, dark-fg), #171717, 18%)};
+    }
+}
+
+@if $re-dark-follow-system {
+    @media (prefers-color-scheme: dark) {
+        :root:not(#{$re-dark-scope}) {
+            --re-surface: #{$re-surface-dark};
+            --re-fg: #{$re-fg-dark};
+            --re-card: #{$re-card-dark};
+            --re-card-fg: #{$re-card-fg-dark};
+            --re-card-ring: #{$re-card-ring-dark};
+            --re-primary: #{$re-primary-dark};
+            --re-primary-fg: #{$re-primary-fg-dark};
+            --re-secondary: #{$re-secondary-dark};
+            --re-secondary-fg: #{$re-secondary-fg-dark};
+            --re-muted: #{$re-muted-dark};
+            --re-muted-fg: #{$re-muted-fg-dark};
+            --re-accent: #{$re-accent-dark};
+            --re-accent-fg: #{$re-accent-fg-dark};
+            --re-destructive: #{$re-destructive-dark};
+            --re-destructive-fg: #{$re-destructive-fg-dark};
+            --re-border: #{$re-border-dark};
+            --re-ring: #{$re-ring-dark};
+        }
+    }
+}

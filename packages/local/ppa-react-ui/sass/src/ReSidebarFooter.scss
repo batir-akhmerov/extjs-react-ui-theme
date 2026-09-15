@@ -1,0 +1,7 @@
+.#{$prefix}toolbar.re-sidebar-footer {
+    color: var(--re-sidebar-fg, #0a0a0a);
+    background-color: var(--re-sidebar, #fafafa);
+    border: none;
+    border-top: 1px solid var(--re-sidebar-border, #e5e5e5);
+    box-shadow: none;
+}

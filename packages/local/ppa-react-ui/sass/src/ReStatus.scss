@@ -1,0 +1,24 @@
+// ============================================================================
+// ppa.react.ReStatus — status-ramp row/cell accents. Badge rules for the
+// same ramp live in ReBadge.scss; both loop over the single
+// $re-status-ramp map (sass/var/Tokens.scss), so adding a status is one map
+// entry plus one ReStatus.addStatus() call, no rule duplication.
+// ============================================================================
+
+@each $name, $ramp in $re-status-ramp {
+    // Row accent = left bar on the row's first cell.
+    .re-status-row-#{$name} .#{$prefix}grid-cell-first {
+        box-shadow: inset 3px 0 0 0 var(--re-status-#{$name}-fg, #{map-get($ramp, fg)});
+    }
+
+    // Cell accent = right bar, tinted text.
+    .re-status-cell-#{$name} {
+        box-shadow: inset -3px 0 0 0 var(--re-status-#{$name}-fg, #{map-get($ramp, fg)});
+        color: var(--re-status-#{$name}-fg, #{map-get($ramp, fg)});
+    }
+
+    // Opt-in tinted background (re-status-fill), e.g. a confidence column.
+    .#{$prefix}grid-cell.re-status-fill.re-status-cell-#{$name} {
+        background-color: var(--re-status-#{$name}-bg, #{map-get($ramp, bg)});
+    }
+}

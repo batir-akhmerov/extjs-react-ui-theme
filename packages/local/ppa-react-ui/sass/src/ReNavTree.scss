@@ -1,0 +1,108 @@
+// ============================================================================
+// ppa.react.ReNavTree. `ui: 'nav'` is kept for its structural behaviour
+// (toolstrip/micro rail); every colour rule here is scoped under
+// `.re-nav-tree.x-treelist-nav` so it neither leaks onto a plain `.x-treelist`
+// nor depends on the framework's own unscoped default-ui treelist CSS.
+//
+// Selector shapes verified against node_modules/@sencha/ext-core/sass/src/
+// list/TreeItem.scss's treelist-ui-body mixin (do not call that mixin here —
+// it lives in ext-core's sass/src, not sass/etc, so it is not a package-safe
+// include).
+// ============================================================================
+
+.#{$prefix}treelist.re-nav-tree.#{$prefix}treelist-nav {
+    background-color: var(--re-sidebar, #fafafa);
+
+    .#{$prefix}treelist-row {
+        padding: 0 10px;
+    }
+
+    .#{$prefix}treelist-toolstrip {
+        background-color: var(--re-sidebar, #fafafa);
+    }
+
+    .#{$prefix}treelist-item-expanded > .#{$prefix}treelist-item {
+        background-color: var(--re-sidebar, #fafafa);
+    }
+
+    .#{$prefix}treelist-item-icon,
+    .#{$prefix}treelist-item-tool {
+        width: 24px;
+        color: var(--re-sidebar-muted-fg, #737373);
+        font-size: var(--re-font-size, 14px);
+    }
+
+    .#{$prefix}treelist-item-expander {
+        width: 24px;
+        color: var(--re-sidebar-muted-fg, #737373);
+        font-size: var(--re-font-size, 14px);
+
+        // CSS-drawn chevron \u2014 no font dependency. Rotates 90deg when the
+        // node is expanded (see .x-treelist-item-expanded below).
+        &:after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-right: 1.5px solid currentColor;
+            border-bottom: 1.5px solid currentColor;
+            transform: rotate(-45deg);
+            transition: transform 0.1s ease-in-out;
+        }
+    }
+
+    .#{$prefix}treelist-item-expanded > * > * > .#{$prefix}treelist-item-expander:after {
+        transform: rotate(45deg);
+    }
+
+    .#{$prefix}treelist-item-text {
+        color: var(--re-sidebar-fg, #0a0a0a);
+        font-size: var(--re-font-size, 14px);
+        line-height: 35px;
+    }
+
+    .#{$prefix}treelist-row-over {
+        background-color: var(--re-sidebar-accent, #f5f5f5);
+
+        > * > .#{$prefix}treelist-item-icon,
+        > * > .#{$prefix}treelist-item-text,
+        > * > .#{$prefix}treelist-item-expander {
+            color: var(--re-sidebar-accent-fg, #171717);
+        }
+    }
+
+    .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row,
+    .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row-over {
+        background-color: var(--re-sidebar-accent, #f5f5f5);
+    }
+
+    // 3px selection indicator on the row's leading edge.
+    .#{$prefix}treelist-row-over:before,
+    .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row:before {
+        content: ' ';
+        position: absolute;
+        display: block;
+        left: 0;
+        top: 0;
+        width: 3px;
+        height: 100%;
+    }
+
+    .#{$prefix}treelist-row-over:before {
+        background-color: transparent;
+    }
+
+    .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row:before,
+    .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row-over:before {
+        background-color: var(--re-sidebar-primary, #171717);
+    }
+
+    .#{$prefix}treelist-item-selected.#{$prefix}treelist-item-tool {
+        color: var(--re-sidebar-accent-fg, #171717);
+        background-color: var(--re-sidebar-accent, #f5f5f5);
+    }
+
+    .#{$prefix}treelist-item-tool-floated:after {
+        background-color: var(--re-sidebar-primary, #171717);
+    }
+}

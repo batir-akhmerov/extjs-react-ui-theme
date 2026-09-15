@@ -1,0 +1,14 @@
+// ============================================================================
+// ppa.react.ReHeaderBar — "neutralize, then paint" for a toolbar-derived
+// component (kills material's elevation shadow).
+// ============================================================================
+
+.#{$prefix}toolbar.re-header-bar {
+    color: var(--re-fg, #0a0a0a);
+    background-color: var(--re-surface, #ffffff);
+    border: none;
+    border-bottom: 1px solid var(--re-sidebar-border, #e5e5e5);
+    box-shadow: none;
+    font-size: 18px;
+    font-weight: 600;
+}

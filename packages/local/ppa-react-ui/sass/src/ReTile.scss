@@ -1,0 +1,99 @@
+// ============================================================================
+// ppa.react.ReTile — stat card (icon chip + label + value). Extends
+// Ext.panel.Panel, so per PPA_REACT_UI_PACKAGE_SPEC.md §3 ("neutralize, then
+// paint") this must first cancel whatever chrome the active theme paints on
+// a panel root, then apply its own. Selectors are written at two classes
+// (`.x-panel.re-tile`) to reliably outrank a theme's one-class `.x-panel-default`.
+// ============================================================================
+
+.#{$prefix}panel.re-tile {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: var(--re-radius-xl, 14px);
+    position: relative;
+
+    // Overlay ring rather than a real border: a real border on a panel with
+    // an absolutely-positioned body would double-count into the box size.
+    &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px solid var(--re-card-ring, rgba(10, 10, 10, 0.1));
+        border-radius: inherit;
+        pointer-events: none;
+    }
+}
+
+// The panel body paints its own opaque theme background edge-to-edge, which
+// would otherwise hide the tile surface/accent above.
+.re-tile .#{$prefix}panel-body {
+    background-color: transparent;
+    border: none;
+}
+
+.re-tile-inner {
+    display: flex;
+    align-items: center;
+}
+
+.re-tile-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin-right: 12px;
+    border-radius: var(--re-radius-lg, 10px);
+    background-color: var(--re-muted, #f5f5f5);
+    color: var(--re-muted-fg, #737373);
+    vertical-align: middle;
+    flex: none;
+}
+
+.re-tile-text {
+    display: block;
+    min-width: 0;
+}
+
+.re-tile-label {
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--re-muted-fg, #737373);
+}
+
+.re-tile-value {
+    display: block;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+// Edge accents, drawn as inset shadows so they consume no layout space and
+// don't fight the card outline above. Tinted by the status ramp when both
+// `accent` and `status` are set.
+@each $name, $ramp in $re-status-ramp {
+    $c: var(--re-status-#{$name}-fg, #{map-get($ramp, fg)});
+
+    .re-tile-accent-left.re-tile-status-#{$name} {
+        box-shadow: inset 3px 0 0 0 $c;
+    }
+
+    .re-tile-accent-top.re-tile-status-#{$name} {
+        box-shadow: inset 0 3px 0 0 $c;
+    }
+
+    .re-tile-accent-right.re-tile-status-#{$name} {
+        box-shadow: inset -3px 0 0 0 $c;
+    }
+
+    .re-tile-status-#{$name} .re-tile-icon {
+        background-color: var(--re-status-#{$name}-bg, #{map-get($ramp, bg)});
+        color: $c;
+    }
+}

@@ -1,10 +1,5 @@
-// Colours live in packages/local/theme-react-shadcn (sass/src/Component.scss, '.centerview').
+// Background lives in packages/local/ppa-react-ui (ppa.react.ReContentArea).
+// Layout-only override kept here: this app insets the center region.
 .centerview {
-	border-left: 0;
-	border-top: 0;
-  padding: 0px;
-  margin: 15px;
-
-	color: $color;
-	font-size: 24px;
+	margin: 15px;
 }

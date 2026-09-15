@@ -2,6 +2,8 @@ Ext.define('ClassicApp.view.gallery.GalleryViewController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.galleryviewcontroller',
 
+    requires: ['ppa.react.ReToast'],
+
     onFocusFieldAfterRender: function (field) {
         Ext.defer(function () {
             if (!field.isDestroyed) {
@@ -86,21 +88,12 @@ Ext.define('ClassicApp.view.gallery.GalleryViewController', {
     },
 
     onToastButtonClick: function (btn) {
-        var type = btn.toastType || 'plain',
-            icons = {
-                success: 'x-fa fa-check',
-                error: 'x-fa fa-xmark',
-                warning: 'x-fa fa-triangle-exclamation',
-                info: 'x-fa fa-circle-info',
-                plain: 'x-fa fa-comment'
-            };
+        var type = btn.toastType || 'plain';
 
-        Ext.toast({
+        ppa.react.ReToast.show({
             html: Ext.String.capitalize(type) + ' toast message',
             title: Ext.String.capitalize(type),
-            iconCls: icons[type],
-            // `cls` replaces Toast's own x-toast class rather than adding to it.
-            cls: 'x-toast gallery-toast-' + type,
+            toastType: type,
             align: btn.toastAlign || 'tr',
             autoClose: !btn.toastPersistent,
             autoCloseDelay: btn.toastAutoCloseDelay || 3000
@@ -108,8 +101,9 @@ Ext.define('ClassicApp.view.gallery.GalleryViewController', {
     },
 
     onProgressToastClick: function () {
-        Ext.toast({
+        ppa.react.ReToast.show({
             title: 'Uploading',
+            toastType: 'plain',
             align: 'br',
             autoClose: false,
             items: [{ xtype: 'progressbar', value: 0.6, text: '60%' }]

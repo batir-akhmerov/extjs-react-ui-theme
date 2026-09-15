@@ -1,6 +1,5 @@
 Ext.define('ClassicApp.view.main.detail.DetailView', {
-	extend: 'Ext.Container',
+	extend: 'ppa.react.ReCard',
 	xtype: 'detailview',
-	cls: 'detailview',
 	html: 'detailview'
 });

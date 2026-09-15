@@ -1,0 +1,23 @@
+// ============================================================================
+// ppa.react.ReStatusBar — flat titled panel, cancelling the card ring/radius
+// a titled `.x-panel-default` would otherwise pick up.
+// ============================================================================
+
+.#{$prefix}panel.re-status-bar.#{$prefix}panel-default {
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--re-sidebar, #fafafa);
+}
+
+.re-status-bar .#{$prefix}panel-header-default {
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--re-sidebar-border, #e5e5e5);
+    background-color: var(--re-sidebar, #fafafa);
+}
+
+.re-status-bar .#{$prefix}panel-header-default .#{$prefix}title-text {
+    color: var(--re-sidebar-muted-fg, #737373);
+    font-size: 12px;
+    font-weight: 400;
+}

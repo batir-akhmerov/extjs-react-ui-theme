@@ -1,0 +1,8 @@
+// ============================================================================
+// ppa.react.ReSidebar — the sidebar is separated by a hairline, not an
+// elevation shadow.
+// ============================================================================
+
+.#{$prefix}panel.re-sidebar {
+    box-shadow: 1px 0 0 0 var(--re-sidebar-border, #e5e5e5);
+}

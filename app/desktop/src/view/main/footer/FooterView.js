@@ -1,6 +1,5 @@
 Ext.define('ClassicApp.view.main.footer.FooterView', {
-	extend: 'Ext.panel.Panel',
+	extend: 'ppa.react.ReStatusBar',
 	xtype: 'footerview',
-	cls: 'footerview',
   title: 'Ext JS version: ' + Ext.versions.extjs.version
 });

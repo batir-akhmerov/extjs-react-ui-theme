@@ -1,0 +1,40 @@
+{
+    "name": "ppa-react-ui",
+
+    "sencha": {
+        "name": "ppa-react-ui",
+        "namespace": "ppa.react",
+        "type": "code",
+        "toolkit": "classic",
+        "creator": "anonymous",
+        "summary": "Reusable, theme-independent React-inspired custom components for Ext JS Classic",
+        "detailedDescription": "Theme-independent, reusable Ext JS Classic components (badges, tiles, avatars, toasts, status accents, and app-shell chrome) originally extracted from a component gallery theme package.",
+        "version": "1.0.0",
+        "compatVersion": "1.0.0",
+        "format": "1",
+        "output": "${package.dir}/build",
+        "local": true,
+        "framework": "ext",
+
+        "classpath": [
+            "${package.dir}/src"
+        ],
+
+        "overrides": [
+            "${package.dir}/overrides"
+        ],
+
+        "sass": {
+            "namespace": "ppa.react",
+            "etc": [
+                "${package.dir}/sass/etc/all.scss"
+            ],
+            "var": [
+                "${package.dir}/sass/var"
+            ],
+            "src": [
+                "${package.dir}/sass/src"
+            ]
+        }
+    }
+}

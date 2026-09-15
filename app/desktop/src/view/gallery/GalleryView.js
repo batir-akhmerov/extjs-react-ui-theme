@@ -49,7 +49,14 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
         'Ext.list.TreeItem',
         'Ext.data.TreeStore',
         'Ext.tree.Panel',
-        'Ext.tree.Column'
+        'Ext.tree.Column',
+
+        'ppa.react.ReBadge',
+        'ppa.react.ReTile',
+        'ppa.react.ReAvatar',
+        'ppa.react.ReToast',
+        'ppa.react.ReStatus',
+        'ppa.react.grid.ReStatusColumn'
     ],
 
     items: (function () {
@@ -97,16 +104,6 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                     stateCfg({ fieldLabel: 'Read only', readOnly: true })
                 ]
             };
-        }
-
-        // Mirrors the React gallery's <StatTile>: icon chip + 12px label +
-        // 24px semibold value on one row.
-        function statTile(icon, label, value) {
-            return '<div style="display:flex;align-items:center;">' +
-                '<span class="gallery-tile-icon"><span class="x-fa ' + icon + '"></span></span>' +
-                '<span><span class="gallery-tile-label" style="display:block;">' + label + '</span>' +
-                '<span class="gallery-tile-value" style="display:block;">' + value + '</span></span>' +
-                '</div>';
         }
 
         return [
@@ -235,21 +232,21 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
             items: [
                 {
                     xtype: 'container', itemId: 'row-variants', cls: 'gallery-row', layout: 'hbox',
-                    defaults: { margin: '0 8 0 0' },
+                    defaults: { xtype: 'rebadge', margin: '0 8 0 0' },
                     items: [
-                        { xtype: 'component', cls: 'gallery-badge gallery-badge-default', html: 'Default' },
-                        { xtype: 'component', cls: 'gallery-badge gallery-badge-secondary', html: 'Secondary' },
-                        { xtype: 'component', cls: 'gallery-badge gallery-badge-destructive', html: 'Destructive' },
-                        { xtype: 'component', cls: 'gallery-badge gallery-badge-outline', html: 'Outline' },
-                        { xtype: 'component', cls: 'gallery-badge gallery-badge-ghost', html: 'Ghost' }
+                        { text: 'Default', variant: 'default' },
+                        { text: 'Secondary', variant: 'secondary' },
+                        { text: 'Destructive', variant: 'destructive' },
+                        { text: 'Outline', variant: 'outline' },
+                        { text: 'Ghost', variant: 'ghost' }
                     ]
                 },
                 {
                     xtype: 'container', itemId: 'row-with-icon', cls: 'gallery-row', layout: 'hbox',
-                    defaults: { margin: '0 8 0 0' },
+                    defaults: { xtype: 'rebadge', margin: '0 8 0 0' },
                     items: [
-                        { xtype: 'component', cls: 'gallery-badge gallery-badge-secondary', html: '<i class="x-fa fa-check"></i> Verified' },
-                        { xtype: 'component', cls: 'gallery-badge gallery-badge-outline', html: '<i class="x-fa fa-bell"></i> 3 new' }
+                        { text: 'Verified', iconCls: 'x-fa fa-check', variant: 'secondary' },
+                        { text: '3 new', iconCls: 'x-fa fa-bell', variant: 'outline' }
                     ]
                 }
             ]
@@ -431,8 +428,8 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                 {
                     xtype: 'panel', itemId: 'row-statistics', cls: 'gallery-row', width: 220,
                     title: 'Statistics', bodyPadding: 16,
-                    html: '<div class="gallery-tile-value">1,284</div>' +
-                          '<div class="gallery-tile-label">emails processed</div>'
+                    html: '<div class="re-tile-value">1,284</div>' +
+                          '<div class="re-tile-label">emails processed</div>'
                 }
             ]
         },
@@ -511,7 +508,7 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                             filterType: 'list',
                             // tdCls drives the per-cell status accent
                             renderer: function (value, meta) {
-                                meta.tdCls = 'gallery-status-cell gallery-status-' + value;
+                                meta.tdCls = ppa.react.ReStatus.getCellCls(value);
 
                                 return value;
                             }
@@ -539,7 +536,7 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                     viewConfig: {
                         stripeRows: true,
                         getRowClass: function (record) {
-                            return 'gallery-row-status gallery-row-' + record.get('status');
+                            return ppa.react.ReStatus.getRowCls(record.get('status'));
                         }
                     },
 
@@ -711,19 +708,20 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
             items: [
                 {
                     xtype: 'container', itemId: 'row-stat-tiles', cls: 'gallery-row', layout: 'hbox',
-                    defaults: { xtype: 'panel', cls: 'gallery-tile', margin: '0 12 0 0', width: 180, height: 84, bodyPadding: 16 },
+                    defaults: { xtype: 'retile', margin: '0 12 0 0' },
                     items: [
-                        { html: statTile('fa-bell', 'Open', '128') },
-                        { cls: 'gallery-tile gallery-tile-accent-left gallery-status-escalated',
-                          html: statTile('fa-filter', 'Escalated', '12') },
-                        { cls: 'gallery-tile gallery-tile-accent-top gallery-status-replied',
-                          html: statTile('fa-reply', 'Replied', '94') },
-                        { cls: 'gallery-tile gallery-tile-accent-right gallery-status-send-failed',
-                          html: statTile('fa-triangle-exclamation', 'Failed', '3') }
+                        { tileIconCls: 'x-fa fa-bell', label: 'Open', value: 128 },
+                        { tileIconCls: 'x-fa fa-filter', label: 'Escalated', value: 12,
+                          accent: 'left', status: 'escalated' },
+                        { tileIconCls: 'x-fa fa-reply', label: 'Replied', value: 94,
+                          accent: 'top', status: 'replied' },
+                        { tileIconCls: 'x-fa fa-triangle-exclamation', label: 'Failed', value: 3,
+                          accent: 'right', status: 'send-failed' }
                     ]
                 },
                 {
                     xtype: 'grid', itemId: 'row-status-accent-grid', cls: 'gallery-row', height: 180,
+                    requires: ['ppa.react.grid.ReStatusColumn'],
                     store: {
                         fields: ['name', 'status', { name: 'conf', type: 'int' }],
                         data: [
@@ -735,18 +733,14 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                     },
                     columns: [
                         { text: 'Tour', dataIndex: 'name', flex: 1 },
-                        {
-                            text: 'Status', dataIndex: 'status', width: 140,
-                            renderer: function (value) {
-                                return '<span class="gallery-badge gallery-status-chip-' + value + '">' +
-                                    Ext.String.htmlEncode(value) + '</span>';
-                            }
-                        },
+                        { xtype: 'restatuscolumn', text: 'Status', dataIndex: 'status', width: 140 },
                         {
                             text: 'Confidence', dataIndex: 'conf', width: 120, align: 'right',
                             renderer: function (value, meta) {
-                                meta.tdCls = 'gallery-cell-fill gallery-status-' +
-                                    (value >= 70 ? 'open' : value >= 40 ? 'escalated' : 'send-failed');
+                                meta.tdCls = ppa.react.ReStatus.getCellCls(
+                                    value >= 70 ? 'open' : value >= 40 ? 'escalated' : 'send-failed',
+                                    true
+                                );
 
                                 return value + '%';
                             }
@@ -754,7 +748,7 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                     ],
                     viewConfig: {
                         getRowClass: function (record) {
-                            return 'gallery-row-' + record.get('status');
+                            return ppa.react.ReStatus.getRowCls(record.get('status'));
                         }
                     }
                 }
@@ -936,9 +930,14 @@ Ext.define('ClassicApp.view.gallery.GalleryView', {
                     xtype: 'toolbar', itemId: 'row-separator', cls: 'gallery-row', width: 220,
                     items: [{ text: 'Left' }, { xtype: 'tbseparator' }, { text: 'Right' }]
                 },
-                { xtype: 'component', itemId: 'row-avatar', cls: 'gallery-row',
-                  html: '<span class="gallery-avatar">JS</span>' +
-                        '<span class="gallery-avatar gallery-avatar-sm" style="margin-left:8px;">AB</span>' }
+                {
+                    xtype: 'container', itemId: 'row-avatar', cls: 'gallery-row',
+                    layout: { type: 'hbox', align: 'middle' },
+                    items: [
+                        { xtype: 'reavatar', initials: 'JS' },
+                        { xtype: 'reavatar', initials: 'AB', scale: 'small', margin: '0 0 0 8' }
+                    ]
+                }
             ]
         }
         ];

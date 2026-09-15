@@ -1,0 +1,16 @@
+// ============================================================================
+// ppa.react.ReCard — "neutralize, then paint" for a panel-derived component.
+// ============================================================================
+
+.#{$prefix}panel.re-card {
+    background-color: var(--re-card, #ffffff);
+    color: var(--re-card-fg, #0a0a0a);
+    border: none;
+    border-radius: var(--re-radius-xl, 14px);
+    box-shadow: 0 0 0 1px var(--re-card-ring, rgba(10, 10, 10, 0.1));
+}
+
+.re-card .#{$prefix}panel-body {
+    background-color: transparent;
+    border: none;
+}

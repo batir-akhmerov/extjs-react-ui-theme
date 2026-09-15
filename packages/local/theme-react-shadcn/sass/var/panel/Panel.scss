@@ -15,7 +15,14 @@
 
 $panel-base-color: dynamic($shadcn-border);
 $panel-border-color: dynamic($shadcn-card-ring);
-$panel-border-radius: dynamic($shadcn-radius-xl);
+
+// MUST stay 0. This variable lands on the blanket `.x-panel-default` selector,
+// and the framework clips every panel (`.x-panel { overflow: hidden }`), so any
+// radius here rounds the CLIP of every header-less scaffolding panel too — which
+// shears the corner off any child sitting flush with it (e.g. a full-width
+// textfield's top-right corner). The card radius is applied deliberately to
+// titled panels and grids in sass/src/panel/Panel.scss instead.
+$panel-border-radius: dynamic(0);
 
 // The card outline is the ring drawn in sass/src/panel/Panel.scss. Zeroing the
 // panel/header/body borders keeps it from doubling up — and stops layout-only

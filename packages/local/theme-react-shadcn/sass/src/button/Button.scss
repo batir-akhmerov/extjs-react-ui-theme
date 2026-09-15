@@ -66,30 +66,10 @@
 );
 
 // ---------------------------------------------------------------------------
-// ui: 'toolbutton' -> app shell icon buttons (HeaderView, BottomView toolbars)
-// ui: 'footerbutton' -> FooterView's version-bar icon buttons
-//
-// Both are transparent-background icon buttons; only the glyph colour
-// differs (app foreground vs. the sidebar's muted foreground). Hover/dark
-// treatment lives with the app-shell views in sass/src/Component.scss, keyed
-// off `.headerview`/`.bottomview`/`.footerview`, since it differs per view.
+// App-shell icon buttons (former ui: 'toolbutton' / 'footerbutton') now ship
+// as ppa.react.ReIconButton (packages/local/ppa-react-ui) — theme-independent,
+// so this theme defines nothing for them.
 // ---------------------------------------------------------------------------
-@include extjs-button-toolbar-small-ui(
-    $ui: 'toolbutton',
-    $font-size: 18px,
-    $padding: 5px 10px 5px 10px,
-    $background-color: transparent,
-    $glyph-color: $shadcn-sidebar-muted-foreground,
-    $border-color: transparent
-);
-
-@include extjs-button-toolbar-small-ui(
-    $ui: 'footerbutton',
-    $background-color: transparent,
-    $color: $shadcn-sidebar-muted-foreground,
-    $glyph-color: $shadcn-sidebar-muted-foreground,
-    $border-color: transparent
-);
 
 // ---------------------------------------------------------------------------
 // Restore the intended box metrics.

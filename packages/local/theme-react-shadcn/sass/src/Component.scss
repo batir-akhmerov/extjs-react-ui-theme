@@ -1,4 +1,4 @@
-// ============================================================================
+﻿// ============================================================================
 // Global shadcn override layer.
 //
 // Only rules that cannot be expressed as theme variables belong here.
@@ -9,7 +9,7 @@
 // Runtime-adjustable font size.
 //
 // ExtJS bakes box metrics (heights, padding, line-height) from $font-size at
-// BUILD time, so these variables resize TEXT ONLY — the boxes stay at their
+// BUILD time, so these variables resize TEXT ONLY â€” the boxes stay at their
 // compiled 14px geometry. 12-15px is safe; outside that, rebuild with a
 // different $font-size.
 //
@@ -87,7 +87,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Scrollbars — a thin, muted-tone thumb instead of the platform default,
+// Scrollbars â€” a thin, muted-tone thumb instead of the platform default,
 // which reads as too bright against the dark surfaces below.
 // ---------------------------------------------------------------------------
 html {
@@ -180,362 +180,11 @@ html {
     border-color: $shadcn-border;
 }
 
-// ============================================================================
-// App shell — this app's HeaderView / BottomView / FooterView / TopView /
-// NavView / MenuView. Kept here (not view-local SCSS) so the app ships with
-// zero theme-specific styling of its own; swapping this package is enough to
-// re-skin the whole shell. Selectors key off each view's `cls`, which is
-// app-owned and stable regardless of theme.
-// ============================================================================
-
-// ---------------------------------------------------------------------------
-// HeaderView.
-// ---------------------------------------------------------------------------
-.headerview {
-    color: $shadcn-sidebar-foreground;
-    background-color: $shadcn-background;
-    border-bottom: 1px solid $shadcn-sidebar-border;
-    box-shadow: none;
-
-    // ui 'toolbutton' (sass/src/button/Button.scss) sets the glyph colour at
-    // one class of specificity; hover has to outrank it.
-    .#{$prefix}btn-over {
-        background-color: $shadcn-accent;
-        border-radius: $shadcn-radius-md;
-    }
-
-    .#{$prefix}btn-over .#{$prefix}btn-icon-el {
-        color: $shadcn-accent-foreground;
-    }
-}
-
-// ---------------------------------------------------------------------------
-// BottomView (nav rail footer strip).
-// ---------------------------------------------------------------------------
-.bottomview {
-    color: $shadcn-sidebar-foreground;
-    background-color: $shadcn-sidebar;
-    border-top: 1px solid $shadcn-sidebar-border;
-
-    .#{$prefix}btn-over {
-        background-color: $shadcn-sidebar-accent;
-        border-radius: $shadcn-radius-md;
-    }
-
-    .#{$prefix}btn-over .#{$prefix}btn-icon-el {
-        color: $shadcn-sidebar-accent-foreground;
-    }
-}
-
-// ---------------------------------------------------------------------------
-// FooterView — a flat status bar, so the panel "card" ring/radius is
-// cancelled.
-// ---------------------------------------------------------------------------
-.footerview {
-    &.#{$prefix}panel-default {
-        border-radius: 0;
-        box-shadow: none;
-        background-color: $shadcn-sidebar;
-    }
-
-    .#{$prefix}panel-header-default {
-        border-radius: 0;
-        border-top: 1px solid $shadcn-sidebar-border;
-        background-color: $shadcn-sidebar;
-    }
-
-    .#{$prefix}panel-header-default .#{$prefix}title-text {
-        color: $shadcn-sidebar-muted-foreground;
-        font-size: 12px;
-        font-weight: $font-weight-normal;
-    }
-}
-
-// ---------------------------------------------------------------------------
-// TopView (nav-rail header / avatar strip).
-// ---------------------------------------------------------------------------
-.topview {
-    color: $shadcn-sidebar-foreground;
-    background-color: $shadcn-sidebar;
-}
-
-.imgAll {
-    box-shadow: 0 0 0 1px $shadcn-sidebar-border;
-}
-
-// ---------------------------------------------------------------------------
-// NavView — shadcn's sidebar is separated by a hairline, not an elevation
-// shadow.
-// ---------------------------------------------------------------------------
-.navview {
-    box-shadow: 1px 0 0 0 $shadcn-sidebar-border;
-}
-
-// ---------------------------------------------------------------------------
-// MenuView — the nav rail's TreeList, styled as a shadcn <SidebarMenu>.
-// ---------------------------------------------------------------------------
-@include treelist-ui(
-    $ui: 'nav',
-
-    $row-indicator-width: 3px,
-    $row-indicator-selected-color: $shadcn-sidebar-primary,
-    $row-indicator-selected-over-color: $shadcn-sidebar-primary,
-    $row-indicator-over-color: transparent,
-
-    $padding: 0px 10px 0 10px,
-    $item-icon-width: 24px,
-    $item-text-icon-gap: 1px,
-    $item-expander-width: 24px,
-
-    $item-icon-font-size: $font-size,
-    $item-text-font-size: $font-size,
-    $item-expander-font-size: $font-size,
-
-    // Explicit family: the gallery treelist var file now overrides the
-    // shared, unscoped $treelist-item-expander-glyph default, so this ui
-    // must restate its own glyph or it inherits that new value.
-    $item-expander-glyph: $fa-var-chevron-right 14px $fontawesome-font-family,
-    $item-expander-expanded-glyph: $fa-var-chevron-down 14px $fontawesome-font-family,
-
-    $item-line-height : 35px,
-    $item-text-overflow: initial,
-
-    $background-color: $shadcn-sidebar,
-    $item-icon-color: $shadcn-sidebar-muted-foreground,
-    $item-text-color: $shadcn-sidebar-foreground,
-    $item-expander-color: $shadcn-sidebar-muted-foreground,
-    $item-icon-over-color: $shadcn-sidebar-accent-foreground,
-    $item-text-over-color: $shadcn-sidebar-accent-foreground,
-    $item-expander-over-color: $shadcn-sidebar-accent-foreground,
-
-    $item-expanded-child-background-color: $shadcn-sidebar,
-
-    $item-expanded-background-color: transparent,
-
-    $row-over-background-color: $shadcn-sidebar-accent,
-
-    $row-selected-background-color: $shadcn-sidebar-accent,
-    $row-selected-over-background-color: $shadcn-sidebar-accent,
-    $toolstrip-background-color:  $shadcn-sidebar,
-    $tool-selected-color: $shadcn-sidebar-accent-foreground,
-    $tool-selected-background-color: $shadcn-sidebar-accent,
-    $tool-float-indicator-color: $shadcn-sidebar-primary,
-    $tool-float-indicator-width: 3px
-);
-
-// ---------------------------------------------------------------------------
-// HomeView / CenterView / DetailView — the app's plain "card" surfaces.
-// ---------------------------------------------------------------------------
-.homeview,
-.detailview {
-    background-color: $shadcn-card;
-    border-radius: $shadcn-radius-xl;
-    box-shadow: 0 0 0 1px $shadcn-card-ring;
-}
-
-.centerview {
-    background-color: $shadcn-background;
-}
-
-// ---------------------------------------------------------------------------
-// GalleryView — theme development/QA surface (docs/EXTJS_GALLERY_SPEC.md,
-// docs/EXTJS_THEME_PARITY_SPEC.md). ExtJS has no Badge/Avatar component; these
-// mirror shadcn's <Badge> (h20, pill radius, px8/py2, 12/500) and <Avatar>
-// (32px circle, muted fill).
-// ---------------------------------------------------------------------------
-.gallery-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    height: 20px;
-    padding: 2px 8px;
-    border: 1px solid transparent;
-    border-radius: 26px;
-    font-size: var(--form-font-size, var(--ui-font-size, 14px));
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-.gallery-badge-default {
-    background-color: $shadcn-primary;
-    color: $shadcn-primary-foreground;
-}
-
-.gallery-badge-secondary {
-    background-color: $shadcn-secondary;
-    color: $shadcn-secondary-foreground;
-}
-
-.gallery-badge-destructive {
-    background-color: rgba(231, 0, 11, 0.1);
-    color: $shadcn-destructive;
-}
-
-.gallery-badge-outline {
-    border-color: $shadcn-border;
-    color: $shadcn-foreground;
-}
-
-.gallery-badge-ghost {
-    color: $shadcn-foreground;
-}
-
-// Status palette. Text colours are manuka's --status-*-text, fills its
-// --status-*-bg (globals.css :root). globals.css has no .dark values for
-// these, so the dark set (below) lifts the text into the light end of the
-// ramp and tints the fill against the card surface.
-$gallery-status-colors: (
-    open:        #1e40af,
-    escalated:   #854d0e,
-    replied:     #166534,
-    closed:      #4b5563,
-    send-failed: #991b1b
-);
-
-$gallery-status-fills: (
-    open:        #dbeafe,
-    escalated:   #fef9c3,
-    replied:     #dcfce7,
-    closed:      #f3f4f6,
-    send-failed: #fee2e2
-);
-
-@each $name, $color in $gallery-status-colors {
-    // Row = left bar, cell = right bar.
-    .gallery-row-#{$name} .#{$prefix}grid-cell-first {
-        box-shadow: inset 3px 0 0 0 $color;
-    }
-
-    .gallery-status-#{$name} {
-        box-shadow: inset -3px 0 0 0 $color;
-        color: $color;
-    }
-
-    // Tile edge accents (spec §7.10). Drawn as inset shadows rather than
-    // borders so they neither consume layout nor fight the card outline.
-    .gallery-tile-accent-left.gallery-status-#{$name} {
-        box-shadow: inset 3px 0 0 0 $color;
-    }
-
-    .gallery-tile-accent-top.gallery-status-#{$name} {
-        box-shadow: inset 0 3px 0 0 $color;
-    }
-
-    .gallery-tile-accent-right.gallery-status-#{$name} {
-        box-shadow: inset -3px 0 0 0 $color;
-    }
-
-    .gallery-status-chip-#{$name} {
-        background-color: map-get($gallery-status-fills, $name);
-        color: $color;
-    }
-
-    .gallery-status-#{$name} .gallery-tile-icon {
-        background-color: map-get($gallery-status-fills, $name);
-        color: $color;
-    }
-
-    // Cell accent = tinted cell plus the right-hand bar, as in the React
-    // table. Opt-in, so the data grid's status column keeps its plain
-    // coloured text.
-    .#{$prefix}grid-cell.gallery-cell-fill.gallery-status-#{$name} {
-        background-color: map-get($gallery-status-fills, $name);
-    }
-}
-
-// Stat tile = shadcn card: radius 14, bg-card, ring-1 foreground/10, pad 16,
-// with a 36px rounded-lg icon chip.
-.gallery-tile {
-    border-radius: $shadcn-radius-xl;
-
-    // Overlay pseudo-element, for the reason given in sass/src/panel/Panel.scss.
-    &:after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        border: 1px solid $shadcn-card-ring;
-        border-radius: inherit;
-        pointer-events: none;
-    }
-}
-
-// The panel body fills the panel edge to edge and paints its own opaque
-// surface, which would otherwise hide the accent borders below.
-.gallery-tile .#{$prefix}panel-body {
-    background-color: transparent;
-}
-
-.gallery-tile-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    margin-right: 12px;
-    border-radius: $shadcn-radius-lg;
-    background-color: $shadcn-muted;
-    color: $shadcn-muted-foreground;
-    vertical-align: middle;
-}
-
-.gallery-tile-label {
-    font-size: 12px;
-    line-height: 16px;
-    color: $shadcn-muted-foreground;
-}
-
-.gallery-tile-value {
-    font-size: 24px;
-    line-height: 32px;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-}
-
-.gallery-avatar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: $shadcn-muted;
-    color: $shadcn-muted-foreground;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.gallery-avatar-sm {
-    width: 24px;
-    height: 24px;
-    font-size: 10px;
-}
-
-// Toasts. The surface comes from the window pass; what differs per type is
-// the header icon colour (sonner's richColors palette) and a 14px title.
-$gallery-toast-colors: (
-    success: #008a2e,
-    error:   #e60000,
-    warning: #dc7609,
-    info:    #0a85d1,
-    plain:   $shadcn-muted-foreground
-);
-
-.#{$prefix}toast .#{$prefix}title-text {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-@each $type, $color in $gallery-toast-colors {
-    // Neutral colours the header icon at
-    // `.x-window-header-title-default > .x-title-icon-wrap-default >
-    //  .x-title-icon-default`, so the per-type rule has to match that depth.
-    .gallery-toast-#{$type} .#{$prefix}window-header-title-default > .#{$prefix}title-icon-wrap-default > .#{$prefix}title-icon-default {
-        color: $color;
-    }
-}
+// App shell (HeaderView / BottomView / FooterView / TopView / NavView /
+// MenuView) and the GalleryView demo components (badges / tiles / avatars /
+// toasts / status accents) now ship as packages/local/ppa-react-ui
+// (ppa.react.Re*) â€” theme-independent, so this theme defines nothing for
+// them. See PPA_REACT_UI_PACKAGE_SPEC.md.
 
 // ---------------------------------------------------------------------------
 // Dark mode.
@@ -548,7 +197,7 @@ $gallery-toast-colors: (
 //
 // This file holds the global surfaces plus every component that has no
 // dedicated sass/src file. Components that do have one carry their own
-// `.dark-mode` block at the bottom of that file — Fashion orders src files by
+// `.dark-mode` block at the bottom of that file â€” Fashion orders src files by
 // class hierarchy, so a rule written here would sort *before* the light rule it
 // is meant to beat.
 // ---------------------------------------------------------------------------
@@ -563,7 +212,7 @@ $gallery-toast-colors: (
     background-color: $shadcn-dark-background;
 
     // -----------------------------------------------------------------------
-    // Scrollbars — same treatment as the light rule above, tokens swapped.
+    // Scrollbars â€” same treatment as the light rule above, tokens swapped.
     // -----------------------------------------------------------------------
     scrollbar-color: $shadcn-dark-border-solid transparent;
 
@@ -587,11 +236,11 @@ $gallery-toast-colors: (
     }
 
     // Combo/picker dropdowns and the date picker carry their own .dark-mode
-    // blocks in sass/src/view/BoundList.scss and sass/src/picker/Date.scss —
+    // blocks in sass/src/view/BoundList.scss and sass/src/picker/Date.scss â€”
     // their light rules are more specific than anything written here.
 
     // -----------------------------------------------------------------------
-    // Tooltips — shadcn dark tooltips invert to the light surface.
+    // Tooltips â€” shadcn dark tooltips invert to the light surface.
     // -----------------------------------------------------------------------
     .#{$prefix}tip-default,
     .#{$prefix}tip-body-default,
@@ -651,7 +300,7 @@ $gallery-toast-colors: (
     }
 
     // -----------------------------------------------------------------------
-    // Field set, display field, error text — no dedicated src file.
+    // Field set, display field, error text â€” no dedicated src file.
     // -----------------------------------------------------------------------
     .#{$prefix}fieldset,
     .#{$prefix}fieldset-default {
@@ -710,6 +359,16 @@ $gallery-toast-colors: (
         color: $shadcn-dark-foreground;
     }
 
+    // Days outside the current month must read as de-emphasised, same intent
+    // as the light theme's `#aaa`. This selector needs one MORE class than
+    // the generic day-text rule above (and than ext-core's own light
+    // `.x-calendar-weeks-outside-cell .x-calendar-weeks-day-text` rule) to
+    // win regardless of package compile order — see repo memory re: equal
+    // specificity + later-compiling ext-core.
+    .#{$prefix}calendar-weeks .#{$prefix}calendar-weeks-outside-cell .#{$prefix}calendar-weeks-day-text {
+        color: $shadcn-dark-muted-foreground-dim;
+    }
+
     .#{$prefix}panel-default:has(> .#{$prefix}panel-bodyWrap > .#{$prefix}calendar-header-table):after {
         border-color: $shadcn-dark-card-ring;
     }
@@ -743,243 +402,6 @@ $gallery-toast-colors: (
     .#{$prefix}toolbar-separator-vertical {
         border-top-color: $shadcn-dark-border-solid;
         border-bottom-color: transparent;
-    }
-}
-
-// ============================================================================
-// App shell + gallery — dark mode. See the note at the top of the light
-// section above for why this is a second top-level `.dark-mode { }` block
-// rather than nested `.dark-mode &` inside each selector: Fashion orders
-// src files by class hierarchy, and this whole section lives in the same
-// file as the rules it overrides, so ordinary cascade order is enough.
-// ============================================================================
-.dark-mode {
-    .headerview {
-        color: $shadcn-dark-sidebar-foreground;
-        background-color: $shadcn-dark-background;
-        border-bottom-color: $shadcn-dark-sidebar-border;
-
-        .#{$prefix}btn-icon-el {
-            color: $shadcn-dark-sidebar-muted-foreground;
-        }
-
-        .#{$prefix}btn-over {
-            background-color: $shadcn-dark-accent;
-        }
-
-        .#{$prefix}btn-over .#{$prefix}btn-icon-el {
-            color: $shadcn-dark-accent-foreground;
-        }
-    }
-
-    .bottomview {
-        color: $shadcn-dark-sidebar-foreground;
-        background-color: $shadcn-dark-sidebar;
-        border-top-color: $shadcn-dark-sidebar-border;
-
-        .#{$prefix}btn-icon-el {
-            color: $shadcn-dark-sidebar-muted-foreground;
-        }
-
-        .#{$prefix}btn-over {
-            background-color: $shadcn-dark-sidebar-accent;
-        }
-
-        .#{$prefix}btn-over .#{$prefix}btn-icon-el {
-            color: $shadcn-dark-sidebar-accent-foreground;
-        }
-    }
-
-    .footerview {
-        &.#{$prefix}panel-default {
-            box-shadow: none;
-            background-color: $shadcn-dark-sidebar;
-        }
-
-        .#{$prefix}panel-header-default {
-            border-top-color: $shadcn-dark-sidebar-border;
-            background-color: $shadcn-dark-sidebar;
-        }
-
-        .#{$prefix}panel-header-default .#{$prefix}title-text {
-            color: $shadcn-dark-sidebar-muted-foreground;
-        }
-    }
-
-    .topview {
-        color: $shadcn-dark-sidebar-foreground;
-        background-color: $shadcn-dark-sidebar;
-    }
-
-    .imgAll {
-        box-shadow: 0 0 0 1px $shadcn-dark-sidebar-border;
-    }
-
-    .navview {
-        box-shadow: 1px 0 0 0 $shadcn-dark-sidebar-border;
-    }
-
-    .homeview,
-    .detailview {
-        color: $shadcn-dark-card-foreground;
-        background-color: $shadcn-dark-card;
-        box-shadow: 0 0 0 1px $shadcn-dark-card-ring;
-    }
-
-    .centerview {
-        color: $shadcn-dark-foreground;
-        background-color: $shadcn-dark-background;
-    }
-
-    // -----------------------------------------------------------------------
-    // MenuView — treelist-ui bakes one palette at build time, so every colour
-    // it emitted has to be restated here at matching-or-greater specificity.
-    // -----------------------------------------------------------------------
-    .#{$prefix}treelist-nav {
-        background-color: $shadcn-dark-sidebar;
-
-        .#{$prefix}treelist-toolstrip {
-            background-color: $shadcn-dark-sidebar;
-        }
-
-        .#{$prefix}treelist-item-expanded .#{$prefix}treelist-item {
-            background-color: $shadcn-dark-sidebar;
-        }
-
-        .#{$prefix}treelist-item-text {
-            color: $shadcn-dark-sidebar-foreground;
-        }
-
-        .#{$prefix}treelist-item-icon,
-        .#{$prefix}treelist-item-tool,
-        .#{$prefix}treelist-item-expander {
-            color: $shadcn-dark-sidebar-muted-foreground;
-        }
-
-        .#{$prefix}treelist-row-over {
-            background-color: $shadcn-dark-sidebar-accent;
-
-            > * > .#{$prefix}treelist-item-icon,
-            > * > .#{$prefix}treelist-item-text,
-            > * > .#{$prefix}treelist-item-expander {
-                color: $shadcn-dark-sidebar-accent-foreground;
-            }
-        }
-
-        .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row {
-            background-color: $shadcn-dark-sidebar-accent;
-        }
-
-        .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row:before,
-        .#{$prefix}treelist-item-selected > .#{$prefix}treelist-row-over:before {
-            background-color: $shadcn-dark-sidebar-primary;
-        }
-
-        .#{$prefix}treelist-item-selected.#{$prefix}treelist-item-tool {
-            color: $shadcn-dark-sidebar-accent-foreground;
-            background-color: $shadcn-dark-sidebar-accent;
-        }
-
-        .#{$prefix}treelist-item-tool-floated:after {
-            background-color: $shadcn-dark-sidebar-primary;
-        }
-    }
-
-    // -----------------------------------------------------------------------
-    // GalleryView.
-    // -----------------------------------------------------------------------
-    .gallery-badge-default {
-        background-color: $shadcn-dark-primary;
-        color: $shadcn-dark-primary-foreground;
-    }
-
-    .gallery-badge-secondary {
-        background-color: $shadcn-dark-secondary;
-        color: $shadcn-dark-secondary-foreground;
-    }
-
-    .gallery-badge-destructive {
-        background-color: rgba($shadcn-dark-destructive, 0.18);
-        color: $shadcn-dark-destructive;
-    }
-
-    .gallery-badge-outline {
-        border-color: $shadcn-dark-border-solid;
-        color: $shadcn-dark-foreground;
-    }
-
-    .gallery-badge-ghost {
-        color: $shadcn-dark-foreground;
-    }
-
-    .gallery-tile:after {
-        border-color: $shadcn-dark-card-ring;
-    }
-
-    // `panel/Panel.scss` repaints `.x-panel-body-default` opaque
-    // (`$shadcn-dark-card`) at the same 2-class specificity as the
-    // light-mode-only transparency rule above, and compiles after this file,
-    // so it wins and hides the tile's inset accent box-shadow. One extra
-    // class forces this to win regardless of build order.
-    .gallery-tile .#{$prefix}panel-body {
-        background-color: transparent;
-    }
-
-    .gallery-tile-icon {
-        background-color: $shadcn-dark-muted;
-        color: $shadcn-dark-muted-foreground;
-    }
-
-    .gallery-tile-label {
-        color: $shadcn-dark-muted-foreground;
-    }
-
-    .gallery-avatar {
-        background-color: $shadcn-dark-muted;
-        color: $shadcn-dark-muted-foreground;
-    }
-
-    @each $name, $color in (
-        open:        #93c5fd,
-        escalated:   #fde047,
-        replied:     #86efac,
-        closed:      #d4d4d4,
-        send-failed: #fca5a5
-    ) {
-        .gallery-row-#{$name} .#{$prefix}grid-cell-first {
-            box-shadow: inset 3px 0 0 0 $color;
-        }
-
-        .gallery-status-#{$name} {
-            box-shadow: inset -3px 0 0 0 $color;
-            color: $color;
-        }
-
-        .gallery-tile-accent-left.gallery-status-#{$name} {
-            box-shadow: inset 3px 0 0 0 $color;
-        }
-
-        .gallery-tile-accent-top.gallery-status-#{$name} {
-            box-shadow: inset 0 3px 0 0 $color;
-        }
-
-        .gallery-tile-accent-right.gallery-status-#{$name} {
-            box-shadow: inset -3px 0 0 0 $color;
-        }
-
-        .gallery-status-chip-#{$name} {
-            background-color: mix($color, #171717, 18%);
-            color: $color;
-        }
-
-        .gallery-status-#{$name} .gallery-tile-icon {
-            background-color: mix($color, #171717, 18%);
-            color: $color;
-        }
-
-        .#{$prefix}grid-cell.gallery-cell-fill.gallery-status-#{$name} {
-            background-color: mix($color, #171717, 18%);
-        }
     }
 }
 

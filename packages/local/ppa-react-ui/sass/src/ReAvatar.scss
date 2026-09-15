@@ -1,0 +1,41 @@
+// ============================================================================
+// ppa.react.ReAvatar — direct Ext.Component subclass, so baseCls is safely
+// owned outright.
+// ============================================================================
+
+.re-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--re-muted, #f5f5f5);
+    color: var(--re-muted-fg, #737373);
+    font-weight: 500;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.re-avatar-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+// The image variant carries a hairline ring against the surface it sits on
+// (ported from the app shell's `.imgAll`).
+.re-avatar:has(.re-avatar-img) {
+    box-shadow: 0 0 0 1px var(--re-sidebar-border, #e5e5e5);
+}
+
+.re-avatar-medium {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+}
+
+.re-avatar-small {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+}
