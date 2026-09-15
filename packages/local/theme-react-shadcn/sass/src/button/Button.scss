@@ -317,6 +317,14 @@
     border-radius: $shadcn-radius-lg;
     border-color: $shadcn-border;
     background-color: $shadcn-background;
+
+    // The neutral base theme bakes a hardcoded white 1px inset "highlight" on
+    // all 4 edges (etc/mixins/slicer via var/container/ButtonGroup.scss).
+    // Invisible against a white light-mode body, but the docked header only
+    // covers the TOP edge — so in dark mode the other 3 sides show up as a
+    // bright white line while the top doesn't, making the border read as
+    // inconsistent. Neither mode wants this bevel; drop it outright.
+    box-shadow: none;
 }
 
 // ---------------------------------------------------------------------------
